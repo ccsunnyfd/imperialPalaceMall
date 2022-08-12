@@ -1,0 +1,2 @@
+TRUNCATE goods CASCADE;
+DROP FUNCTION IF EXISTS batch_insert_goods(text[]) CASCADE;

@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package api.mall.v1;
+import "errors/errors.proto";
+
+option go_package = "imperialPalaceMall/api/mall/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.mall.v1";
+
+enum ErrorReason {
+  option (errors.default_code) = 500;
+
+  CATEGORY_UNSPECIFIED = 0 [(errors.code) = 400];
+  CATEGORY_NOT_FOUND = 1 [(errors.code) = 404];
+  GOODS_UNSPECIFIED = 2 [(errors.code) = 400];
+  GOODS_NOT_FOUND = 3 [(errors.code) = 404];
+}

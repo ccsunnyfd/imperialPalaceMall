@@ -1,0 +1,86 @@
+syntax = "proto3";
+
+package api.mall.v1;
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+option go_package = "imperialPalaceMall/api/mall/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.mall.v1";
+
+service GoodsService {
+  rpc CreateGoods (CreateGoodsRequest) returns (CreateGoodsReply);
+  rpc UpdateGoods (UpdateGoodsRequest) returns (UpdateGoodsReply);
+  rpc DeleteGoods (DeleteGoodsRequest) returns (DeleteGoodsReply);
+  rpc GetGoods (GetGoodsRequest) returns (GetGoodsReply) {
+    option (google.api.http) = {
+      get: "/goods/{id}"
+    };
+  };
+  rpc ListGoods (ListGoodsRequest) returns (ListGoodsReply) {
+    option (google.api.http) = {
+      get: "/goods"
+    };
+  };
+}
+
+message GoodsInfo {
+  int64 id = 1;
+  int32 kind = 2;
+  string content = 3;
+}
+
+message GoodsSimplify {
+  int64  id = 1;
+  string spu_no = 2;
+  string goods_name = 3;
+  double start_price = 4;
+  int64 category_id = 5;
+  int64 brand_id = 6;
+  GoodsInfo info = 7;
+}
+
+message GoodsDetail {
+  int64  id = 1;
+  string spu_no = 2;
+  string goods_name = 3;
+  double start_price = 4;
+  int64 category_id = 5;
+  int64 brand_id = 6;
+  repeated GoodsInfo infos = 7;
+}
+
+message Metadata {
+  int64 current_page = 1;
+  int64 page_size = 2;
+  int64 first_page = 3;
+  int64 last_page = 4 ;
+  int64 total_records = 5;
+}
+
+message CreateGoodsRequest {}
+message CreateGoodsReply {}
+
+message UpdateGoodsRequest {}
+message UpdateGoodsReply {}
+
+message DeleteGoodsRequest {}
+message DeleteGoodsReply {}
+
+message GetGoodsRequest {
+  int64 id = 1  [(validate.rules).int64 = {gt: 0}];
+}
+message GetGoodsReply {
+  GoodsDetail goods = 1;
+}
+
+message ListGoodsRequest {
+  int64 category_id = 1 [(validate.rules).int64 = {ignore_empty: true, gt: 0}];
+  int64 page = 2 [(validate.rules).int64 = {ignore_empty: true, gt: 0, lte: 10000000}];
+  int64 page_size = 3 [(validate.rules).int64 = {ignore_empty: true, gt: 0, lte: 100}];
+}
+message ListGoodsReply {
+  repeated GoodsSimplify goods_list = 1;
+  Metadata metadata = 2;
+}

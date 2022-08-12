@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package api.mall.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "imperialPalaceMall/api/mall/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.mall.v1";
+
+service CategoryService {
+	rpc CreateCategory (CreateCategoryRequest) returns (CreateCategoryReply);
+	rpc UpdateCategory (UpdateCategoryRequest) returns (UpdateCategoryReply);
+	rpc DeleteCategory (DeleteCategoryRequest) returns (DeleteCategoryReply);
+	rpc GetCategory (GetCategoryRequest) returns (GetCategoryReply);
+	rpc ListCategory (ListCategoryRequest) returns (ListCategoryReply) {
+		option (google.api.http) = {
+			get: "/categories"
+		};
+	};
+}
+
+message Category {
+	int64  id = 1;
+	string category_name = 2;
+}
+
+message CreateCategoryRequest {}
+message CreateCategoryReply {}
+
+message UpdateCategoryRequest {}
+message UpdateCategoryReply {}
+
+message DeleteCategoryRequest {}
+message DeleteCategoryReply {}
+
+message GetCategoryRequest {}
+message GetCategoryReply {}
+
+message ListCategoryRequest {}
+message ListCategoryReply {
+	repeated Category categories = 1;
+}

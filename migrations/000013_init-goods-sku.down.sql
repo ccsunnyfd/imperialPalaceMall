@@ -1,0 +1,2 @@
+TRUNCATE goods_sku CASCADE;
+DROP FUNCTION IF EXISTS init_goods_sku() CASCADE;
