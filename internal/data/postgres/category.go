@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"context"
+	"fmt"
 	_ "github.com/lib/pq"
 )
 
@@ -43,6 +44,7 @@ func (c *CategoryClient) Query(ctx context.Context) ([]*Category, error) {
 
 	rows, err := c.client.db.QueryContext(ctx, query)
 	if err != nil {
+		fmt.Println(err)
 		return nil, err
 	}
 

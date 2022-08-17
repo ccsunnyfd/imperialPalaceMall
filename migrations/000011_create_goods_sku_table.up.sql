@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS goods_sku
 (
     id              bigserial PRIMARY KEY,
     goods_id        bigint                      NOT NULL,
-    goods_attr_path jsonb                        NOT NULL,
+    goods_attr_path bigint[]                        NOT NULL DEFAULT ARRAY[]::bigint[],
     price           integer                     NOT NULL,
     stock           integer                     NOT NULL DEFAULT 0,
     created_at      timestamp(0) with time zone NOT NULL DEFAULT NOW(),

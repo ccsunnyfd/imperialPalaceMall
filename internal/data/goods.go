@@ -31,31 +31,90 @@ func (r *goodsRepo) Update(ctx context.Context, g *biz.Goods) (*biz.Goods, error
 	return g, nil
 }
 
-func (r *goodsRepo) FindByID(ctx context.Context, id int64) (*biz.GoodsDetail, error) {
+func (r *goodsRepo) GetGoodsDetail(ctx context.Context, id int64) (*biz.GoodsDetail, error) {
 	g, err := r.data.db.Goods.Get(ctx, id)
 
 	if err != nil {
 		return nil, err
 	}
 
-	var infoList = make([]*biz.GoodsInfo, 0, len(g.Infos))
+	infos, err := r.data.db.Goods.GetGoodsInfo(ctx, id)
+	if err != nil {
+		return nil, err
+	}
 
-	for _, info := range g.Infos {
+	var infoList = make([]*biz.GoodsInfo, 0, len(infos))
+	for _, f := range infos {
 		infoList = append(infoList, &biz.GoodsInfo{
-			Id:      info.Id,
-			Kind:    info.Kind,
-			Content: info.Content,
+			Id:      f.Id,
+			Kind:    f.Kind,
+			Content: f.Content,
 		})
 	}
+
 	return &biz.GoodsDetail{
 		Id:         g.Id,
 		SpuNo:      g.SpuNo,
 		GoodsName:  g.GoodsName,
+		GoodsDesc:  g.GoodsDesc,
 		StartPrice: g.StartPrice,
 		CategoryId: g.CategoryId,
 		BrandId:    g.BrandId,
 		Infos:      infoList,
 	}, nil
+}
+
+func (r *goodsRepo) GetSKUs(ctx context.Context, goodsId int64) ([]*biz.GoodsSKU, error) {
+	skus, err := r.data.db.Goods.GetSKUs(ctx, goodsId)
+
+	if err != nil {
+		return nil, err
+	}
+	rv := make([]*biz.GoodsSKU, 0, len(skus))
+	for _, sku := range skus {
+		rv = append(rv, &biz.GoodsSKU{
+			Id:            sku.Id,
+			GoodsId:       sku.GoodsId,
+			GoodsAttrPath: sku.GoodsAttrPath,
+			Price:         sku.Price,
+			Stock:         sku.Stock,
+		})
+	}
+	return rv, nil
+}
+
+func (r *goodsRepo) GetAttrs(ctx context.Context, goodsId int64) ([]*biz.GoodsAttr, error) {
+	kk, err := r.data.db.Goods.GetGoodsAttrKeys(ctx, goodsId)
+	if err != nil {
+		return nil, err
+	}
+
+	attrList := make([]*biz.GoodsAttr, 0, len(kk))
+	for _, k := range kk {
+		attrKeyId := k.Id
+		vv, err := r.data.db.Goods.GetGoodsAttrValuesByKeyId(ctx, attrKeyId)
+		if err != nil {
+			return nil, err
+		}
+
+		attrValueList := make([]*biz.GoodsAttrValue, 0, len(vv))
+		for _, v := range vv {
+			attrValueList = append(attrValueList, &biz.GoodsAttrValue{
+				Id:        v.Id,
+				AttrKeyId: v.AttrKeyId,
+				AttrValue: v.AttrValue,
+			})
+		}
+
+		attrList = append(attrList, &biz.GoodsAttr{
+			Id:         k.Id,
+			GoodsId:    goodsId,
+			AttrKey:    k.AttrKey,
+			AttrValues: attrValueList,
+		})
+	}
+
+	return attrList, nil
 }
 
 func (r *goodsRepo) List(ctx context.Context, categoryId int64, f filters.Filters) ([]*biz.GoodsSimplify, filters.Metadata, error) {

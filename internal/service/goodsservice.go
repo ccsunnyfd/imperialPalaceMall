@@ -28,7 +28,7 @@ func (s *GoodsServiceService) DeleteGoods(ctx context.Context, req *pb.DeleteGoo
 	return &pb.DeleteGoodsReply{}, nil
 }
 func (s *GoodsServiceService) GetGoods(ctx context.Context, req *pb.GetGoodsRequest) (*pb.GetGoodsReply, error) {
-	g, err := s.uc.Get(ctx, req.Id)
+	g, err := s.uc.GetGoodsDetail(ctx, req.Id)
 	if err != nil {
 		//if errors.Is(err, biz.ErrGoodsNotFound) {
 		//	return nil, pb.ErrorGoodsNotFound("goods %d not found", req.Id)
@@ -51,6 +51,7 @@ func (s *GoodsServiceService) GetGoods(ctx context.Context, req *pb.GetGoodsRequ
 			Id:         g.Id,
 			SpuNo:      g.SpuNo,
 			GoodsName:  g.GoodsName,
+			GoodsDesc:  g.GoodsDesc,
 			StartPrice: g.StartPrice,
 			CategoryId: g.CategoryId,
 			BrandId:    g.BrandId,
@@ -90,5 +91,46 @@ func (s *GoodsServiceService) ListGoods(ctx context.Context, req *pb.ListGoodsRe
 			LastPage:     metadata.LastPage,
 			TotalRecords: metadata.TotalRecords,
 		},
+	}, nil
+}
+
+func (s *GoodsServiceService) GetSKUs(ctx context.Context, req *pb.GetSKUsRequest) (*pb.GetSKUsReply, error) {
+	skus, attrs, err := s.uc.GetGoodsSKUs(ctx, req.Id)
+	if err != nil {
+		return nil, err
+	}
+
+	var skuList = make([]*pb.GoodsSKU, 0, len(skus))
+	for _, sku := range skus {
+		skuList = append(skuList, &pb.GoodsSKU{
+			Id:            sku.Id,
+			GoodsId:       sku.GoodsId,
+			GoodsAttrPath: sku.GoodsAttrPath,
+			Price:         sku.Price,
+			Stock:         sku.Stock,
+		})
+	}
+
+	var attrList = make([]*pb.GoodsAttr, 0, len(attrs))
+	for _, attr := range attrs {
+		var attrValueList = make([]*pb.GoodsAttrValue, 0, len(attr.AttrValues))
+		for _, v := range attr.AttrValues {
+			attrValueList = append(attrValueList, &pb.GoodsAttrValue{
+				Id:        v.Id,
+				AttrKeyId: v.AttrKeyId,
+				AttrValue: v.AttrValue,
+			})
+		}
+		attrList = append(attrList, &pb.GoodsAttr{
+			Id:         attr.Id,
+			GoodsId:    attr.GoodsId,
+			AttrKey:    attr.AttrKey,
+			AttrValues: attrValueList,
+		})
+	}
+
+	return &pb.GetSKUsReply{
+		Skus:  skuList,
+		Attrs: attrList,
 	}, nil
 }

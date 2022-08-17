@@ -1,0 +1,1 @@
+UPDATE goods SET goods_desc = concat(goods_name, '描述') WHERE id > 0;

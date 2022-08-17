@@ -25,15 +25,38 @@ type Goods struct {
 	Id         int64
 	SpuNo      string
 	GoodsName  string
+	GoodsDesc  string
 	StartPrice float64
 	CategoryId int64
 	BrandId    int64
+}
+
+type GoodsAttrValue struct {
+	Id        int64
+	AttrKeyId int64
+	AttrValue string
+}
+
+type GoodsAttr struct {
+	Id         int64
+	GoodsId    int64
+	AttrKey    string
+	AttrValues []*GoodsAttrValue
+}
+
+type GoodsSKU struct {
+	Id            int64
+	GoodsId       int64
+	GoodsAttrPath []int64
+	Price         int64
+	Stock         int64
 }
 
 type GoodsDetail struct {
 	Id         int64
 	SpuNo      string
 	GoodsName  string
+	GoodsDesc  string
 	StartPrice float64
 	CategoryId int64
 	BrandId    int64
@@ -54,8 +77,10 @@ type GoodsSimplify struct {
 type GoodsRepo interface {
 	Save(context.Context, *Goods) (*Goods, error)
 	Update(context.Context, *Goods) (*Goods, error)
-	FindByID(context.Context, int64) (*GoodsDetail, error)
+	GetGoodsDetail(context.Context, int64) (*GoodsDetail, error)
 	List(context.Context, int64, filters.Filters) ([]*GoodsSimplify, filters.Metadata, error)
+	GetAttrs(context.Context, int64) ([]*GoodsAttr, error)
+	GetSKUs(context.Context, int64) ([]*GoodsSKU, error)
 }
 
 // GoodsUsecase is a Goods usecase.
@@ -75,11 +100,11 @@ func (uc *GoodsUsecase) List(ctx context.Context, categoryId int64, f filters.Fi
 	return uc.repo.List(ctx, categoryId, f)
 }
 
-// Get returns the GoodsDetail by id.
-func (uc *GoodsUsecase) Get(ctx context.Context, goodsId int64) (*GoodsDetail, error) {
-	uc.log.WithContext(ctx).Infof("Get: ")
+// GetGoodsDetail returns the GoodsDetail by goods_id.
+func (uc *GoodsUsecase) GetGoodsDetail(ctx context.Context, goodsId int64) (*GoodsDetail, error) {
+	uc.log.WithContext(ctx).Infof("Get goodsDetail by goods_id: %d", goodsId)
 
-	g, err := uc.repo.FindByID(ctx, goodsId)
+	g, err := uc.repo.GetGoodsDetail(ctx, goodsId)
 	if err != nil {
 		//if errors.Is(err, sql.ErrNoRows) {
 		//	return nil, ErrGoodsNotFound
@@ -89,3 +114,21 @@ func (uc *GoodsUsecase) Get(ctx context.Context, goodsId int64) (*GoodsDetail, e
 
 	return g, nil
 }
+
+// GetGoodsSKUs returns the GoodsSKU and GoodsAttr list by goods_id.
+func (uc *GoodsUsecase) GetGoodsSKUs(ctx context.Context, goodsId int64) ([]*GoodsSKU, []*GoodsAttr, error) {
+	uc.log.WithContext(ctx).Infof("GetSKUs by goods_id: %d", goodsId)
+
+	skus, err := uc.repo.GetSKUs(ctx, goodsId)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	attrs, err := uc.repo.GetAttrs(ctx, goodsId)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return skus, attrs, nil
+}
+

@@ -5,7 +5,7 @@ create or replace function init_goods_sku()
 AS
 $$
 declare
-    goods_attr_path      jsonb;
+    goods_attr_path      bigint[];
     goods_id             bigint;
     goods_attr_value_id1 bigint;
     goods_attr_value_id2 bigint;
@@ -25,7 +25,7 @@ begin
         EXIT WHEN NOT FOUND;
 
         if goods_attr_value_id2 IS NOT NULL then
-            goods_attr_path = to_jsonb(ARRAY [goods_attr_value_id1, goods_attr_value_id2]);
+            goods_attr_path = ARRAY [goods_attr_value_id1, goods_attr_value_id2];
             price = floor(random() * 10000 + 100);
             stock := floor(random() * 100 + 1);
 

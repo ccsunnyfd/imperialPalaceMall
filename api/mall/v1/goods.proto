@@ -23,6 +23,11 @@ service GoodsService {
       get: "/goods"
     };
   };
+  rpc GetSKUs (GetSKUsRequest) returns (GetSKUsReply) {
+    option (google.api.http) = {
+      get: "/goods/{id}/sku"
+    };
+  };
 }
 
 message GoodsInfo {
@@ -45,10 +50,11 @@ message GoodsDetail {
   int64  id = 1;
   string spu_no = 2;
   string goods_name = 3;
-  double start_price = 4;
-  int64 category_id = 5;
-  int64 brand_id = 6;
-  repeated GoodsInfo infos = 7;
+  string goods_desc = 4;
+  double start_price = 5;
+  int64 category_id = 6;
+  int64 brand_id = 7;
+  repeated GoodsInfo infos = 8;
 }
 
 message Metadata {
@@ -83,4 +89,34 @@ message ListGoodsRequest {
 message ListGoodsReply {
   repeated GoodsSimplify goods_list = 1;
   Metadata metadata = 2;
+}
+
+message GetSKUsRequest {
+  int64 id = 1  [(validate.rules).int64 = {gt: 0}];
+}
+
+message    GetSKUsReply {
+  repeated GoodsSKU skus = 1;
+  repeated GoodsAttr attrs = 2;
+}
+
+message GoodsSKU {
+  int64 id = 1;
+  int64 goods_id = 2;
+  repeated int64 goods_attr_path = 3;
+  int64 price = 4;
+  int64 stock = 5;
+}
+
+message GoodsAttr {
+  int64 id = 1;
+  int64 goods_id = 2;
+  string attr_key = 3;
+  repeated    GoodsAttrValue attr_values = 4;
+}
+
+message GoodsAttrValue {
+  int64 id = 1;
+  int64 attr_key_id = 2;
+  string attr_value = 3;
 }
