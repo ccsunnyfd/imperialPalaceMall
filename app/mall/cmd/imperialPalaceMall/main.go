@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"github.com/go-kratos/kratos/v2/config/env"
+	"imperialPalaceMall/app/mall/internal/conf"
 	"os"
 
 	"github.com/go-kratos/kratos/v2"
@@ -11,7 +12,6 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	"github.com/go-kratos/kratos/v2/transport/http"
-	"imperialPalaceMall/internal/conf"
 )
 
 // go build -ldflags "-X main.Version=x.y.z"

@@ -6,8 +6,8 @@ import (
 	"errors"
 	"github.com/lib/pq"
 	_ "github.com/lib/pq"
-	"imperialPalaceMall/internal/biz"
-	"imperialPalaceMall/internal/filters"
+	"imperialPalaceMall/app/mall/internal/biz"
+	"imperialPalaceMall/app/mall/internal/filters"
 )
 
 type GoodsInfo struct {

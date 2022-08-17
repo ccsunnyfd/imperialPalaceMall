@@ -2,10 +2,9 @@ package data
 
 import (
 	"context"
-	"imperialPalaceMall/internal/filters"
-
 	"github.com/go-kratos/kratos/v2/log"
-	"imperialPalaceMall/internal/biz"
+	"imperialPalaceMall/app/mall/internal/biz"
+	"imperialPalaceMall/app/mall/internal/filters"
 )
 
 var _ biz.GoodsRepo = (*goodsRepo)(nil)

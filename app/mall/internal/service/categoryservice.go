@@ -2,9 +2,8 @@ package service
 
 import (
 	"context"
-	"imperialPalaceMall/internal/biz"
-
 	pb "imperialPalaceMall/api/mall/v1"
+	"imperialPalaceMall/app/mall/internal/biz"
 )
 
 type CategoryServiceService struct {

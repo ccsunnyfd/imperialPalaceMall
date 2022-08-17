@@ -3,8 +3,8 @@ package service
 import (
 	"context"
 	pb "imperialPalaceMall/api/mall/v1"
-	"imperialPalaceMall/internal/biz"
-	"imperialPalaceMall/internal/filters"
+	"imperialPalaceMall/app/mall/internal/biz"
+	"imperialPalaceMall/app/mall/internal/filters"
 )
 
 type GoodsServiceService struct {

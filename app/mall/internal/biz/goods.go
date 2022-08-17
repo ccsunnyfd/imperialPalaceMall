@@ -2,11 +2,10 @@ package biz
 
 import (
 	"context"
-	"imperialPalaceMall/internal/filters"
-
 	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
 	mall "imperialPalaceMall/api/mall/v1"
+	"imperialPalaceMall/app/mall/internal/filters"
 )
 
 var (
@@ -131,4 +130,3 @@ func (uc *GoodsUsecase) GetGoodsSKUs(ctx context.Context, goodsId int64) ([]*Goo
 
 	return skus, attrs, nil
 }
-

@@ -5,12 +5,12 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	pb "imperialPalaceMall/api/mall/v1"
-	"imperialPalaceMall/internal/conf"
-	"imperialPalaceMall/internal/service"
+	"imperialPalaceMall/app/mall/internal/conf"
+	service2 "imperialPalaceMall/app/mall/internal/service"
 )
 
 // NewHTTPServer new a HTTP server.
-func NewHTTPServer(c *conf.Server, categoryService *service.CategoryServiceService, goodsService *service.GoodsServiceService, logger log.Logger) *http.Server {
+func NewHTTPServer(c *conf.Server, categoryService *service2.CategoryServiceService, goodsService *service2.GoodsServiceService, logger log.Logger) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),

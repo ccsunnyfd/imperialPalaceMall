@@ -5,8 +5,8 @@ import (
 	"database/sql"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
-	"imperialPalaceMall/internal/conf"
-	"imperialPalaceMall/internal/data/postgres"
+	"imperialPalaceMall/app/mall/internal/conf"
+	"imperialPalaceMall/app/mall/internal/data/postgres"
 	"time"
 )
 
