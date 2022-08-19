@@ -11,17 +11,17 @@ import (
 )
 
 // ProviderSet is data providers.
-var ProviderSet = wire.NewSet(NewData, NewCategoryRepo, NewGoodsRepo)
+var ProviderSet = wire.NewSet(NewData, NewDB, NewCategoryRepo, NewGoodsRepo)
 
 // Data .
 type Data struct {
 	//db  *mock.Client
-	db *postgres.Client
+	db  *postgres.Client
+	log *log.Helper
 }
 
-// NewData .
-func NewData(conf *conf.Data, logger log.Logger) (*Data, func(), error) {
-	logH := log.NewHelper(log.With(logger, "module", "mall/data"))
+func NewDB(conf *conf.Data, logger log.Logger) (*postgres.Client, func()) {
+	logH := log.NewHelper(log.With(logger, "modules", "mall-srvice/data/sql"))
 
 	db, err := sql.Open(
 		conf.Database.Driver,
@@ -39,14 +39,21 @@ func NewData(conf *conf.Data, logger log.Logger) (*Data, func(), error) {
 		logH.Fatalf("failed opening connection to db: %v", err)
 	}
 
-	client := postgres.NewClient(db)
-	d := &Data{
-		db: client,
-	}
-
-	return d, func() {
-		if err := d.db.Close(); err != nil {
+	return postgres.NewClient(db), func() {
+		if err := db.Close(); err != nil {
 			log.Error(err)
 		}
-	}, nil
+	}
+}
+
+// NewData .
+func NewData(db *postgres.Client, logger log.Logger) (*Data, func(), error) {
+	logH := log.NewHelper(log.With(logger, "module", "mall/data"))
+
+	d := &Data{
+		db:  db,
+		log: logH,
+	}
+
+	return d, func() {}, nil
 }

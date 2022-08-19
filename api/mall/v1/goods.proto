@@ -5,7 +5,7 @@ package api.mall.v1;
 import "google/api/annotations.proto";
 import "validate/validate.proto";
 
-option go_package = "imperialPalaceMall/api/mall/v1;v1";
+option go_package = "mall/api/mall/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.mall.v1";
 
@@ -15,17 +15,17 @@ service GoodsService {
   rpc DeleteGoods (DeleteGoodsRequest) returns (DeleteGoodsReply);
   rpc GetGoods (GetGoodsRequest) returns (GetGoodsReply) {
     option (google.api.http) = {
-      get: "/goods/{id}"
+      get: "/v1/goods/{id}"
     };
   };
   rpc ListGoods (ListGoodsRequest) returns (ListGoodsReply) {
     option (google.api.http) = {
-      get: "/goods"
+      get: "/v1/goods"
     };
   };
   rpc GetSKUs (GetSKUsRequest) returns (GetSKUsReply) {
     option (google.api.http) = {
-      get: "/goods/{id}/sku"
+      get: "/v1/goods/{id}/sku"
     };
   };
 }

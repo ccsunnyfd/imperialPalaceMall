@@ -27,7 +27,7 @@ type CategoryServiceHTTPServer interface {
 
 func RegisterCategoryServiceHTTPServer(s *http.Server, srv CategoryServiceHTTPServer) {
 	r := s.Route("/")
-	r.GET("/categories", _CategoryService_ListCategory0_HTTP_Handler(srv))
+	r.GET("/v1/categories", _CategoryService_ListCategory0_HTTP_Handler(srv))
 }
 
 func _CategoryService_ListCategory0_HTTP_Handler(srv CategoryServiceHTTPServer) func(ctx http.Context) error {
@@ -63,7 +63,7 @@ func NewCategoryServiceHTTPClient(client *http.Client) CategoryServiceHTTPClient
 
 func (c *CategoryServiceHTTPClientImpl) ListCategory(ctx context.Context, in *ListCategoryRequest, opts ...http.CallOption) (*ListCategoryReply, error) {
 	var out ListCategoryReply
-	pattern := "/categories"
+	pattern := "/v1/categories"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationCategoryServiceListCategory))
 	opts = append(opts, http.PathTemplate(pattern))

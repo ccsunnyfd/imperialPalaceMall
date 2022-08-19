@@ -3,7 +3,7 @@ syntax = "proto3";
 package api.mall.v1;
 import "errors/errors.proto";
 
-option go_package = "imperialPalaceMall/api/mall/v1;v1";
+option go_package = "mall/api/mall/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.mall.v1";
 

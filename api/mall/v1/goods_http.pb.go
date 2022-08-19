@@ -31,9 +31,9 @@ type GoodsServiceHTTPServer interface {
 
 func RegisterGoodsServiceHTTPServer(s *http.Server, srv GoodsServiceHTTPServer) {
 	r := s.Route("/")
-	r.GET("/goods/{id}", _GoodsService_GetGoods0_HTTP_Handler(srv))
-	r.GET("/goods", _GoodsService_ListGoods0_HTTP_Handler(srv))
-	r.GET("/goods/{id}/sku", _GoodsService_GetSKUs0_HTTP_Handler(srv))
+	r.GET("/v1/goods/{id}", _GoodsService_GetGoods0_HTTP_Handler(srv))
+	r.GET("/v1/goods", _GoodsService_ListGoods0_HTTP_Handler(srv))
+	r.GET("/v1/goods/{id}/sku", _GoodsService_GetSKUs0_HTTP_Handler(srv))
 }
 
 func _GoodsService_GetGoods0_HTTP_Handler(srv GoodsServiceHTTPServer) func(ctx http.Context) error {
@@ -115,7 +115,7 @@ func NewGoodsServiceHTTPClient(client *http.Client) GoodsServiceHTTPClient {
 
 func (c *GoodsServiceHTTPClientImpl) GetGoods(ctx context.Context, in *GetGoodsRequest, opts ...http.CallOption) (*GetGoodsReply, error) {
 	var out GetGoodsReply
-	pattern := "/goods/{id}"
+	pattern := "/v1/goods/{id}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationGoodsServiceGetGoods))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -128,7 +128,7 @@ func (c *GoodsServiceHTTPClientImpl) GetGoods(ctx context.Context, in *GetGoodsR
 
 func (c *GoodsServiceHTTPClientImpl) GetSKUs(ctx context.Context, in *GetSKUsRequest, opts ...http.CallOption) (*GetSKUsReply, error) {
 	var out GetSKUsReply
-	pattern := "/goods/{id}/sku"
+	pattern := "/v1/goods/{id}/sku"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationGoodsServiceGetSKUs))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -141,7 +141,7 @@ func (c *GoodsServiceHTTPClientImpl) GetSKUs(ctx context.Context, in *GetSKUsReq
 
 func (c *GoodsServiceHTTPClientImpl) ListGoods(ctx context.Context, in *ListGoodsRequest, opts ...http.CallOption) (*ListGoodsReply, error) {
 	var out ListGoodsReply
-	pattern := "/goods"
+	pattern := "/v1/goods"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationGoodsServiceListGoods))
 	opts = append(opts, http.PathTemplate(pattern))

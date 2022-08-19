@@ -4,7 +4,7 @@ package api.mall.v1;
 
 import "google/api/annotations.proto";
 
-option go_package = "imperialPalaceMall/api/mall/v1;v1";
+option go_package = "mall/api/mall/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.mall.v1";
 
@@ -15,7 +15,7 @@ service CategoryService {
 	rpc GetCategory (GetCategoryRequest) returns (GetCategoryReply);
 	rpc ListCategory (ListCategoryRequest) returns (ListCategoryReply) {
 		option (google.api.http) = {
-			get: "/categories"
+			get: "/v1/categories"
 		};
 	};
 }

@@ -15,10 +15,3 @@ func NewClient(db *sql.DB) *Client {
 
 	return client
 }
-
-func (c *Client) Close() error {
-	if err := c.db.Close(); err != nil {
-		return err
-	}
-	return nil
-}
