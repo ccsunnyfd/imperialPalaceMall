@@ -9,30 +9,35 @@ package main
 import (
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
-	biz2 "imperialPalaceMall/app/mall/internal/biz"
-	"imperialPalaceMall/app/mall/internal/conf"
-	data2 "imperialPalaceMall/app/mall/internal/data"
-	"imperialPalaceMall/app/mall/internal/server"
-	service2 "imperialPalaceMall/app/mall/internal/service"
+	"imperialPalaceMall/app/user/internal/biz"
+	"imperialPalaceMall/app/user/internal/conf"
+	"imperialPalaceMall/app/user/internal/data"
+	"imperialPalaceMall/app/user/internal/server"
+	"imperialPalaceMall/app/user/internal/service"
 )
 
 // Injectors from wire.go:
 
 // wireApp init kratos application.
 func wireApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
-	dataData, cleanup, err := data2.NewData(confData, logger)
+	db := data.NewDB(confData, logger)
+	client, cleanup := data.NewRedis(confData, logger)
+	wxAuther, cleanup2 := data.NewWxLoginAuther(confData, logger)
+	wxBizDataCrypt := data.NewWxDecrypter(confData)
+	dataData, cleanup3, err := data.NewData(db, client, wxAuther, wxBizDataCrypt, logger)
 	if err != nil {
+		cleanup2()
+		cleanup()
 		return nil, nil, err
 	}
-	categoryRepo := data2.NewCategoryRepo(dataData, logger)
-	categoryUsecase := biz2.NewCategoryUsecase(categoryRepo, logger)
-	categoryServiceService := service2.NewCategoryServiceService(categoryUsecase)
-	goodsRepo := data2.NewGoodsRepo(dataData, logger)
-	goodsUsecase := biz2.NewGoodsUsecase(goodsRepo, logger)
-	goodsServiceService := service2.NewGoodsServiceService(goodsUsecase)
-	httpServer := server.NewHTTPServer(confServer, categoryServiceService, goodsServiceService, logger)
+	userRepo := data.NewUserRepo(dataData, logger)
+	userUsecase := biz.NewUserUsecase(userRepo, logger)
+	userServiceService := service.NewUserServiceService(userUsecase)
+	httpServer := server.NewHTTPServer(confServer, userServiceService, logger)
 	app := newApp(logger, httpServer)
 	return app, func() {
+		cleanup3()
+		cleanup2()
 		cleanup()
 	}, nil
 }

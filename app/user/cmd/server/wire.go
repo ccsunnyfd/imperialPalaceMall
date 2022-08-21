@@ -9,11 +9,11 @@ import (
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
-	"imperialPalaceMall/app/mall/internal/biz"
-	"imperialPalaceMall/app/mall/internal/conf"
-	"imperialPalaceMall/app/mall/internal/data"
-	"imperialPalaceMall/app/mall/internal/server"
-	"imperialPalaceMall/app/mall/internal/service"
+	"imperialPalaceMall/app/user/internal/biz"
+	"imperialPalaceMall/app/user/internal/conf"
+	"imperialPalaceMall/app/user/internal/data"
+	"imperialPalaceMall/app/user/internal/server"
+	"imperialPalaceMall/app/user/internal/service"
 )
 
 // wireApp init kratos application.

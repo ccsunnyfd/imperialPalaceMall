@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package api.weixin.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "imperialPalaceMall/api/weixin/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.weixin.v1";
+
+service Weixin {
+	rpc Code2Session (Code2SessionRequest) returns (Code2SessionReply) {
+		option (google.api.http) = {
+			get: "/sns/jscode2session"
+		};
+	};
+}
+
+message Code2SessionRequest {
+	string appid = 1;
+	string secret = 2;
+	string js_code = 3 [json_name="js_code"];
+	string grant_type = 4 [json_name="grant_type"];
+}
+
+message Code2SessionReply {
+	string openid = 1;
+	string session_key = 2;
+	int64 errcode = 3;
+	string errmsg = 4;
+}

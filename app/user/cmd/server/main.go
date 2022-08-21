@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"github.com/go-kratos/kratos/v2/config/env"
-	"imperialPalaceMall/app/mall/internal/conf"
+	"imperialPalaceMall/app/user/internal/conf"
 	"os"
 
 	"github.com/go-kratos/kratos/v2"

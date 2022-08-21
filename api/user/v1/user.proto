@@ -24,6 +24,9 @@ service User {
 
 message WxLoginRequest {
 	string code = 1;
+	string encrypted_data = 2;
+	string iv = 3;
+	bool session_is_valid = 4;
 }
 
 message WxLoginReply {

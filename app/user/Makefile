@@ -73,31 +73,31 @@ db/migrations/new:
 .PHONY: db/migrations/up
 db/migrations/up:
 	@echo 'Running up migrations...'
-	migrate -path ./migrations -database postgres://${MALL_DB_SOURCE}?sslmode=disable up
+	migrate -path ./migrations -database postgres://${USER_DB_SOURCE}?sslmode=disable up
 
 ## db/migrations/down: apply all down database migrations
 .PHONY: db/migrations/down
 db/migrations/down:
 	@echo 'Running down migrations...'
-	migrate -path ./migrations -database postgres://${MALL_DB_SOURCE}?sslmode=disable down
+	migrate -path ./migrations -database postgres://${USER_DB_SOURCE}?sslmode=disable down
 
 ## db/migrations/force version=$1: force a database migration
 .PHONY: db/migrations/force
 db/migrations/force:
 	@echo 'Running force migrations...'
-	migrate -path ./migrations -database postgres://${MALL_DB_SOURCE}?sslmode=disable force ${version}
+	migrate -path ./migrations -database postgres://${USER_DB_SOURCE}?sslmode=disable force ${version}
 
 ## db/migrations/version: show migration version
 .PHONY: db/migrations/version
 db/migrations/version:
 	@echo 'Running show migration version...'
-	migrate -path ./migrations -database postgres://${MALL_DB_SOURCE}?sslmode=disable version
+	migrate -path ./migrations -database postgres://${USER_DB_SOURCE}?sslmode=disable version
 
 ## db/migrations/goto: goto a migration version
 .PHONY: db/migrations/goto
 db/migrations/goto:
 	@echo 'Running goto a migration version...'
-	migrate -path ./migrations -database postgres://${MALL_DB_SOURCE}?sslmode=disable goto ${version}
+	migrate -path ./migrations -database postgres://${USER_DB_SOURCE}?sslmode=disable goto ${version}
 
 # show help
 help:

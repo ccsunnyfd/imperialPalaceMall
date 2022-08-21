@@ -2,48 +2,72 @@ package data
 
 import (
 	"context"
-	"database/sql"
+	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/go-redis/redis/extra/redisotel"
 	"github.com/go-redis/redis/v8"
 	"github.com/google/wire"
-	userPb "imperialPalaceMall/api/user/v1"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+	weixinPb "imperialPalaceMall/api/weixin/v1"
+	"imperialPalaceMall/app/pkg/weixin"
+	"imperialPalaceMall/app/user/internal/biz"
 	"imperialPalaceMall/app/user/internal/conf"
-	"imperialPalaceMall/app/user/internal/data/postgres"
 	"time"
 )
 
 // ProviderSet is data providers.
-var ProviderSet = wire.NewSet(NewData, NewWxLoginServiceClient, NewUserRepo)
+var ProviderSet = wire.NewSet(NewData, NewDB, NewRedis, NewWxLoginAuther, NewWxDecrypter, NewUserRepo)
 
 // Data .
 type Data struct {
 	rdb           *redis.Client
-	db            *postgres.Client
-	wxLoginClient userPb.UserHTTPClient
+	db            *gorm.DB
+	wxLoginAuther *WxAuther
+	wxDecrypter   *weixin.WXBizDataCrypt
+	log           *log.Helper
 }
 
 // NewData .
-func NewData(conf *conf.Data, wxLoginClient userPb.UserHTTPClient, logger log.Logger) (*Data, func(), error) {
-	logH := log.NewHelper(log.With(logger, "module", "user/data"))
+func NewData(db *gorm.DB, rdb *redis.Client, wxLoginAuther *WxAuther, wxDecrypter *weixin.WXBizDataCrypt, logger log.Logger) (*Data, func(), error) {
+	logH := log.NewHelper(log.With(logger, "module", "user-service/data"))
 
-	db, err := sql.Open(
-		conf.Database.Driver,
-		conf.Database.Source,
-	)
-	if err != nil {
-		logH.Fatalf("failed opening connection to db: %v", err)
+	d := &Data{
+		db:            db,
+		rdb:           rdb,
+		wxLoginAuther: wxLoginAuther,
+		wxDecrypter:   wxDecrypter,
+		log:           logH,
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
+	return d, func() {}, nil
+}
 
-	err = db.PingContext(ctx)
+func NewDB(conf *conf.Data, logger log.Logger) *gorm.DB {
+	logH := log.NewHelper(log.With(logger, "module", "user-service/data/gorm"))
+
+	db, err := gorm.Open(postgres.New(postgres.Config{
+		DSN: fmt.Sprintf(
+			"host=%s user=%s password='%s' dbname=%s port=%d sslmode=disable TimeZone=Asia/Shanghai",
+			conf.Database.Addr,
+			conf.Database.User,
+			conf.Database.Password,
+			conf.Database.Dbname,
+			conf.Database.Port),
+		PreferSimpleProtocol: true, // disables implicit prepared statement usage
+	}), &gorm.Config{})
+
 	if err != nil {
-		logH.Fatalf("failed opening connection to db: %v", err)
+		logH.Fatalf("failed opening connection to mysql: %v", err)
 	}
+
+	return db
+}
+
+func NewRedis(conf *conf.Data, logger log.Logger) (*redis.Client, func()) {
+	logH := log.NewHelper(log.With(logger, "module", "order-service/data/redis"))
 
 	rdb := redis.NewClient(&redis.Options{
 		Addr:         conf.Redis.Addr,
@@ -52,41 +76,73 @@ func NewData(conf *conf.Data, wxLoginClient userPb.UserHTTPClient, logger log.Lo
 		DialTimeout:  conf.Redis.DialTimeout.AsDuration(),
 		WriteTimeout: conf.Redis.WriteTimeout.AsDuration(),
 		ReadTimeout:  conf.Redis.ReadTimeout.AsDuration(),
+		PoolSize:     10,
 	})
+
 	rdb.AddHook(redisotel.TracingHook{})
 
-	dbClient := postgres.NewClient(db)
+	timeout, cancelFunc := context.WithTimeout(context.Background(), time.Second*2)
+	defer cancelFunc()
 
-	d := &Data{
-		db:            dbClient,
-		rdb:           rdb,
-		wxLoginClient: wxLoginClient,
+	err := rdb.Ping(timeout).Err()
+	if err != nil {
+		logH.Fatalf("redis connect error: %v", err)
 	}
 
-	return d, func() {
-		if err := d.db.Close(); err != nil {
-			log.Error(err)
+	return rdb, func() {
+		if err := rdb.Close(); err != nil {
+			logH.Error(err)
 		}
-		if err := d.rdb.Close(); err != nil {
-			log.Error(err)
-		}
-	}, nil
+	}
 }
 
-func NewWxLoginServiceClient() (userPb.UserHTTPClient, func()) {
+//func NewTlsConf(conf *conf.Data) *tls.Config {
+//	b, err := os.ReadFile("../../configs/cert/ca.crt")
+//	if err != nil {
+//		panic(err)
+//	}
+//	cp := x509.NewCertPool()
+//	if !cp.AppendCertsFromPEM(b) {
+//		panic("append certs error")
+//	}
+//
+//	addrStrArr := strings.Split(conf.Weixin.Addr, "//")
+//	if len(addrStrArr) != 2 {
+//		panic("weixin server address not correct")
+//	}
+//
+//	return &tls.Config{ServerName: addrStrArr[1], RootCAs: cp}
+//}
+
+func NewWxLoginAuther(conf *conf.Data, logger log.Logger) (*WxAuther, func()) {
+	logH := log.NewHelper(log.With(logger, "module", "user-service/data/weixin-login"))
+
 	conn, err := http.NewClient(
 		context.Background(),
-		http.WithEndpoint("https://api.weixin.qq.com/sns/jscode2session"),
+		http.WithEndpoint(conf.Weixin.Addr),
+		//http.WithTLSConfig(tlsConf),
+		http.WithTimeout(10*time.Second),
 		http.WithMiddleware(
 			recovery.Recovery(),
 		),
 	)
 	if err != nil {
-		panic(err)
+		logH.Fatalf("failed opening connection to weixin server: %v", err)
 	}
-	return userPb.NewUserHTTPClient(conn), func() {
-		if err := conn.Close(); err != nil {
-			log.Error(err)
+	return NewWxAuther(&biz.Code2sessionRequest{
+			Appid:     conf.Weixin.Appid,
+			Secret:    conf.Weixin.Secret,
+			GrantType: conf.Weixin.GrantType,
+		},
+			weixinPb.NewWeixinHTTPClient(conn)), func() {
+			if err := conn.Close(); err != nil {
+				logH.Error(err)
+			}
 		}
+}
+
+func NewWxDecrypter(conf *conf.Data) *weixin.WXBizDataCrypt {
+	return &weixin.WXBizDataCrypt{
+		AppId: conf.Weixin.Appid,
 	}
 }
