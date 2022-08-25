@@ -113,6 +113,24 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.mall.v1.GetSKUsReply'
+    /v1/user/my/cart:
+        put:
+            tags:
+                - CartService
+            operationId: CartService_AddCart
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.cart.v1.AddCartRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.cart.v1.AddCartReply'
     /v1/wx/login:
         post:
             tags:
@@ -133,6 +151,41 @@ paths:
                                 $ref: '#/components/schemas/api.user.v1.WxLoginReply'
 components:
     schemas:
+        api.cart.v1.AddCartReply:
+            type: object
+            properties:
+                cart:
+                    $ref: '#/components/schemas/api.cart.v1.Cart'
+        api.cart.v1.AddCartRequest:
+            type: object
+            properties:
+                userId:
+                    type: integer
+                    format: int64
+                goodsId:
+                    type: integer
+                    format: int64
+                goodsSku:
+                    type: integer
+                    format: int64
+        api.cart.v1.Cart:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int64
+                userId:
+                    type: integer
+                    format: int64
+                goodsId:
+                    type: integer
+                    format: int64
+                goodsSku:
+                    type: integer
+                    format: int64
+                num:
+                    type: integer
+                    format: int32
         api.mall.v1.Category:
             type: object
             properties:
@@ -323,6 +376,7 @@ components:
                 errmsg:
                     type: string
 tags:
+    - name: CartService
     - name: CategoryService
     - name: GoodsService
     - name: User

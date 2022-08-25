@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package api.cart.v1;
+import "errors/errors.proto";
+
+option go_package = "mall/api/cart/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.cart.v1";
+
+enum ErrorReason {
+  option (errors.default_code) = 500;
+
+  CART_ITEM__UNSPECIFIED = 0 [(errors.code) = 400];
+  CART_ITEM_NOT_FOUND = 1 [(errors.code) = 404];
+}
