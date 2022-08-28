@@ -1,0 +1,15 @@
+server:
+  http:
+    addr: 0.0.0.0:8000
+    timeout: 15s
+data:
+  service:
+    user:
+      addr: 127.0.0.1:9001
+      timeout: 15s
+    mall:
+      addr: 127.0.0.1:9002
+      timeout: 2s
+    cart:
+      addr: 127.0.0.1:9003
+      timeout: 2s

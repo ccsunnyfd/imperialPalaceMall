@@ -18,7 +18,7 @@ func NewUserServiceService(uc *biz.UserUsecase) *UserServiceService {
 }
 
 func (s *UserServiceService) WxLogin(ctx context.Context, req *pb.WxLoginRequest) (*pb.WxLoginReply, error) {
-	token, err := s.uc.WXLogin(ctx, req.Code, req.EncryptedData, req.Iv, req.SessionIsValid)
+	token, err := s.uc.WXLogin(ctx, req.Code.Value, req.EncryptedData.Value, req.Iv.Value, req.SessionIsValid)
 	if err != nil {
 		return &pb.WxLoginReply{}, err
 	}

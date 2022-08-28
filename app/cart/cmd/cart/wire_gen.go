@@ -28,8 +28,8 @@ func wireApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*
 	cartRepo := data.NewCartRepo(dataData, logger)
 	cartUsecase := biz.NewCartUsecase(cartRepo, logger)
 	cartService := service.NewCartService(cartUsecase)
-	httpServer := server.NewHTTPServer(confServer, cartService, logger)
-	app := newApp(logger, httpServer)
+	grpcServer := server.NewGRPCServer(confServer, cartService, logger)
+	app := newApp(logger, grpcServer)
 	return app, func() {
 		cleanup()
 	}, nil

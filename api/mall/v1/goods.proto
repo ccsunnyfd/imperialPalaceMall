@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package api.mall.v1;
 
-import "google/api/annotations.proto";
+import "google/protobuf/wrappers.proto";
 import "validate/validate.proto";
 
 option go_package = "mall/api/mall/v1;v1";
@@ -13,21 +13,9 @@ service GoodsService {
   rpc CreateGoods (CreateGoodsRequest) returns (CreateGoodsReply);
   rpc UpdateGoods (UpdateGoodsRequest) returns (UpdateGoodsReply);
   rpc DeleteGoods (DeleteGoodsRequest) returns (DeleteGoodsReply);
-  rpc GetGoods (GetGoodsRequest) returns (GetGoodsReply) {
-    option (google.api.http) = {
-      get: "/v1/goods/{id}"
-    };
-  };
-  rpc ListGoods (ListGoodsRequest) returns (ListGoodsReply) {
-    option (google.api.http) = {
-      get: "/v1/goods"
-    };
-  };
-  rpc GetSKUs (GetSKUsRequest) returns (GetSKUsReply) {
-    option (google.api.http) = {
-      get: "/v1/goods/{id}/sku"
-    };
-  };
+  rpc GetGoods (GetGoodsRequest) returns (GetGoodsReply);
+  rpc ListGoods (ListGoodsRequest) returns (ListGoodsReply);
+  rpc GetSKUs (GetSKUsRequest) returns (GetSKUsReply);
 }
 
 message GoodsInfo {
@@ -92,7 +80,7 @@ message ListGoodsReply {
 }
 
 message GetSKUsRequest {
-  int64 id = 1  [(validate.rules).int64 = {gt: 0}];
+  google.protobuf.Int64Value id = 1  [(validate.rules).int64 = {gt: 0}, (validate.rules).message.required = true];
 }
 
 message    GetSKUsReply {

@@ -1,0 +1,167 @@
+syntax = "proto3";
+
+package api.shop.interface.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/wrappers.proto";
+import "validate/validate.proto";
+
+option go_package = "imperialPalaceMall/api/shop/interface/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.shop.interface.v1";
+
+service ShopInterface {
+	rpc ListCategory (ListCategoryRequest) returns (ListCategoryReply){
+		option (google.api.http) = {
+			get: "/v1/categories"
+		};
+	};
+	rpc GetGoods (GetGoodsRequest) returns (GetGoodsReply) {
+		option (google.api.http) = {
+			get: "/v1/goods/{id}"
+		};
+	};
+	rpc ListGoods (ListGoodsRequest) returns (ListGoodsReply) {
+		option (google.api.http) = {
+			get: "/v1/goods"
+		};
+	};
+	rpc GetSKUs (GetSKUsRequest) returns (GetSKUsReply) {
+		option (google.api.http) = {
+			get: "/v1/goods/{id}/sku"
+		};
+	};
+	rpc WxLogin (WxLoginRequest) returns (WxLoginReply) {
+		option (google.api.http) = {
+			post: "/v1/wx/login"
+			body: "*"
+		};
+	};
+	rpc AddCart (AddCartRequest) returns (AddCartReply){
+		option (google.api.http) = {
+			put: "/v1/user/my/cart",
+			body: "*"
+		};
+	};
+}
+
+message Category {
+	int64  id = 1;
+	string category_name = 2;
+}
+
+message ListCategoryRequest {}
+message ListCategoryReply {
+	repeated Category categories = 1;
+}
+
+message GoodsInfo {
+	int64 id = 1;
+	int32 kind = 2;
+	string content = 3;
+}
+
+message GoodsSimplify {
+	int64  id = 1;
+	string spu_no = 2;
+	string goods_name = 3;
+	double start_price = 4;
+	int64 category_id = 5;
+	int64 brand_id = 6;
+	GoodsInfo info = 7;
+}
+
+message GoodsDetail {
+	int64  id = 1;
+	string spu_no = 2;
+	string goods_name = 3;
+	string goods_desc = 4;
+	double start_price = 5;
+	int64 category_id = 6;
+	int64 brand_id = 7;
+	repeated GoodsInfo infos = 8;
+}
+
+message Metadata {
+	int64 current_page = 1;
+	int64 page_size = 2;
+	int64 first_page = 3;
+	int64 last_page = 4 ;
+	int64 total_records = 5;
+}
+
+message GetGoodsRequest {
+	int64 id = 1  [(validate.rules).int64 = {gt: 0}];
+}
+message GetGoodsReply {
+	GoodsDetail goods = 1;
+}
+
+message ListGoodsRequest {
+	int64 category_id = 1 [(validate.rules).int64 = {ignore_empty: true, gt: 0}];
+	int64 page = 2 [(validate.rules).int64 = {ignore_empty: true, gt: 0, lte: 10000000}];
+	int64 page_size = 3 [(validate.rules).int64 = {ignore_empty: true, gt: 0, lte: 100}];
+}
+message ListGoodsReply {
+	repeated GoodsSimplify goods_list = 1;
+	Metadata metadata = 2;
+}
+
+message GetSKUsRequest {
+	google.protobuf.Int64Value id = 1  [(validate.rules).int64 = {gt: 0}, (validate.rules).message.required = true];
+}
+
+message    GetSKUsReply {
+	repeated GoodsSKU skus = 1;
+	repeated GoodsAttr attrs = 2;
+}
+
+message GoodsSKU {
+	int64 id = 1;
+	int64 goods_id = 2;
+	repeated int64 goods_attr_path = 3;
+	int64 price = 4;
+	int64 stock = 5;
+}
+
+message GoodsAttr {
+	int64 id = 1;
+	int64 goods_id = 2;
+	string attr_key = 3;
+	repeated    GoodsAttrValue attr_values = 4;
+}
+
+message GoodsAttrValue {
+	int64 id = 1;
+	int64 attr_key_id = 2;
+	string attr_value = 3;
+}
+
+message WxLoginRequest {
+	google.protobuf.StringValue code = 1 [(validate.rules).string = {min_len: 5}, (validate.rules).message.required = true];
+	google.protobuf.StringValue encrypted_data = 2 [(validate.rules).string = {min_len: 10}, (validate.rules).message.required = true];
+	google.protobuf.StringValue iv = 3 [(validate.rules).string = {min_len: 5}, (validate.rules).message.required = true];
+	bool session_is_valid = 4;
+}
+
+message WxLoginReply {
+	string token = 1;
+}
+
+message AddCartRequest {
+	google.protobuf.Int64Value user_id = 1 [(validate.rules).int64 = {gt: 0}, (validate.rules).message.required=true];
+	google.protobuf.Int64Value goods_id = 2 [(validate.rules).int64 = {gt: 0}, (validate.rules).message.required=true];
+	google.protobuf.Int64Value goods_sku = 3 [(validate.rules).int64 = {gt: 0}, (validate.rules).message.required=true];
+}
+
+message Cart {
+	int64 id = 1;
+	int64 user_id = 2;
+	int64 goods_id = 3;
+	int64 goods_sku = 4;
+	int32 num = 5;
+}
+
+message AddCartReply {
+	Cart cart = 1;
+}

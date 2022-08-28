@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
 	"imperialPalaceMall/app/mall/internal/biz"
-	"imperialPalaceMall/app/mall/internal/filters"
+	"imperialPalaceMall/app/pkg/filters"
 )
 
 var _ biz.GoodsRepo = (*goodsRepo)(nil)

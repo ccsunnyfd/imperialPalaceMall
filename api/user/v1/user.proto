@@ -2,19 +2,15 @@ syntax = "proto3";
 
 package api.user.v1;
 
-import "google/api/annotations.proto";
+import "google/protobuf/wrappers.proto";
+import "validate/validate.proto";
 
 option go_package = "imperialPalaceMall/api/user/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.user.v1";
 
 service User {
-	rpc WxLogin (WxLoginRequest) returns (WxLoginReply) {
-		option (google.api.http) = {
-			post: "/v1/wx/login"
-			body: "*"
-		};
-	};
+	rpc WxLogin (WxLoginRequest) returns (WxLoginReply);
 	rpc CreateUser (CreateUserRequest) returns (CreateUserReply);
 	rpc UpdateUser (UpdateUserRequest) returns (UpdateUserReply);
 	rpc DeleteUser (DeleteUserRequest) returns (DeleteUserReply);
@@ -23,9 +19,9 @@ service User {
 }
 
 message WxLoginRequest {
-	string code = 1;
-	string encrypted_data = 2;
-	string iv = 3;
+	google.protobuf.StringValue code = 1 [(validate.rules).string = {min_len: 5}, (validate.rules).message.required = true];
+	google.protobuf.StringValue encrypted_data = 2 [(validate.rules).string = {min_len: 10}, (validate.rules).message.required = true];
+	google.protobuf.StringValue iv = 3 [(validate.rules).string = {min_len: 5}, (validate.rules).message.required = true];
 	bool session_is_valid = 4;
 }
 

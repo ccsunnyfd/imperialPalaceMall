@@ -38,20 +38,20 @@ paths:
     /v1/categories:
         get:
             tags:
-                - CategoryService
-            operationId: CategoryService_ListCategory
+                - ShopInterface
+            operationId: ShopInterface_ListCategory
             responses:
                 "200":
                     description: OK
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.mall.v1.ListCategoryReply'
+                                $ref: '#/components/schemas/api.shop.interface.v1.ListCategoryReply'
     /v1/goods:
         get:
             tags:
-                - GoodsService
-            operationId: GoodsService_ListGoods
+                - ShopInterface
+            operationId: ShopInterface_ListGoods
             parameters:
                 - name: categoryId
                   in: query
@@ -74,12 +74,12 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.mall.v1.ListGoodsReply'
+                                $ref: '#/components/schemas/api.shop.interface.v1.ListGoodsReply'
     /v1/goods/{id}:
         get:
             tags:
-                - GoodsService
-            operationId: GoodsService_GetGoods
+                - ShopInterface
+            operationId: ShopInterface_GetGoods
             parameters:
                 - name: id
                   in: path
@@ -93,36 +93,35 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.mall.v1.GetGoodsReply'
+                                $ref: '#/components/schemas/api.shop.interface.v1.GetGoodsReply'
     /v1/goods/{id}/sku:
         get:
             tags:
-                - GoodsService
-            operationId: GoodsService_GetSKUs
+                - ShopInterface
+            operationId: ShopInterface_GetSKUs
             parameters:
                 - name: id
                   in: path
                   required: true
                   schema:
-                    type: integer
-                    format: int64
+                    $ref: '#/components/schemas/google.protobuf.Int64Value'
             responses:
                 "200":
                     description: OK
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.mall.v1.GetSKUsReply'
+                                $ref: '#/components/schemas/api.shop.interface.v1.GetSKUsReply'
     /v1/user/my/cart:
         put:
             tags:
-                - CartService
-            operationId: CartService_AddCart
+                - ShopInterface
+            operationId: ShopInterface_AddCart
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/api.cart.v1.AddCartRequest'
+                            $ref: '#/components/schemas/api.shop.interface.v1.AddCartRequest'
                 required: true
             responses:
                 "200":
@@ -130,17 +129,17 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.cart.v1.AddCartReply'
+                                $ref: '#/components/schemas/api.shop.interface.v1.AddCartReply'
     /v1/wx/login:
         post:
             tags:
-                - User
-            operationId: User_WxLogin
+                - ShopInterface
+            operationId: ShopInterface_WxLogin
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/api.user.v1.WxLoginRequest'
+                            $ref: '#/components/schemas/api.shop.interface.v1.WxLoginRequest'
                 required: true
             responses:
                 "200":
@@ -148,27 +147,24 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.user.v1.WxLoginReply'
+                                $ref: '#/components/schemas/api.shop.interface.v1.WxLoginReply'
 components:
     schemas:
-        api.cart.v1.AddCartReply:
+        api.shop.interface.v1.AddCartReply:
             type: object
             properties:
                 cart:
-                    $ref: '#/components/schemas/api.cart.v1.Cart'
-        api.cart.v1.AddCartRequest:
+                    $ref: '#/components/schemas/api.shop.interface.v1.Cart'
+        api.shop.interface.v1.AddCartRequest:
             type: object
             properties:
                 userId:
-                    type: integer
-                    format: int64
+                    $ref: '#/components/schemas/google.protobuf.Int64Value'
                 goodsId:
-                    type: integer
-                    format: int64
+                    $ref: '#/components/schemas/google.protobuf.Int64Value'
                 goodsSku:
-                    type: integer
-                    format: int64
-        api.cart.v1.Cart:
+                    $ref: '#/components/schemas/google.protobuf.Int64Value'
+        api.shop.interface.v1.Cart:
             type: object
             properties:
                 id:
@@ -186,7 +182,7 @@ components:
                 num:
                     type: integer
                     format: int32
-        api.mall.v1.Category:
+        api.shop.interface.v1.Category:
             type: object
             properties:
                 id:
@@ -194,23 +190,23 @@ components:
                     format: int64
                 categoryName:
                     type: string
-        api.mall.v1.GetGoodsReply:
+        api.shop.interface.v1.GetGoodsReply:
             type: object
             properties:
                 goods:
-                    $ref: '#/components/schemas/api.mall.v1.GoodsDetail'
-        api.mall.v1.GetSKUsReply:
+                    $ref: '#/components/schemas/api.shop.interface.v1.GoodsDetail'
+        api.shop.interface.v1.GetSKUsReply:
             type: object
             properties:
                 skus:
                     type: array
                     items:
-                        $ref: '#/components/schemas/api.mall.v1.GoodsSKU'
+                        $ref: '#/components/schemas/api.shop.interface.v1.GoodsSKU'
                 attrs:
                     type: array
                     items:
-                        $ref: '#/components/schemas/api.mall.v1.GoodsAttr'
-        api.mall.v1.GoodsAttr:
+                        $ref: '#/components/schemas/api.shop.interface.v1.GoodsAttr'
+        api.shop.interface.v1.GoodsAttr:
             type: object
             properties:
                 id:
@@ -224,8 +220,8 @@ components:
                 attrValues:
                     type: array
                     items:
-                        $ref: '#/components/schemas/api.mall.v1.GoodsAttrValue'
-        api.mall.v1.GoodsAttrValue:
+                        $ref: '#/components/schemas/api.shop.interface.v1.GoodsAttrValue'
+        api.shop.interface.v1.GoodsAttrValue:
             type: object
             properties:
                 id:
@@ -236,7 +232,7 @@ components:
                     format: int64
                 attrValue:
                     type: string
-        api.mall.v1.GoodsDetail:
+        api.shop.interface.v1.GoodsDetail:
             type: object
             properties:
                 id:
@@ -260,8 +256,8 @@ components:
                 infos:
                     type: array
                     items:
-                        $ref: '#/components/schemas/api.mall.v1.GoodsInfo'
-        api.mall.v1.GoodsInfo:
+                        $ref: '#/components/schemas/api.shop.interface.v1.GoodsInfo'
+        api.shop.interface.v1.GoodsInfo:
             type: object
             properties:
                 id:
@@ -272,7 +268,7 @@ components:
                     format: int32
                 content:
                     type: string
-        api.mall.v1.GoodsSKU:
+        api.shop.interface.v1.GoodsSKU:
             type: object
             properties:
                 id:
@@ -292,7 +288,7 @@ components:
                 stock:
                     type: integer
                     format: int64
-        api.mall.v1.GoodsSimplify:
+        api.shop.interface.v1.GoodsSimplify:
             type: object
             properties:
                 id:
@@ -312,24 +308,24 @@ components:
                     type: integer
                     format: int64
                 info:
-                    $ref: '#/components/schemas/api.mall.v1.GoodsInfo'
-        api.mall.v1.ListCategoryReply:
+                    $ref: '#/components/schemas/api.shop.interface.v1.GoodsInfo'
+        api.shop.interface.v1.ListCategoryReply:
             type: object
             properties:
                 categories:
                     type: array
                     items:
-                        $ref: '#/components/schemas/api.mall.v1.Category'
-        api.mall.v1.ListGoodsReply:
+                        $ref: '#/components/schemas/api.shop.interface.v1.Category'
+        api.shop.interface.v1.ListGoodsReply:
             type: object
             properties:
                 goodsList:
                     type: array
                     items:
-                        $ref: '#/components/schemas/api.mall.v1.GoodsSimplify'
+                        $ref: '#/components/schemas/api.shop.interface.v1.GoodsSimplify'
                 metadata:
-                    $ref: '#/components/schemas/api.mall.v1.Metadata'
-        api.mall.v1.Metadata:
+                    $ref: '#/components/schemas/api.shop.interface.v1.Metadata'
+        api.shop.interface.v1.Metadata:
             type: object
             properties:
                 currentPage:
@@ -347,20 +343,20 @@ components:
                 totalRecords:
                     type: integer
                     format: int64
-        api.user.v1.WxLoginReply:
+        api.shop.interface.v1.WxLoginReply:
             type: object
             properties:
                 token:
                     type: string
-        api.user.v1.WxLoginRequest:
+        api.shop.interface.v1.WxLoginRequest:
             type: object
             properties:
                 code:
-                    type: string
+                    $ref: '#/components/schemas/google.protobuf.StringValue'
                 encryptedData:
-                    type: string
+                    $ref: '#/components/schemas/google.protobuf.StringValue'
                 iv:
-                    type: string
+                    $ref: '#/components/schemas/google.protobuf.StringValue'
                 sessionIsValid:
                     type: boolean
         api.weixin.v1.Code2SessionReply:
@@ -375,9 +371,21 @@ components:
                     format: int64
                 errmsg:
                     type: string
+        google.protobuf.Int64Value:
+            type: object
+            properties:
+                value:
+                    type: integer
+                    description: The int64 value.
+                    format: int64
+            description: Wrapper message for `int64`. The JSON representation for `Int64Value` is JSON string.
+        google.protobuf.StringValue:
+            type: object
+            properties:
+                value:
+                    type: string
+                    description: The string value.
+            description: Wrapper message for `string`. The JSON representation for `StringValue` is JSON string.
 tags:
-    - name: CartService
-    - name: CategoryService
-    - name: GoodsService
-    - name: User
+    - name: ShopInterface
     - name: Weixin

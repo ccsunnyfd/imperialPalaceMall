@@ -3,16 +3,18 @@ package server
 import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
+	"github.com/go-kratos/kratos/v2/middleware/validate"
 	"github.com/go-kratos/kratos/v2/transport/http"
-	pb "imperialPalaceMall/api/user/v1"
-	"imperialPalaceMall/app/user/internal/conf"
-	service "imperialPalaceMall/app/user/internal/service"
+	pb "imperialPalaceMall/api/shop/interface/v1"
+	"imperialPalaceMall/app/shop/internal/conf"
+	"imperialPalaceMall/app/shop/internal/service"
 )
 
-// NewHTTPServer new a HTTP server.
-func NewHTTPServer(c *conf.Server, userService *service.UserServiceService, logger log.Logger) *http.Server {
+// NewHTTPServer new a http server.
+func NewHTTPServer(c *conf.Server, shopInterface *service.ShopInterface, logger log.Logger) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
+			validate.Validator(),
 			recovery.Recovery(),
 		),
 	}
@@ -26,6 +28,6 @@ func NewHTTPServer(c *conf.Server, userService *service.UserServiceService, logg
 		opts = append(opts, http.Timeout(c.Http.Timeout.AsDuration()))
 	}
 	srv := http.NewServer(opts...)
-	pb.RegisterUserHTTPServer(srv, userService)
+	pb.RegisterShopInterfaceHTTPServer(srv, shopInterface)
 	return srv
 }

@@ -5,7 +5,7 @@ import (
 	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
 	mall "imperialPalaceMall/api/mall/v1"
-	"imperialPalaceMall/app/mall/internal/filters"
+	"imperialPalaceMall/app/pkg/filters"
 )
 
 var (

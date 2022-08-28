@@ -4,7 +4,7 @@ import (
 	"context"
 	pb "imperialPalaceMall/api/mall/v1"
 	"imperialPalaceMall/app/mall/internal/biz"
-	"imperialPalaceMall/app/mall/internal/filters"
+	"imperialPalaceMall/app/pkg/filters"
 )
 
 type GoodsServiceService struct {
@@ -95,7 +95,7 @@ func (s *GoodsServiceService) ListGoods(ctx context.Context, req *pb.ListGoodsRe
 }
 
 func (s *GoodsServiceService) GetSKUs(ctx context.Context, req *pb.GetSKUsRequest) (*pb.GetSKUsReply, error) {
-	skus, attrs, err := s.uc.GetGoodsSKUs(ctx, req.Id)
+	skus, attrs, err := s.uc.GetGoodsSKUs(ctx, req.Id.Value)
 	if err != nil {
 		return nil, err
 	}

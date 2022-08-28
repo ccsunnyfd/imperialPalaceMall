@@ -20,9 +20,9 @@ func NewCartService(uc *biz.CartUsecase) *CartService {
 
 func (s *CartService) AddCart(ctx context.Context, in *pb.AddCartRequest) (*pb.AddCartReply, error) {
 	c, err := s.uc.AddCart(ctx, &biz.Cart{
-		UserId:   in.UserId,
-		GoodsId:  in.GoodsId,
-		GoodsSKU: in.GoodsSku,
+		UserId:   in.UserId.Value,
+		GoodsId:  in.GoodsId.Value,
+		GoodsSKU: in.GoodsSku.Value,
 	})
 	if err != nil {
 		return nil, err
