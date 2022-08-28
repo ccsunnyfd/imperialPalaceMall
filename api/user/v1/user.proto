@@ -14,7 +14,7 @@ service User {
 	rpc CreateUser (CreateUserRequest) returns (CreateUserReply);
 	rpc UpdateUser (UpdateUserRequest) returns (UpdateUserReply);
 	rpc DeleteUser (DeleteUserRequest) returns (DeleteUserReply);
-	rpc GetUser (GetUserRequest) returns (GetUserReply);
+	rpc CheckToken (CheckTokenRequest) returns (CheckTokenReply);
 	rpc ListUser (ListUserRequest) returns (ListUserReply);
 }
 
@@ -38,8 +38,16 @@ message UpdateUserReply {}
 message DeleteUserRequest {}
 message DeleteUserReply {}
 
-message GetUserRequest {}
-message GetUserReply {}
+message CheckTokenRequest {
+	google.protobuf.StringValue token = 1 [(validate.rules).string = {len: 26}, (validate.rules).message.required = true];
+}
+message CheckTokenReply {
+	message UserRet {
+		int64 user_id = 1;
+		string open_id = 2;
+	}
+	UserRet user = 1;
+}
 
 message ListUserRequest {}
 message ListUserReply {}

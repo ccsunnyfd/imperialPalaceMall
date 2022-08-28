@@ -14,8 +14,8 @@ import (
 func NewGRPCServer(c *conf.Server, cartService *service.CartService, logger log.Logger) *grpc.Server {
 	var opts = []grpc.ServerOption{
 		grpc.Middleware(
-			validate.Validator(),
 			recovery.Recovery(),
+			validate.Validator(),
 		),
 	}
 	if c.Grpc.Network != "" {

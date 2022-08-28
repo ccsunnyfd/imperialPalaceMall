@@ -158,8 +158,6 @@ components:
         api.shop.interface.v1.AddCartRequest:
             type: object
             properties:
-                userId:
-                    $ref: '#/components/schemas/google.protobuf.Int64Value'
                 goodsId:
                     $ref: '#/components/schemas/google.protobuf.Int64Value'
                 goodsSku:

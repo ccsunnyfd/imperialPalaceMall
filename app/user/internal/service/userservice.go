@@ -26,3 +26,16 @@ func (s *UserServiceService) WxLogin(ctx context.Context, req *pb.WxLoginRequest
 		Token: token,
 	}, nil
 }
+
+func (s *UserServiceService) CheckToken(ctx context.Context, req *pb.CheckTokenRequest) (*pb.CheckTokenReply, error) {
+	user, err := s.uc.CheckToken(ctx, req.Token.Value)
+	if err != nil {
+		return &pb.CheckTokenReply{}, err
+	}
+	return &pb.CheckTokenReply{
+		User: &pb.CheckTokenReply_UserRet{
+			UserId: user.UserId,
+			OpenId: user.OpenId,
+		},
+	}, nil
+}

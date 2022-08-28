@@ -34,7 +34,9 @@ func wireApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*
 	categoryUsecase := biz.NewCategoryUsecase(categoryRepo, logger)
 	goodsRepo := data.NewGoodsRepo(dataData, logger)
 	goodsUsecase := biz.NewGoodsUsecase(goodsRepo, logger)
-	shopInterface := service.NewShopInterface(userUsecase, categoryUsecase, goodsUsecase, logger)
+	cartRepo := data.NewCartRepo(dataData, logger)
+	cartUsecase := biz.NewCartUsecase(cartRepo, logger)
+	shopInterface := service.NewShopInterface(userUsecase, categoryUsecase, goodsUsecase, cartUsecase, logger)
 	httpServer := server.NewHTTPServer(confServer, shopInterface, logger)
 	app := newApp(logger, httpServer)
 	return app, func() {

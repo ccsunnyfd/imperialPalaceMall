@@ -45,3 +45,22 @@ func (r *userRepo) WXLogin(ctx context.Context, code string, encryptedData strin
 	}
 	return result.(string), nil
 }
+
+func (r *userRepo) CheckToken(ctx context.Context, token string) (*biz.UserCache, error) {
+	result, err, _ := r.sg.Do(fmt.Sprintf("check_token_%s", token), func() (interface{}, error) {
+		reply, err := r.data.uc.CheckToken(ctx, &userV1.CheckTokenRequest{
+			Token: wrapperspb.String(token),
+		})
+		if err != nil {
+			return nil, biz.ErrTokenNotFound
+		}
+		return &biz.UserCache{
+			UserId: reply.User.UserId,
+			OpenId: reply.User.OpenId,
+		}, nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return result.(*biz.UserCache), nil
+}

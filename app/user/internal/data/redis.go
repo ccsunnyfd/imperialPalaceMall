@@ -7,9 +7,9 @@ import (
 	"time"
 )
 
-func (r *userRepo) GetByOpenId(ctx context.Context, openid string) (*biz.UserCache, error) {
-	result, err := r.data.rdb.Get(ctx, openid).Result()
-	r.log.Infof("getByOpenId: openid %s result %s err %v\n", openid, result, err)
+func (r *userRepo) Get(ctx context.Context, openidOrToken string) (*biz.UserCache, error) {
+	result, err := r.data.rdb.Get(ctx, openidOrToken).Result()
+	r.log.Infof("getByOpenIdOrToken: openidOrToken %s result %s err %v\n", openidOrToken, result, err)
 
 	if err != nil {
 		return nil, err

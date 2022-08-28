@@ -2366,30 +2366,6 @@ func (m *AddCartRequest) validate(all bool) error {
 
 	var errors []error
 
-	if wrapper := m.GetUserId(); wrapper != nil {
-
-		if wrapper.GetValue() <= 0 {
-			err := AddCartRequestValidationError{
-				field:  "UserId",
-				reason: "value must be greater than 0",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
-		}
-
-	} else {
-		err := AddCartRequestValidationError{
-			field:  "UserId",
-			reason: "value is required and must not be nil.",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
 	if wrapper := m.GetGoodsId(); wrapper != nil {
 
 		if wrapper.GetValue() <= 0 {

@@ -15,15 +15,17 @@ type ShopInterface struct {
 	uc   *biz.UserUsecase
 	catc *biz.CategoryUsecase
 	gc   *biz.GoodsUsecase
+	cc   *biz.CartUsecase
 
 	log *log.Helper
 }
 
-func NewShopInterface(uc *biz.UserUsecase, catc *biz.CategoryUsecase, gc *biz.GoodsUsecase, logger log.Logger) *ShopInterface {
+func NewShopInterface(uc *biz.UserUsecase, catc *biz.CategoryUsecase, gc *biz.GoodsUsecase, cc *biz.CartUsecase, logger log.Logger) *ShopInterface {
 	return &ShopInterface{
 		log:  log.NewHelper(log.With(logger, "module", "service/interface")),
 		uc:   uc,
 		catc: catc,
 		gc:   gc,
+		cc:   cc,
 	}
 }

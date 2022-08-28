@@ -149,7 +149,6 @@ message WxLoginReply {
 }
 
 message AddCartRequest {
-	google.protobuf.Int64Value user_id = 1 [(validate.rules).int64 = {gt: 0}, (validate.rules).message.required=true];
 	google.protobuf.Int64Value goods_id = 2 [(validate.rules).int64 = {gt: 0}, (validate.rules).message.required=true];
 	google.protobuf.Int64Value goods_sku = 3 [(validate.rules).int64 = {gt: 0}, (validate.rules).message.required=true];
 }

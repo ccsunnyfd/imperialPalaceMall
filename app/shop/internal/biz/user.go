@@ -8,7 +8,13 @@ import (
 
 var (
 	ErrTokenNotCreated = errors.New("token not created")
+	ErrTokenNotFound   = errors.New("token not found")
 )
+
+type UserCache struct {
+	UserId int64
+	OpenId string
+}
 
 type User struct {
 	Id        int64  `json:"id"`
@@ -33,6 +39,7 @@ const (
 // UserRepo is a User repo.
 type UserRepo interface {
 	WXLogin(ctx context.Context, code string, encryptedData string, iv string, sessionIsValid bool) (string, error)
+	CheckToken(ctx context.Context, token string) (*UserCache, error)
 }
 
 // UserUsecase is a User usecase.
@@ -48,4 +55,8 @@ func NewUserUsecase(repo UserRepo, logger log.Logger) *UserUsecase {
 
 func (u *UserUsecase) WXLogin(ctx context.Context, code string, encryptedData string, iv string, sessionIsValid bool) (string, error) {
 	return u.repo.WXLogin(ctx, code, encryptedData, iv, sessionIsValid)
+}
+
+func (u *UserUsecase) CheckToken(ctx context.Context, token string) (*UserCache, error) {
+	return u.repo.CheckToken(ctx, token)
 }

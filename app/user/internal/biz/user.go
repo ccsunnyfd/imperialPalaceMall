@@ -47,7 +47,7 @@ type UserRepo interface {
 	Save(context.Context, *User) (*User, error)
 	Code2Session(context.Context, string) (string, string, error)
 	DecryptUserInfo(context.Context, string, string, string) (*User, error)
-	GetByOpenId(context.Context, string) (*UserCache, error)
+	Get(context.Context, string) (*UserCache, error)
 	SetUserCache(context.Context, *UserCache, string, time.Duration)
 }
 
@@ -72,7 +72,7 @@ func (u *UserUsecase) WXLogin(ctx context.Context, code string, encryptedData st
 
 	if sessionIsValid {
 		// 从缓存中拿老的session_key用来解密用户敏感数据
-		userCache, err := u.repo.GetByOpenId(ctx, openid)
+		userCache, err := u.repo.Get(ctx, openid)
 		if err != nil {
 			return "", err
 		}
@@ -118,6 +118,10 @@ func (u *UserUsecase) WXLogin(ctx context.Context, code string, encryptedData st
 	}, openid, 72*time.Hour)
 
 	return tokenStr, nil
+}
+
+func (u *UserUsecase) CheckToken(ctx context.Context, token string) (*UserCache, error) {
+	return u.repo.Get(ctx, token)
 }
 
 type Code2sessionRequest struct {
