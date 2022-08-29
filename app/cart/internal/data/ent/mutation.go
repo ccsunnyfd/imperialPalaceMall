@@ -29,23 +29,24 @@ const (
 // CartMutation represents an operation that mutates the Cart nodes in the graph.
 type CartMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *int64
-	user_id       *int64
-	adduser_id    *int64
-	goods_id      *int64
-	addgoods_id   *int64
-	goods_sku     *int64
-	addgoods_sku  *int64
-	num           *int32
-	addnum        *int32
-	created_at    *time.Time
-	updated_at    *time.Time
-	clearedFields map[string]struct{}
-	done          bool
-	oldValue      func(context.Context) (*Cart, error)
-	predicates    []predicate.Cart
+	op              Op
+	typ             string
+	id              *int64
+	user_id         *int64
+	adduser_id      *int64
+	goods_id        *int64
+	addgoods_id     *int64
+	goods_sku_id    *int64
+	addgoods_sku_id *int64
+	goods_sku_desc  *string
+	num             *int32
+	addnum          *int32
+	created_at      *time.Time
+	updated_at      *time.Time
+	clearedFields   map[string]struct{}
+	done            bool
+	oldValue        func(context.Context) (*Cart, error)
+	predicates      []predicate.Cart
 }
 
 var _ ent.Mutation = (*CartMutation)(nil)
@@ -264,60 +265,96 @@ func (m *CartMutation) ResetGoodsID() {
 	m.addgoods_id = nil
 }
 
-// SetGoodsSku sets the "goods_sku" field.
-func (m *CartMutation) SetGoodsSku(i int64) {
-	m.goods_sku = &i
-	m.addgoods_sku = nil
+// SetGoodsSkuID sets the "goods_sku_id" field.
+func (m *CartMutation) SetGoodsSkuID(i int64) {
+	m.goods_sku_id = &i
+	m.addgoods_sku_id = nil
 }
 
-// GoodsSku returns the value of the "goods_sku" field in the mutation.
-func (m *CartMutation) GoodsSku() (r int64, exists bool) {
-	v := m.goods_sku
+// GoodsSkuID returns the value of the "goods_sku_id" field in the mutation.
+func (m *CartMutation) GoodsSkuID() (r int64, exists bool) {
+	v := m.goods_sku_id
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldGoodsSku returns the old "goods_sku" field's value of the Cart entity.
+// OldGoodsSkuID returns the old "goods_sku_id" field's value of the Cart entity.
 // If the Cart object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CartMutation) OldGoodsSku(ctx context.Context) (v int64, err error) {
+func (m *CartMutation) OldGoodsSkuID(ctx context.Context) (v int64, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldGoodsSku is only allowed on UpdateOne operations")
+		return v, errors.New("OldGoodsSkuID is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldGoodsSku requires an ID field in the mutation")
+		return v, errors.New("OldGoodsSkuID requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldGoodsSku: %w", err)
+		return v, fmt.Errorf("querying old value for OldGoodsSkuID: %w", err)
 	}
-	return oldValue.GoodsSku, nil
+	return oldValue.GoodsSkuID, nil
 }
 
-// AddGoodsSku adds i to the "goods_sku" field.
-func (m *CartMutation) AddGoodsSku(i int64) {
-	if m.addgoods_sku != nil {
-		*m.addgoods_sku += i
+// AddGoodsSkuID adds i to the "goods_sku_id" field.
+func (m *CartMutation) AddGoodsSkuID(i int64) {
+	if m.addgoods_sku_id != nil {
+		*m.addgoods_sku_id += i
 	} else {
-		m.addgoods_sku = &i
+		m.addgoods_sku_id = &i
 	}
 }
 
-// AddedGoodsSku returns the value that was added to the "goods_sku" field in this mutation.
-func (m *CartMutation) AddedGoodsSku() (r int64, exists bool) {
-	v := m.addgoods_sku
+// AddedGoodsSkuID returns the value that was added to the "goods_sku_id" field in this mutation.
+func (m *CartMutation) AddedGoodsSkuID() (r int64, exists bool) {
+	v := m.addgoods_sku_id
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// ResetGoodsSku resets all changes to the "goods_sku" field.
-func (m *CartMutation) ResetGoodsSku() {
-	m.goods_sku = nil
-	m.addgoods_sku = nil
+// ResetGoodsSkuID resets all changes to the "goods_sku_id" field.
+func (m *CartMutation) ResetGoodsSkuID() {
+	m.goods_sku_id = nil
+	m.addgoods_sku_id = nil
+}
+
+// SetGoodsSkuDesc sets the "goods_sku_desc" field.
+func (m *CartMutation) SetGoodsSkuDesc(s string) {
+	m.goods_sku_desc = &s
+}
+
+// GoodsSkuDesc returns the value of the "goods_sku_desc" field in the mutation.
+func (m *CartMutation) GoodsSkuDesc() (r string, exists bool) {
+	v := m.goods_sku_desc
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldGoodsSkuDesc returns the old "goods_sku_desc" field's value of the Cart entity.
+// If the Cart object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CartMutation) OldGoodsSkuDesc(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldGoodsSkuDesc is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldGoodsSkuDesc requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldGoodsSkuDesc: %w", err)
+	}
+	return oldValue.GoodsSkuDesc, nil
+}
+
+// ResetGoodsSkuDesc resets all changes to the "goods_sku_desc" field.
+func (m *CartMutation) ResetGoodsSkuDesc() {
+	m.goods_sku_desc = nil
 }
 
 // SetNum sets the "num" field.
@@ -467,15 +504,18 @@ func (m *CartMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CartMutation) Fields() []string {
-	fields := make([]string, 0, 6)
+	fields := make([]string, 0, 7)
 	if m.user_id != nil {
 		fields = append(fields, cart.FieldUserID)
 	}
 	if m.goods_id != nil {
 		fields = append(fields, cart.FieldGoodsID)
 	}
-	if m.goods_sku != nil {
-		fields = append(fields, cart.FieldGoodsSku)
+	if m.goods_sku_id != nil {
+		fields = append(fields, cart.FieldGoodsSkuID)
+	}
+	if m.goods_sku_desc != nil {
+		fields = append(fields, cart.FieldGoodsSkuDesc)
 	}
 	if m.num != nil {
 		fields = append(fields, cart.FieldNum)
@@ -498,8 +538,10 @@ func (m *CartMutation) Field(name string) (ent.Value, bool) {
 		return m.UserID()
 	case cart.FieldGoodsID:
 		return m.GoodsID()
-	case cart.FieldGoodsSku:
-		return m.GoodsSku()
+	case cart.FieldGoodsSkuID:
+		return m.GoodsSkuID()
+	case cart.FieldGoodsSkuDesc:
+		return m.GoodsSkuDesc()
 	case cart.FieldNum:
 		return m.Num()
 	case cart.FieldCreatedAt:
@@ -519,8 +561,10 @@ func (m *CartMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldUserID(ctx)
 	case cart.FieldGoodsID:
 		return m.OldGoodsID(ctx)
-	case cart.FieldGoodsSku:
-		return m.OldGoodsSku(ctx)
+	case cart.FieldGoodsSkuID:
+		return m.OldGoodsSkuID(ctx)
+	case cart.FieldGoodsSkuDesc:
+		return m.OldGoodsSkuDesc(ctx)
 	case cart.FieldNum:
 		return m.OldNum(ctx)
 	case cart.FieldCreatedAt:
@@ -550,12 +594,19 @@ func (m *CartMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetGoodsID(v)
 		return nil
-	case cart.FieldGoodsSku:
+	case cart.FieldGoodsSkuID:
 		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetGoodsSku(v)
+		m.SetGoodsSkuID(v)
+		return nil
+	case cart.FieldGoodsSkuDesc:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetGoodsSkuDesc(v)
 		return nil
 	case cart.FieldNum:
 		v, ok := value.(int32)
@@ -592,8 +643,8 @@ func (m *CartMutation) AddedFields() []string {
 	if m.addgoods_id != nil {
 		fields = append(fields, cart.FieldGoodsID)
 	}
-	if m.addgoods_sku != nil {
-		fields = append(fields, cart.FieldGoodsSku)
+	if m.addgoods_sku_id != nil {
+		fields = append(fields, cart.FieldGoodsSkuID)
 	}
 	if m.addnum != nil {
 		fields = append(fields, cart.FieldNum)
@@ -610,8 +661,8 @@ func (m *CartMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedUserID()
 	case cart.FieldGoodsID:
 		return m.AddedGoodsID()
-	case cart.FieldGoodsSku:
-		return m.AddedGoodsSku()
+	case cart.FieldGoodsSkuID:
+		return m.AddedGoodsSkuID()
 	case cart.FieldNum:
 		return m.AddedNum()
 	}
@@ -637,12 +688,12 @@ func (m *CartMutation) AddField(name string, value ent.Value) error {
 		}
 		m.AddGoodsID(v)
 		return nil
-	case cart.FieldGoodsSku:
+	case cart.FieldGoodsSkuID:
 		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.AddGoodsSku(v)
+		m.AddGoodsSkuID(v)
 		return nil
 	case cart.FieldNum:
 		v, ok := value.(int32)
@@ -684,8 +735,11 @@ func (m *CartMutation) ResetField(name string) error {
 	case cart.FieldGoodsID:
 		m.ResetGoodsID()
 		return nil
-	case cart.FieldGoodsSku:
-		m.ResetGoodsSku()
+	case cart.FieldGoodsSkuID:
+		m.ResetGoodsSkuID()
+		return nil
+	case cart.FieldGoodsSkuDesc:
+		m.ResetGoodsSkuDesc()
 		return nil
 	case cart.FieldNum:
 		m.ResetNum()

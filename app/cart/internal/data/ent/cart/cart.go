@@ -15,8 +15,10 @@ const (
 	FieldUserID = "user_id"
 	// FieldGoodsID holds the string denoting the goods_id field in the database.
 	FieldGoodsID = "goods_id"
-	// FieldGoodsSku holds the string denoting the goods_sku field in the database.
-	FieldGoodsSku = "goods_sku"
+	// FieldGoodsSkuID holds the string denoting the goods_sku_id field in the database.
+	FieldGoodsSkuID = "goods_sku_id"
+	// FieldGoodsSkuDesc holds the string denoting the goods_sku_desc field in the database.
+	FieldGoodsSkuDesc = "goods_sku_desc"
 	// FieldNum holds the string denoting the num field in the database.
 	FieldNum = "num"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
@@ -32,7 +34,8 @@ var Columns = []string{
 	FieldID,
 	FieldUserID,
 	FieldGoodsID,
-	FieldGoodsSku,
+	FieldGoodsSkuID,
+	FieldGoodsSkuDesc,
 	FieldNum,
 	FieldCreatedAt,
 	FieldUpdatedAt,

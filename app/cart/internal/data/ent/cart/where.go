@@ -94,10 +94,17 @@ func GoodsID(v int64) predicate.Cart {
 	})
 }
 
-// GoodsSku applies equality check predicate on the "goods_sku" field. It's identical to GoodsSkuEQ.
-func GoodsSku(v int64) predicate.Cart {
+// GoodsSkuID applies equality check predicate on the "goods_sku_id" field. It's identical to GoodsSkuIDEQ.
+func GoodsSkuID(v int64) predicate.Cart {
 	return predicate.Cart(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldGoodsSku), v))
+		s.Where(sql.EQ(s.C(FieldGoodsSkuID), v))
+	})
+}
+
+// GoodsSkuDesc applies equality check predicate on the "goods_sku_desc" field. It's identical to GoodsSkuDescEQ.
+func GoodsSkuDesc(v string) predicate.Cart {
+	return predicate.Cart(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldGoodsSkuDesc), v))
 	})
 }
 
@@ -250,67 +257,166 @@ func GoodsIDLTE(v int64) predicate.Cart {
 	})
 }
 
-// GoodsSkuEQ applies the EQ predicate on the "goods_sku" field.
-func GoodsSkuEQ(v int64) predicate.Cart {
+// GoodsSkuIDEQ applies the EQ predicate on the "goods_sku_id" field.
+func GoodsSkuIDEQ(v int64) predicate.Cart {
 	return predicate.Cart(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldGoodsSku), v))
+		s.Where(sql.EQ(s.C(FieldGoodsSkuID), v))
 	})
 }
 
-// GoodsSkuNEQ applies the NEQ predicate on the "goods_sku" field.
-func GoodsSkuNEQ(v int64) predicate.Cart {
+// GoodsSkuIDNEQ applies the NEQ predicate on the "goods_sku_id" field.
+func GoodsSkuIDNEQ(v int64) predicate.Cart {
 	return predicate.Cart(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldGoodsSku), v))
+		s.Where(sql.NEQ(s.C(FieldGoodsSkuID), v))
 	})
 }
 
-// GoodsSkuIn applies the In predicate on the "goods_sku" field.
-func GoodsSkuIn(vs ...int64) predicate.Cart {
+// GoodsSkuIDIn applies the In predicate on the "goods_sku_id" field.
+func GoodsSkuIDIn(vs ...int64) predicate.Cart {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
 	}
 	return predicate.Cart(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldGoodsSku), v...))
+		s.Where(sql.In(s.C(FieldGoodsSkuID), v...))
 	})
 }
 
-// GoodsSkuNotIn applies the NotIn predicate on the "goods_sku" field.
-func GoodsSkuNotIn(vs ...int64) predicate.Cart {
+// GoodsSkuIDNotIn applies the NotIn predicate on the "goods_sku_id" field.
+func GoodsSkuIDNotIn(vs ...int64) predicate.Cart {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
 	}
 	return predicate.Cart(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldGoodsSku), v...))
+		s.Where(sql.NotIn(s.C(FieldGoodsSkuID), v...))
 	})
 }
 
-// GoodsSkuGT applies the GT predicate on the "goods_sku" field.
-func GoodsSkuGT(v int64) predicate.Cart {
+// GoodsSkuIDGT applies the GT predicate on the "goods_sku_id" field.
+func GoodsSkuIDGT(v int64) predicate.Cart {
 	return predicate.Cart(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldGoodsSku), v))
+		s.Where(sql.GT(s.C(FieldGoodsSkuID), v))
 	})
 }
 
-// GoodsSkuGTE applies the GTE predicate on the "goods_sku" field.
-func GoodsSkuGTE(v int64) predicate.Cart {
+// GoodsSkuIDGTE applies the GTE predicate on the "goods_sku_id" field.
+func GoodsSkuIDGTE(v int64) predicate.Cart {
 	return predicate.Cart(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldGoodsSku), v))
+		s.Where(sql.GTE(s.C(FieldGoodsSkuID), v))
 	})
 }
 
-// GoodsSkuLT applies the LT predicate on the "goods_sku" field.
-func GoodsSkuLT(v int64) predicate.Cart {
+// GoodsSkuIDLT applies the LT predicate on the "goods_sku_id" field.
+func GoodsSkuIDLT(v int64) predicate.Cart {
 	return predicate.Cart(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldGoodsSku), v))
+		s.Where(sql.LT(s.C(FieldGoodsSkuID), v))
 	})
 }
 
-// GoodsSkuLTE applies the LTE predicate on the "goods_sku" field.
-func GoodsSkuLTE(v int64) predicate.Cart {
+// GoodsSkuIDLTE applies the LTE predicate on the "goods_sku_id" field.
+func GoodsSkuIDLTE(v int64) predicate.Cart {
 	return predicate.Cart(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldGoodsSku), v))
+		s.Where(sql.LTE(s.C(FieldGoodsSkuID), v))
+	})
+}
+
+// GoodsSkuDescEQ applies the EQ predicate on the "goods_sku_desc" field.
+func GoodsSkuDescEQ(v string) predicate.Cart {
+	return predicate.Cart(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldGoodsSkuDesc), v))
+	})
+}
+
+// GoodsSkuDescNEQ applies the NEQ predicate on the "goods_sku_desc" field.
+func GoodsSkuDescNEQ(v string) predicate.Cart {
+	return predicate.Cart(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldGoodsSkuDesc), v))
+	})
+}
+
+// GoodsSkuDescIn applies the In predicate on the "goods_sku_desc" field.
+func GoodsSkuDescIn(vs ...string) predicate.Cart {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Cart(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldGoodsSkuDesc), v...))
+	})
+}
+
+// GoodsSkuDescNotIn applies the NotIn predicate on the "goods_sku_desc" field.
+func GoodsSkuDescNotIn(vs ...string) predicate.Cart {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Cart(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldGoodsSkuDesc), v...))
+	})
+}
+
+// GoodsSkuDescGT applies the GT predicate on the "goods_sku_desc" field.
+func GoodsSkuDescGT(v string) predicate.Cart {
+	return predicate.Cart(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldGoodsSkuDesc), v))
+	})
+}
+
+// GoodsSkuDescGTE applies the GTE predicate on the "goods_sku_desc" field.
+func GoodsSkuDescGTE(v string) predicate.Cart {
+	return predicate.Cart(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldGoodsSkuDesc), v))
+	})
+}
+
+// GoodsSkuDescLT applies the LT predicate on the "goods_sku_desc" field.
+func GoodsSkuDescLT(v string) predicate.Cart {
+	return predicate.Cart(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldGoodsSkuDesc), v))
+	})
+}
+
+// GoodsSkuDescLTE applies the LTE predicate on the "goods_sku_desc" field.
+func GoodsSkuDescLTE(v string) predicate.Cart {
+	return predicate.Cart(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldGoodsSkuDesc), v))
+	})
+}
+
+// GoodsSkuDescContains applies the Contains predicate on the "goods_sku_desc" field.
+func GoodsSkuDescContains(v string) predicate.Cart {
+	return predicate.Cart(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldGoodsSkuDesc), v))
+	})
+}
+
+// GoodsSkuDescHasPrefix applies the HasPrefix predicate on the "goods_sku_desc" field.
+func GoodsSkuDescHasPrefix(v string) predicate.Cart {
+	return predicate.Cart(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldGoodsSkuDesc), v))
+	})
+}
+
+// GoodsSkuDescHasSuffix applies the HasSuffix predicate on the "goods_sku_desc" field.
+func GoodsSkuDescHasSuffix(v string) predicate.Cart {
+	return predicate.Cart(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldGoodsSkuDesc), v))
+	})
+}
+
+// GoodsSkuDescEqualFold applies the EqualFold predicate on the "goods_sku_desc" field.
+func GoodsSkuDescEqualFold(v string) predicate.Cart {
+	return predicate.Cart(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldGoodsSkuDesc), v))
+	})
+}
+
+// GoodsSkuDescContainsFold applies the ContainsFold predicate on the "goods_sku_desc" field.
+func GoodsSkuDescContainsFold(v string) predicate.Cart {
+	return predicate.Cart(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldGoodsSkuDesc), v))
 	})
 }
 

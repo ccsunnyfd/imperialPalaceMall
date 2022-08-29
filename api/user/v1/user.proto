@@ -39,7 +39,7 @@ message DeleteUserRequest {}
 message DeleteUserReply {}
 
 message CheckTokenRequest {
-	google.protobuf.StringValue token = 1 [(validate.rules).string = {len: 26}, (validate.rules).message.required = true];
+	google.protobuf.StringValue token = 1 [(validate.rules).string = {min_len: 20}, (validate.rules).message.required = true];
 }
 message CheckTokenReply {
 	message UserRet {

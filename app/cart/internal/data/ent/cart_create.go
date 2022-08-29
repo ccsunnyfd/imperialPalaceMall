@@ -32,9 +32,15 @@ func (cc *CartCreate) SetGoodsID(i int64) *CartCreate {
 	return cc
 }
 
-// SetGoodsSku sets the "goods_sku" field.
-func (cc *CartCreate) SetGoodsSku(i int64) *CartCreate {
-	cc.mutation.SetGoodsSku(i)
+// SetGoodsSkuID sets the "goods_sku_id" field.
+func (cc *CartCreate) SetGoodsSkuID(i int64) *CartCreate {
+	cc.mutation.SetGoodsSkuID(i)
+	return cc
+}
+
+// SetGoodsSkuDesc sets the "goods_sku_desc" field.
+func (cc *CartCreate) SetGoodsSkuDesc(s string) *CartCreate {
+	cc.mutation.SetGoodsSkuDesc(s)
 	return cc
 }
 
@@ -173,8 +179,11 @@ func (cc *CartCreate) check() error {
 	if _, ok := cc.mutation.GoodsID(); !ok {
 		return &ValidationError{Name: "goods_id", err: errors.New(`ent: missing required field "Cart.goods_id"`)}
 	}
-	if _, ok := cc.mutation.GoodsSku(); !ok {
-		return &ValidationError{Name: "goods_sku", err: errors.New(`ent: missing required field "Cart.goods_sku"`)}
+	if _, ok := cc.mutation.GoodsSkuID(); !ok {
+		return &ValidationError{Name: "goods_sku_id", err: errors.New(`ent: missing required field "Cart.goods_sku_id"`)}
+	}
+	if _, ok := cc.mutation.GoodsSkuDesc(); !ok {
+		return &ValidationError{Name: "goods_sku_desc", err: errors.New(`ent: missing required field "Cart.goods_sku_desc"`)}
 	}
 	if _, ok := cc.mutation.Num(); !ok {
 		return &ValidationError{Name: "num", err: errors.New(`ent: missing required field "Cart.num"`)}
@@ -234,13 +243,21 @@ func (cc *CartCreate) createSpec() (*Cart, *sqlgraph.CreateSpec) {
 		})
 		_node.GoodsID = value
 	}
-	if value, ok := cc.mutation.GoodsSku(); ok {
+	if value, ok := cc.mutation.GoodsSkuID(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeInt64,
 			Value:  value,
-			Column: cart.FieldGoodsSku,
+			Column: cart.FieldGoodsSkuID,
 		})
-		_node.GoodsSku = value
+		_node.GoodsSkuID = value
+	}
+	if value, ok := cc.mutation.GoodsSkuDesc(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: cart.FieldGoodsSkuDesc,
+		})
+		_node.GoodsSkuDesc = value
 	}
 	if value, ok := cc.mutation.Num(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{

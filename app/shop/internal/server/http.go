@@ -7,6 +7,7 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware/selector"
 	"github.com/go-kratos/kratos/v2/middleware/validate"
 	"github.com/go-kratos/kratos/v2/transport/http"
+	"github.com/gorilla/handlers"
 	pb "imperialPalaceMall/api/shop/interface/v1"
 	"imperialPalaceMall/app/pkg/middleware"
 	"imperialPalaceMall/app/shop/internal/conf"
@@ -16,7 +17,7 @@ import (
 func NewWhiteListMatcher() selector.MatchFunc {
 	whiteList := make(map[string]struct{})
 	// protobuf文件中 包名.服务名/方法名
-	whiteList["/api.shop.interface.v1.ShopInterface/WXLogin"] = struct{}{}
+	whiteList["/api.shop.interface.v1.ShopInterface/WxLogin"] = struct{}{}
 	whiteList["/api.shop.interface.v1.ShopInterface/ListCategory"] = struct{}{}
 	whiteList["/api.shop.interface.v1.ShopInterface/GetGoods"] = struct{}{}
 	whiteList["/api.shop.interface.v1.ShopInterface/ListGoods"] = struct{}{}
@@ -51,6 +52,11 @@ func NewHTTPServer(c *conf.Server, shopInterface *service.ShopInterface, logger 
 				middleware.JWTAuth(NewTokenChecker(shopInterface)),
 			).Match(NewWhiteListMatcher()).Build(),
 		),
+		http.Filter(handlers.CORS(
+			handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}),
+			handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD", "PATCH", "DELETE", "OPTIONS"}),
+			handlers.AllowedOrigins([]string{"*"}),
+		)),
 	}
 	if c.Http.Network != "" {
 		opts = append(opts, http.Network(c.Http.Network))

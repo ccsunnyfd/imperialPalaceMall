@@ -54,16 +54,22 @@ func (cu *CartUpdate) AddGoodsID(i int64) *CartUpdate {
 	return cu
 }
 
-// SetGoodsSku sets the "goods_sku" field.
-func (cu *CartUpdate) SetGoodsSku(i int64) *CartUpdate {
-	cu.mutation.ResetGoodsSku()
-	cu.mutation.SetGoodsSku(i)
+// SetGoodsSkuID sets the "goods_sku_id" field.
+func (cu *CartUpdate) SetGoodsSkuID(i int64) *CartUpdate {
+	cu.mutation.ResetGoodsSkuID()
+	cu.mutation.SetGoodsSkuID(i)
 	return cu
 }
 
-// AddGoodsSku adds i to the "goods_sku" field.
-func (cu *CartUpdate) AddGoodsSku(i int64) *CartUpdate {
-	cu.mutation.AddGoodsSku(i)
+// AddGoodsSkuID adds i to the "goods_sku_id" field.
+func (cu *CartUpdate) AddGoodsSkuID(i int64) *CartUpdate {
+	cu.mutation.AddGoodsSkuID(i)
+	return cu
+}
+
+// SetGoodsSkuDesc sets the "goods_sku_desc" field.
+func (cu *CartUpdate) SetGoodsSkuDesc(s string) *CartUpdate {
+	cu.mutation.SetGoodsSkuDesc(s)
 	return cu
 }
 
@@ -213,18 +219,25 @@ func (cu *CartUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: cart.FieldGoodsID,
 		})
 	}
-	if value, ok := cu.mutation.GoodsSku(); ok {
+	if value, ok := cu.mutation.GoodsSkuID(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeInt64,
 			Value:  value,
-			Column: cart.FieldGoodsSku,
+			Column: cart.FieldGoodsSkuID,
 		})
 	}
-	if value, ok := cu.mutation.AddedGoodsSku(); ok {
+	if value, ok := cu.mutation.AddedGoodsSkuID(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
 			Type:   field.TypeInt64,
 			Value:  value,
-			Column: cart.FieldGoodsSku,
+			Column: cart.FieldGoodsSkuID,
+		})
+	}
+	if value, ok := cu.mutation.GoodsSkuDesc(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: cart.FieldGoodsSkuDesc,
 		})
 	}
 	if value, ok := cu.mutation.Num(); ok {
@@ -300,16 +313,22 @@ func (cuo *CartUpdateOne) AddGoodsID(i int64) *CartUpdateOne {
 	return cuo
 }
 
-// SetGoodsSku sets the "goods_sku" field.
-func (cuo *CartUpdateOne) SetGoodsSku(i int64) *CartUpdateOne {
-	cuo.mutation.ResetGoodsSku()
-	cuo.mutation.SetGoodsSku(i)
+// SetGoodsSkuID sets the "goods_sku_id" field.
+func (cuo *CartUpdateOne) SetGoodsSkuID(i int64) *CartUpdateOne {
+	cuo.mutation.ResetGoodsSkuID()
+	cuo.mutation.SetGoodsSkuID(i)
 	return cuo
 }
 
-// AddGoodsSku adds i to the "goods_sku" field.
-func (cuo *CartUpdateOne) AddGoodsSku(i int64) *CartUpdateOne {
-	cuo.mutation.AddGoodsSku(i)
+// AddGoodsSkuID adds i to the "goods_sku_id" field.
+func (cuo *CartUpdateOne) AddGoodsSkuID(i int64) *CartUpdateOne {
+	cuo.mutation.AddGoodsSkuID(i)
+	return cuo
+}
+
+// SetGoodsSkuDesc sets the "goods_sku_desc" field.
+func (cuo *CartUpdateOne) SetGoodsSkuDesc(s string) *CartUpdateOne {
+	cuo.mutation.SetGoodsSkuDesc(s)
 	return cuo
 }
 
@@ -489,18 +508,25 @@ func (cuo *CartUpdateOne) sqlSave(ctx context.Context) (_node *Cart, err error) 
 			Column: cart.FieldGoodsID,
 		})
 	}
-	if value, ok := cuo.mutation.GoodsSku(); ok {
+	if value, ok := cuo.mutation.GoodsSkuID(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeInt64,
 			Value:  value,
-			Column: cart.FieldGoodsSku,
+			Column: cart.FieldGoodsSkuID,
 		})
 	}
-	if value, ok := cuo.mutation.AddedGoodsSku(); ok {
+	if value, ok := cuo.mutation.AddedGoodsSkuID(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
 			Type:   field.TypeInt64,
 			Value:  value,
-			Column: cart.FieldGoodsSku,
+			Column: cart.FieldGoodsSkuID,
+		})
+	}
+	if value, ok := cuo.mutation.GoodsSkuDesc(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: cart.FieldGoodsSkuDesc,
 		})
 	}
 	if value, ok := cuo.mutation.Num(); ok {

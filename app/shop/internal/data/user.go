@@ -29,7 +29,7 @@ func NewUserRepo(data *Data, logger log.Logger) biz.UserRepo {
 
 func (r *userRepo) WXLogin(ctx context.Context, code string, encryptedData string, iv string, sessionIsValid bool) (string, error) {
 	result, err, _ := r.sg.Do(fmt.Sprintf("wxlogin_with_code_%s", code), func() (interface{}, error) {
-		token, err := r.data.uc.WxLogin(ctx, &userV1.WxLoginRequest{
+		reply, err := r.data.uc.WxLogin(ctx, &userV1.WxLoginRequest{
 			Code:           wrapperspb.String(code),
 			EncryptedData:  wrapperspb.String(encryptedData),
 			Iv:             wrapperspb.String(iv),
@@ -38,7 +38,7 @@ func (r *userRepo) WXLogin(ctx context.Context, code string, encryptedData strin
 		if err != nil {
 			return nil, biz.ErrTokenNotCreated
 		}
-		return token, nil
+		return reply.Token, nil
 	})
 	if err != nil {
 		return "", err

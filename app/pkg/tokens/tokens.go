@@ -5,6 +5,7 @@ import (
 	"crypto/sha256"
 	"encoding/base32"
 	"encoding/hex"
+	"errors"
 	"time"
 )
 
@@ -40,4 +41,14 @@ func GenerateToken(userID int64, ttl time.Duration, scope string) (string, error
 	token.Hash = hash[:]
 
 	return hex.EncodeToString(token.Hash), nil
+}
+
+func ValidateHashedToken(token string) error {
+	if token == "" {
+		return errors.New("token must be provided")
+	}
+	//if len(token) != 32 {
+	//	return errors.New("token must be 32 bytes long")
+	//}
+	return nil
 }

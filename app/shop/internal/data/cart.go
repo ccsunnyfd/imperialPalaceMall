@@ -27,18 +27,20 @@ func NewCartRepo(data *Data, logger log.Logger) biz.CartRepo {
 
 func (r *cartRepo) AddCart(ctx context.Context, item *biz.Cart) (*biz.Cart, error) {
 	reply, err := r.data.cc.AddCart(ctx, &cartV1.AddCartRequest{
-		UserId:   wrapperspb.Int64(item.UserId),
-		GoodsId:  wrapperspb.Int64(item.GoodsId),
-		GoodsSku: wrapperspb.Int64(item.GoodsSKU),
+		UserId:       wrapperspb.Int64(item.UserId),
+		GoodsId:      wrapperspb.Int64(item.GoodsId),
+		GoodsSkuId:   wrapperspb.Int64(item.GoodsSKUId),
+		GoodsSkuDesc: wrapperspb.String(item.GoodsSKUDesc),
 	})
 	if err != nil {
 		return nil, biz.ErrAddCart
 	}
 	return &biz.Cart{
-		Id:       reply.Cart.Id,
-		UserId:   reply.Cart.UserId,
-		GoodsId:  reply.Cart.GoodsId,
-		GoodsSKU: reply.Cart.GoodsSku,
-		Num:      reply.Cart.Num,
+		Id:           reply.Cart.Id,
+		UserId:       reply.Cart.UserId,
+		GoodsId:      reply.Cart.GoodsId,
+		GoodsSKUId:   reply.Cart.GoodsSkuId,
+		GoodsSKUDesc: reply.Cart.GoodsSkuDesc,
+		Num:          reply.Cart.Num,
 	}, nil
 }

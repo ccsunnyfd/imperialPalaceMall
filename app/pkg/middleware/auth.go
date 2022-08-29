@@ -5,6 +5,7 @@ import (
 	"errors"
 	"github.com/go-kratos/kratos/v2/middleware"
 	"github.com/go-kratos/kratos/v2/transport"
+	"imperialPalaceMall/app/pkg/tokens"
 	"strings"
 )
 
@@ -30,7 +31,7 @@ func JWTAuth(ckTokenFunc CheckToken) middleware.Middleware {
 			}
 
 			// Validate the token to make sure it is in a sensible format.
-			err = validateTokenPlaintext(headerParts[1])
+			err = tokens.ValidateHashedToken(headerParts[1])
 			if err != nil {
 				return nil, err
 			}
@@ -43,16 +44,6 @@ func JWTAuth(ckTokenFunc CheckToken) middleware.Middleware {
 			return next(ContextSetUser(ctx, user), req)
 		}
 	}
-}
-
-func validateTokenPlaintext(tokenPlaintext string) error {
-	if tokenPlaintext == "" {
-		return errors.New("token must be provided")
-	}
-	if len(tokenPlaintext) != 26 {
-		return errors.New("token must be 26 bytes long")
-	}
-	return nil
 }
 
 type User struct {

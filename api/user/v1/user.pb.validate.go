@@ -940,16 +940,15 @@ func (m *CheckTokenRequest) validate(all bool) error {
 
 	if wrapper := m.GetToken(); wrapper != nil {
 
-		if utf8.RuneCountInString(wrapper.GetValue()) != 26 {
+		if utf8.RuneCountInString(wrapper.GetValue()) < 20 {
 			err := CheckTokenRequestValidationError{
 				field:  "Token",
-				reason: "value length must be 26 runes",
+				reason: "value length must be at least 20 runes",
 			}
 			if !all {
 				return err
 			}
 			errors = append(errors, err)
-
 		}
 
 	} else {

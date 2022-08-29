@@ -32,3 +32,7 @@ func (r *userRepo) SetUserCache(ctx context.Context, user *biz.UserCache, key st
 		r.log.Errorf("fail to set user cache:redis.Set(%v) error(%v)", user, err)
 	}
 }
+
+func (r *userRepo) DeleteOldToken(ctx context.Context, oldTokenKey string) {
+	r.data.rdb.Del(ctx, oldTokenKey)
+}

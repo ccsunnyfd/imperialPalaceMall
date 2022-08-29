@@ -15,11 +15,12 @@ var (
 
 // Cart is a Cart model.
 type Cart struct {
-	Id       int64
-	UserId   int64
-	GoodsId  int64
-	GoodsSKU int64
-	Num      int32
+	Id           int64
+	UserId       int64
+	GoodsId      int64
+	GoodsSKUId   int64
+	GoodsSKUDesc string
+	Num          int32
 }
 
 // CartRepo is a Cart repo.
@@ -50,6 +51,7 @@ func (uc *CartUsecase) AddCart(ctx context.Context, item *Cart) (*Cart, error) {
 		if errors.Is(err, ErrCartItemNotFound) {
 			return uc.repo.Create(ctx, item)
 		}
+		uc.log.Errorf("add cart error: %v", err)
 		return nil, err
 	}
 	// 存在则更新

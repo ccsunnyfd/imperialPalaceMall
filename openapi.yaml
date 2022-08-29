@@ -160,8 +160,10 @@ components:
             properties:
                 goodsId:
                     $ref: '#/components/schemas/google.protobuf.Int64Value'
-                goodsSku:
+                goodsSkuId:
                     $ref: '#/components/schemas/google.protobuf.Int64Value'
+                goodsSkuDesc:
+                    $ref: '#/components/schemas/google.protobuf.StringValue'
         api.shop.interface.v1.Cart:
             type: object
             properties:
@@ -174,9 +176,11 @@ components:
                 goodsId:
                     type: integer
                     format: int64
-                goodsSku:
+                goodsSkuId:
                     type: integer
                     format: int64
+                goodsSkuDesc:
+                    type: string
                 num:
                     type: integer
                     format: int32

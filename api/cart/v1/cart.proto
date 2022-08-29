@@ -16,15 +16,17 @@ service CartService {
 message AddCartRequest {
   google.protobuf.Int64Value user_id = 1 [(validate.rules).int64 = {gt: 0}, (validate.rules).message.required=true];
   google.protobuf.Int64Value goods_id = 2 [(validate.rules).int64 = {gt: 0}, (validate.rules).message.required=true];
-  google.protobuf.Int64Value goods_sku = 3 [(validate.rules).int64 = {gt: 0}, (validate.rules).message.required=true];
+  google.protobuf.Int64Value goods_sku_id = 3 [(validate.rules).int64 = {gt: 0}, (validate.rules).message.required=true];
+  google.protobuf.StringValue goods_sku_desc = 4 [(validate.rules).string = {min_len: 1, max_len: 50}, (validate.rules).message.required=true];
 }
 
 message Cart {
   int64 id = 1;
   int64 user_id = 2;
   int64 goods_id = 3;
-  int64 goods_sku = 4;
-  int32 num = 5;
+  int64 goods_sku_id = 4;
+  string goods_sku_desc = 5;
+  int32 num = 6;
 }
 
 message AddCartReply {

@@ -49,6 +49,7 @@ type UserRepo interface {
 	DecryptUserInfo(context.Context, string, string, string) (*User, error)
 	Get(context.Context, string) (*UserCache, error)
 	SetUserCache(context.Context, *UserCache, string, time.Duration)
+	DeleteOldToken(context.Context, string)
 }
 
 // UserUsecase is a User usecase.
@@ -70,6 +71,8 @@ func (u *UserUsecase) WXLogin(ctx context.Context, code string, encryptedData st
 
 	sessionKeyForDecrypt := newSessionKey
 
+	// 老的token
+	var oldToken string
 	if sessionIsValid {
 		// 从缓存中拿老的session_key用来解密用户敏感数据
 		userCache, err := u.repo.Get(ctx, openid)
@@ -77,6 +80,7 @@ func (u *UserUsecase) WXLogin(ctx context.Context, code string, encryptedData st
 			return "", err
 		}
 		sessionKeyForDecrypt = userCache.SessionKey
+		oldToken = userCache.Token
 	}
 
 	userInfo, err := u.repo.DecryptUserInfo(ctx, sessionKeyForDecrypt, encryptedData, iv)
@@ -102,20 +106,24 @@ func (u *UserUsecase) WXLogin(ctx context.Context, code string, encryptedData st
 		return "", err
 	}
 
-	// 缓存
-	u.repo.SetUserCache(ctx, &UserCache{
-		Token:      tokenStr,
-		OpenId:     openid,
-		UserId:     userId,
-		SessionKey: newSessionKey,
-	}, tokenStr, 72*time.Hour)
+	// 缓存。由于微信最新的CheckSession状态是自动维护的，可以一直不过期，所以这里需要设置缓存永不过期0，新生成token时先把老的token记录删除
+	if oldToken != "" {
+		u.repo.DeleteOldToken(ctx, oldToken)
+	}
 
 	u.repo.SetUserCache(ctx, &UserCache{
 		Token:      tokenStr,
 		OpenId:     openid,
 		UserId:     userId,
 		SessionKey: newSessionKey,
-	}, openid, 72*time.Hour)
+	}, tokenStr, 0)
+
+	u.repo.SetUserCache(ctx, &UserCache{
+		Token:      tokenStr,
+		OpenId:     openid,
+		UserId:     userId,
+		SessionKey: newSessionKey,
+	}, openid, 0)
 
 	return tokenStr, nil
 }

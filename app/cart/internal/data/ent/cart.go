@@ -20,8 +20,10 @@ type Cart struct {
 	UserID int64 `json:"user_id,omitempty"`
 	// GoodsID holds the value of the "goods_id" field.
 	GoodsID int64 `json:"goods_id,omitempty"`
-	// GoodsSku holds the value of the "goods_sku" field.
-	GoodsSku int64 `json:"goods_sku,omitempty"`
+	// GoodsSkuID holds the value of the "goods_sku_id" field.
+	GoodsSkuID int64 `json:"goods_sku_id,omitempty"`
+	// GoodsSkuDesc holds the value of the "goods_sku_desc" field.
+	GoodsSkuDesc string `json:"goods_sku_desc,omitempty"`
 	// Num holds the value of the "num" field.
 	Num int32 `json:"num,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
@@ -35,8 +37,10 @@ func (*Cart) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case cart.FieldID, cart.FieldUserID, cart.FieldGoodsID, cart.FieldGoodsSku, cart.FieldNum:
+		case cart.FieldID, cart.FieldUserID, cart.FieldGoodsID, cart.FieldGoodsSkuID, cart.FieldNum:
 			values[i] = new(sql.NullInt64)
+		case cart.FieldGoodsSkuDesc:
+			values[i] = new(sql.NullString)
 		case cart.FieldCreatedAt, cart.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
 		default:
@@ -72,11 +76,17 @@ func (c *Cart) assignValues(columns []string, values []interface{}) error {
 			} else if value.Valid {
 				c.GoodsID = value.Int64
 			}
-		case cart.FieldGoodsSku:
+		case cart.FieldGoodsSkuID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field goods_sku", values[i])
+				return fmt.Errorf("unexpected type %T for field goods_sku_id", values[i])
 			} else if value.Valid {
-				c.GoodsSku = value.Int64
+				c.GoodsSkuID = value.Int64
+			}
+		case cart.FieldGoodsSkuDesc:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field goods_sku_desc", values[i])
+			} else if value.Valid {
+				c.GoodsSkuDesc = value.String
 			}
 		case cart.FieldNum:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -130,8 +140,11 @@ func (c *Cart) String() string {
 	builder.WriteString("goods_id=")
 	builder.WriteString(fmt.Sprintf("%v", c.GoodsID))
 	builder.WriteString(", ")
-	builder.WriteString("goods_sku=")
-	builder.WriteString(fmt.Sprintf("%v", c.GoodsSku))
+	builder.WriteString("goods_sku_id=")
+	builder.WriteString(fmt.Sprintf("%v", c.GoodsSkuID))
+	builder.WriteString(", ")
+	builder.WriteString("goods_sku_desc=")
+	builder.WriteString(c.GoodsSkuDesc)
 	builder.WriteString(", ")
 	builder.WriteString("num=")
 	builder.WriteString(fmt.Sprintf("%v", c.Num))

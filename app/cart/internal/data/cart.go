@@ -27,18 +27,21 @@ func (r *cartRepo) Create(ctx context.Context, item *biz.Cart) (*biz.Cart, error
 		Create().
 		SetUserID(item.UserId).
 		SetGoodsID(item.GoodsId).
-		SetGoodsSku(item.GoodsSKU).
+		SetGoodsSkuID(item.GoodsSKUId).
+		SetGoodsSkuDesc(item.GoodsSKUDesc).
 		SetNum(1).
 		Save(ctx)
 	if err != nil {
+		r.log.Errorf("add cart error: %v", err)
 		return nil, err
 	}
 	return &biz.Cart{
-		Id:       po.ID,
-		UserId:   po.UserID,
-		GoodsId:  po.GoodsID,
-		GoodsSKU: po.GoodsSku,
-		Num:      po.Num,
+		Id:           po.ID,
+		UserId:       po.UserID,
+		GoodsId:      po.GoodsID,
+		GoodsSKUId:   po.GoodsSkuID,
+		GoodsSKUDesc: po.GoodsSkuDesc,
+		Num:          po.Num,
 	}, nil
 }
 
@@ -51,11 +54,12 @@ func (r *cartRepo) Update(ctx context.Context, item *biz.Cart) (*biz.Cart, error
 		return nil, err
 	}
 	return &biz.Cart{
-		Id:       po.ID,
-		UserId:   po.UserID,
-		GoodsId:  po.GoodsID,
-		GoodsSKU: po.GoodsSku,
-		Num:      po.Num,
+		Id:           po.ID,
+		UserId:       po.UserID,
+		GoodsId:      po.GoodsID,
+		GoodsSKUId:   po.GoodsSkuID,
+		GoodsSKUDesc: po.GoodsSkuDesc,
+		Num:          po.Num,
 	}, nil
 }
 
@@ -65,17 +69,18 @@ func (r *cartRepo) FindOne(ctx context.Context, item *biz.Cart) (*biz.Cart, erro
 		Where(
 			cart.UserIDEQ(item.UserId),
 			cart.GoodsIDEQ(item.GoodsId),
-			cart.GoodsSkuEQ(item.GoodsSKU)).
+			cart.GoodsSkuIDEQ(item.GoodsSKUId)).
 		First(ctx)
 
 	if err != nil {
 		return nil, biz.ErrCartItemNotFound
 	}
 	return &biz.Cart{
-		Id:       po.ID,
-		UserId:   po.UserID,
-		GoodsId:  po.GoodsID,
-		GoodsSKU: po.GoodsSku,
-		Num:      po.Num,
+		Id:           po.ID,
+		UserId:       po.UserID,
+		GoodsId:      po.GoodsID,
+		GoodsSKUId:   po.GoodsSkuID,
+		GoodsSKUDesc: po.GoodsSkuDesc,
+		Num:          po.Num,
 	}, nil
 }

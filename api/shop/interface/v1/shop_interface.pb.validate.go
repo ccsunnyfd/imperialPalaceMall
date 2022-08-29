@@ -2390,11 +2390,11 @@ func (m *AddCartRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if wrapper := m.GetGoodsSku(); wrapper != nil {
+	if wrapper := m.GetGoodsSkuId(); wrapper != nil {
 
 		if wrapper.GetValue() <= 0 {
 			err := AddCartRequestValidationError{
-				field:  "GoodsSku",
+				field:  "GoodsSkuId",
 				reason: "value must be greater than 0",
 			}
 			if !all {
@@ -2405,7 +2405,31 @@ func (m *AddCartRequest) validate(all bool) error {
 
 	} else {
 		err := AddCartRequestValidationError{
-			field:  "GoodsSku",
+			field:  "GoodsSkuId",
+			reason: "value is required and must not be nil.",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if wrapper := m.GetGoodsSkuDesc(); wrapper != nil {
+
+		if l := utf8.RuneCountInString(wrapper.GetValue()); l < 1 || l > 50 {
+			err := AddCartRequestValidationError{
+				field:  "GoodsSkuDesc",
+				reason: "value length must be between 1 and 50 runes, inclusive",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+	} else {
+		err := AddCartRequestValidationError{
+			field:  "GoodsSkuDesc",
 			reason: "value is required and must not be nil.",
 		}
 		if !all {
@@ -2519,7 +2543,9 @@ func (m *Cart) validate(all bool) error {
 
 	// no validation rules for GoodsId
 
-	// no validation rules for GoodsSku
+	// no validation rules for GoodsSkuId
+
+	// no validation rules for GoodsSkuDesc
 
 	// no validation rules for Num
 

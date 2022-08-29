@@ -13,11 +13,12 @@ var (
 
 // Cart is a Cart model.
 type Cart struct {
-	Id       int64
-	UserId   int64
-	GoodsId  int64
-	GoodsSKU int64
-	Num      int32
+	Id           int64
+	UserId       int64
+	GoodsId      int64
+	GoodsSKUId   int64
+	GoodsSKUDesc string
+	Num          int32
 }
 
 // CartRepo is a Cart repo.
