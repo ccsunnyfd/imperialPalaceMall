@@ -4,11 +4,12 @@ import (
 	"context"
 	"errors"
 	"github.com/go-kratos/kratos/v2/log"
-	"imperialPalaceMall/app/pkg/middleware"
 )
 
 var (
-	ErrAddCart = errors.New("add cart item error")
+	ErrAddCart       = errors.New("add cart item error")
+	ErrGetCart       = errors.New("get cart by userId error")
+	ErrUpdateCartNum = errors.New("update cart num error")
 )
 
 // Cart is a Cart model.
@@ -24,6 +25,8 @@ type Cart struct {
 // CartRepo is a Cart repo.
 type CartRepo interface {
 	AddCart(ctx context.Context, item *Cart) (*Cart, error)
+	GetCart(ctx context.Context, userId int64) ([]*Cart, error)
+	UpdateCartNum(ctx context.Context, cartId int64, num int32) (*Cart, error)
 }
 
 // CartUsecase is a Cart usecase.
@@ -39,7 +42,13 @@ func NewCartUsecase(repo CartRepo, logger log.Logger) *CartUsecase {
 
 // AddCart creates a Cart item if no same item has been added, otherwise update item num in Cart, and returns the new Cart.
 func (uc *CartUsecase) AddCart(ctx context.Context, item *Cart) (*Cart, error) {
-	userId := middleware.ContextGetUser(ctx).UserId
-	item.UserId = userId
 	return uc.repo.AddCart(ctx, item)
+}
+
+func (uc *CartUsecase) GetCart(ctx context.Context, userId int64) ([]*Cart, error) {
+	return uc.repo.GetCart(ctx, userId)
+}
+
+func (uc *CartUsecase) UpdateCartNum(ctx context.Context, cartId int64, num int32) (*Cart, error) {
+	return uc.repo.UpdateCartNum(ctx, cartId, num)
 }

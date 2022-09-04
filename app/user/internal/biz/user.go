@@ -77,6 +77,7 @@ func (u *UserUsecase) WXLogin(ctx context.Context, code string, encryptedData st
 		// 从缓存中拿老的session_key用来解密用户敏感数据
 		userCache, err := u.repo.Get(ctx, openid)
 		if err != nil {
+			u.log.Errorf("get from redis cache error: %v", err)
 			return "", err
 		}
 		sessionKeyForDecrypt = userCache.SessionKey

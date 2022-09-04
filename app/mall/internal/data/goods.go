@@ -82,6 +82,21 @@ func (r *goodsRepo) GetSKUs(ctx context.Context, goodsId int64) ([]*biz.GoodsSKU
 	return rv, nil
 }
 
+func (r *goodsRepo) GetBySkuId(ctx context.Context, skuId int64) (*biz.GoodsSKU, error) {
+	sku, err := r.data.db.Goods.GetSku(ctx, skuId)
+
+	if err != nil {
+		return nil, err
+	}
+	return &biz.GoodsSKU{
+		Id:            sku.Id,
+		GoodsId:       sku.GoodsId,
+		GoodsAttrPath: sku.GoodsAttrPath,
+		Price:         sku.Price,
+		Stock:         sku.Stock,
+	}, nil
+}
+
 func (r *goodsRepo) GetAttrs(ctx context.Context, goodsId int64) ([]*biz.GoodsAttr, error) {
 	kk, err := r.data.db.Goods.GetGoodsAttrKeys(ctx, goodsId)
 	if err != nil {

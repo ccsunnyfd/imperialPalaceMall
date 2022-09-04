@@ -28,6 +28,8 @@ type ShopInterfaceClient interface {
 	GetSKUs(ctx context.Context, in *GetSKUsRequest, opts ...grpc.CallOption) (*GetSKUsReply, error)
 	WxLogin(ctx context.Context, in *WxLoginRequest, opts ...grpc.CallOption) (*WxLoginReply, error)
 	AddCart(ctx context.Context, in *AddCartRequest, opts ...grpc.CallOption) (*AddCartReply, error)
+	GetMyCart(ctx context.Context, in *GetMyCartRequest, opts ...grpc.CallOption) (*GetMyCartReply, error)
+	UpdateCartNum(ctx context.Context, in *UpdateCartNumRequest, opts ...grpc.CallOption) (*UpdateCartNumReply, error)
 }
 
 type shopInterfaceClient struct {
@@ -92,6 +94,24 @@ func (c *shopInterfaceClient) AddCart(ctx context.Context, in *AddCartRequest, o
 	return out, nil
 }
 
+func (c *shopInterfaceClient) GetMyCart(ctx context.Context, in *GetMyCartRequest, opts ...grpc.CallOption) (*GetMyCartReply, error) {
+	out := new(GetMyCartReply)
+	err := c.cc.Invoke(ctx, "/api.shop.interface.v1.ShopInterface/GetMyCart", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *shopInterfaceClient) UpdateCartNum(ctx context.Context, in *UpdateCartNumRequest, opts ...grpc.CallOption) (*UpdateCartNumReply, error) {
+	out := new(UpdateCartNumReply)
+	err := c.cc.Invoke(ctx, "/api.shop.interface.v1.ShopInterface/UpdateCartNum", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ShopInterfaceServer is the server API for ShopInterface service.
 // All implementations must embed UnimplementedShopInterfaceServer
 // for forward compatibility
@@ -102,6 +122,8 @@ type ShopInterfaceServer interface {
 	GetSKUs(context.Context, *GetSKUsRequest) (*GetSKUsReply, error)
 	WxLogin(context.Context, *WxLoginRequest) (*WxLoginReply, error)
 	AddCart(context.Context, *AddCartRequest) (*AddCartReply, error)
+	GetMyCart(context.Context, *GetMyCartRequest) (*GetMyCartReply, error)
+	UpdateCartNum(context.Context, *UpdateCartNumRequest) (*UpdateCartNumReply, error)
 	mustEmbedUnimplementedShopInterfaceServer()
 }
 
@@ -126,6 +148,12 @@ func (UnimplementedShopInterfaceServer) WxLogin(context.Context, *WxLoginRequest
 }
 func (UnimplementedShopInterfaceServer) AddCart(context.Context, *AddCartRequest) (*AddCartReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddCart not implemented")
+}
+func (UnimplementedShopInterfaceServer) GetMyCart(context.Context, *GetMyCartRequest) (*GetMyCartReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetMyCart not implemented")
+}
+func (UnimplementedShopInterfaceServer) UpdateCartNum(context.Context, *UpdateCartNumRequest) (*UpdateCartNumReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateCartNum not implemented")
 }
 func (UnimplementedShopInterfaceServer) mustEmbedUnimplementedShopInterfaceServer() {}
 
@@ -248,6 +276,42 @@ func _ShopInterface_AddCart_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ShopInterface_GetMyCart_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetMyCartRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ShopInterfaceServer).GetMyCart(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.shop.interface.v1.ShopInterface/GetMyCart",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ShopInterfaceServer).GetMyCart(ctx, req.(*GetMyCartRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ShopInterface_UpdateCartNum_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateCartNumRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ShopInterfaceServer).UpdateCartNum(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.shop.interface.v1.ShopInterface/UpdateCartNum",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ShopInterfaceServer).UpdateCartNum(ctx, req.(*UpdateCartNumRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ShopInterface_ServiceDesc is the grpc.ServiceDesc for ShopInterface service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -278,6 +342,14 @@ var ShopInterface_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AddCart",
 			Handler:    _ShopInterface_AddCart_Handler,
+		},
+		{
+			MethodName: "GetMyCart",
+			Handler:    _ShopInterface_GetMyCart_Handler,
+		},
+		{
+			MethodName: "UpdateCartNum",
+			Handler:    _ShopInterface_UpdateCartNum_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

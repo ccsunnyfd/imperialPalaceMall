@@ -45,10 +45,10 @@ func (r *cartRepo) Create(ctx context.Context, item *biz.Cart) (*biz.Cart, error
 	}, nil
 }
 
-func (r *cartRepo) Update(ctx context.Context, item *biz.Cart) (*biz.Cart, error) {
+func (r *cartRepo) UpdateNum(ctx context.Context, cartId int64, num int32) (*biz.Cart, error) {
 	po, err := r.data.db.Cart.
-		UpdateOneID(item.Id).
-		SetNum(item.Num).
+		UpdateOneID(cartId).
+		SetNum(num).
 		Save(ctx)
 	if err != nil {
 		return nil, err
@@ -83,4 +83,28 @@ func (r *cartRepo) FindOne(ctx context.Context, item *biz.Cart) (*biz.Cart, erro
 		GoodsSKUDesc: po.GoodsSkuDesc,
 		Num:          po.Num,
 	}, nil
+}
+
+func (r *cartRepo) GetByUserId(ctx context.Context, userId int64) ([]*biz.Cart, error) {
+	po, err := r.data.db.Cart.
+		Query().
+		Where(
+			cart.UserIDEQ(userId)).
+		All(ctx)
+	if err != nil {
+		return nil, biz.ErrCartItemNotFound
+	}
+
+	rv := make([]*biz.Cart, 0, len(po))
+	for _, x := range po {
+		rv = append(rv, &biz.Cart{
+			Id:           x.ID,
+			UserId:       x.UserID,
+			GoodsId:      x.GoodsID,
+			GoodsSKUId:   x.GoodsSkuID,
+			GoodsSKUDesc: x.GoodsSkuDesc,
+			Num:          x.Num,
+		})
+	}
+	return rv, nil
 }

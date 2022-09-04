@@ -45,6 +45,15 @@ type GoodsSKU struct {
 	Stock         int64
 }
 
+type GoodsAndSkuDetail struct {
+	GoodsAttrPath []int64
+	Price         int64
+	Stock         int64
+	GoodsName     string
+	GoodsDesc     string
+	GoodsImage    string
+}
+
 type GoodsSimplify struct {
 	Id         int64
 	SpuNo      string
@@ -323,4 +332,29 @@ func (c *GoodsClient) Query(ctx context.Context, categoryId int64, f filters.Fil
 
 	metadata := filters.CalculateMetadata(totalRecords, f.Page, f.PageSize)
 	return goodsList, metadata, nil
+}
+
+func (c *GoodsClient) GetSku(ctx context.Context, skuId int64) (*GoodsSKU, error) {
+	query := `SELECT id, goods_id, goods_attr_path, price, stock FROM goods_sku WHERE id = $1`
+
+	var sku GoodsSKU
+
+	err := c.client.db.QueryRowContext(ctx, query, skuId).Scan(
+		&sku.Id,
+		&sku.GoodsId,
+		pq.Array(&sku.GoodsAttrPath),
+		&sku.Price,
+		&sku.Stock,
+	)
+
+	if err != nil {
+		switch {
+		case errors.Is(err, sql.ErrNoRows):
+			return nil, biz.ErrSkuNotFound
+		default:
+			return nil, err
+		}
+	}
+
+	return &sku, nil
 }

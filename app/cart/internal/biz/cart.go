@@ -27,7 +27,8 @@ type Cart struct {
 type CartRepo interface {
 	FindOne(ctx context.Context, item *Cart) (*Cart, error)
 	Create(ctx context.Context, item *Cart) (*Cart, error)
-	Update(ctx context.Context, item *Cart) (*Cart, error)
+	UpdateNum(ctx context.Context, cartId int64, num int32) (*Cart, error)
+	GetByUserId(ctx context.Context, userId int64) ([]*Cart, error)
 }
 
 // CartUsecase is a Cart usecase.
@@ -55,6 +56,17 @@ func (uc *CartUsecase) AddCart(ctx context.Context, item *Cart) (*Cart, error) {
 		return nil, err
 	}
 	// 存在则更新
-	existItem.Num++
-	return uc.repo.Update(ctx, existItem)
+	return uc.repo.UpdateNum(ctx, existItem.Id, existItem.Num+1)
+}
+
+func (uc *CartUsecase) GetCartsByUserId(ctx context.Context, userId int64) ([]*Cart, error) {
+	uc.log.WithContext(ctx).Infof("GetCartsByUserId: %d", userId)
+
+	return uc.repo.GetByUserId(ctx, userId)
+}
+
+func (uc *CartUsecase) UpdateCartNum(ctx context.Context, cartId int64, num int32) (*Cart, error) {
+	uc.log.WithContext(ctx).Infof("UpdateCartNum_cartId_%d_num_%d", cartId, num)
+
+	return uc.repo.UpdateNum(ctx, cartId, num)
 }

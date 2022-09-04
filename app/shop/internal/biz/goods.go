@@ -8,9 +8,10 @@ import (
 )
 
 var (
-	ErrListGoods     = errors.New("goods not listed")
-	ErrGoodsNotFound = errors.New("goods not found")
-	ErrSKUNotFound   = errors.New("goods sku not found")
+	ErrListGoods                 = errors.New("goods not listed")
+	ErrGoodsNotFound             = errors.New("goods not found")
+	ErrSKUNotFound               = errors.New("goods sku not found")
+	ErrGoodsAndSkuDetailNotFound = errors.New("goods and sku detail not found")
 )
 
 type Goods struct {
@@ -71,11 +72,23 @@ type GoodsSimplify struct {
 	Info       GoodsInfo
 }
 
+type GoodsAndSkuDetailItem struct {
+	// goods
+	GoodsName  string
+	GoodsDesc  string
+	GoodsImage string
+	// goods_sku
+	Price         int64
+	Stock         int64
+	GoodsAttrPath []int64
+}
+
 // GoodsRepo is a Goods repo.
 type GoodsRepo interface {
 	List(ctx context.Context, categoryId int64, f filters.Filters) ([]*GoodsSimplify, filters.Metadata, error)
 	GetGoodsDetail(ctx context.Context, goodsId int64) (*GoodsDetail, error)
 	GetGoodsSKUs(ctx context.Context, goodsId int64) ([]*GoodsSKU, []*GoodsAttr, error)
+	GetGoodsAndSkuDetail(ctx context.Context, goodsId int64, skuId int64) (*GoodsAndSkuDetailItem, error)
 }
 
 // GoodsUsecase is a Goods usecase.
@@ -100,4 +113,8 @@ func (uc *GoodsUsecase) GetGoodsDetail(ctx context.Context, goodsId int64) (*Goo
 
 func (uc *GoodsUsecase) GetGoodsSKUs(ctx context.Context, goodsId int64) ([]*GoodsSKU, []*GoodsAttr, error) {
 	return uc.repo.GetGoodsSKUs(ctx, goodsId)
+}
+
+func (uc *GoodsUsecase) GetGoodsAndSkuDetail(ctx context.Context, goodsId, skuId int64) (*GoodsAndSkuDetailItem, error) {
+	return uc.repo.GetGoodsAndSkuDetail(ctx, goodsId, skuId)
 }

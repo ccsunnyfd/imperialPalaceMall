@@ -28,6 +28,7 @@ type GoodsServiceClient interface {
 	GetGoods(ctx context.Context, in *GetGoodsRequest, opts ...grpc.CallOption) (*GetGoodsReply, error)
 	ListGoods(ctx context.Context, in *ListGoodsRequest, opts ...grpc.CallOption) (*ListGoodsReply, error)
 	GetSKUs(ctx context.Context, in *GetSKUsRequest, opts ...grpc.CallOption) (*GetSKUsReply, error)
+	GetGoodsAndSkuDetail(ctx context.Context, in *GetGoodsAndSkuDetailRequest, opts ...grpc.CallOption) (*GetGoodsAndSkuDetailReply, error)
 }
 
 type goodsServiceClient struct {
@@ -92,6 +93,15 @@ func (c *goodsServiceClient) GetSKUs(ctx context.Context, in *GetSKUsRequest, op
 	return out, nil
 }
 
+func (c *goodsServiceClient) GetGoodsAndSkuDetail(ctx context.Context, in *GetGoodsAndSkuDetailRequest, opts ...grpc.CallOption) (*GetGoodsAndSkuDetailReply, error) {
+	out := new(GetGoodsAndSkuDetailReply)
+	err := c.cc.Invoke(ctx, "/api.mall.v1.GoodsService/GetGoodsAndSkuDetail", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // GoodsServiceServer is the server API for GoodsService service.
 // All implementations must embed UnimplementedGoodsServiceServer
 // for forward compatibility
@@ -102,6 +112,7 @@ type GoodsServiceServer interface {
 	GetGoods(context.Context, *GetGoodsRequest) (*GetGoodsReply, error)
 	ListGoods(context.Context, *ListGoodsRequest) (*ListGoodsReply, error)
 	GetSKUs(context.Context, *GetSKUsRequest) (*GetSKUsReply, error)
+	GetGoodsAndSkuDetail(context.Context, *GetGoodsAndSkuDetailRequest) (*GetGoodsAndSkuDetailReply, error)
 	mustEmbedUnimplementedGoodsServiceServer()
 }
 
@@ -126,6 +137,9 @@ func (UnimplementedGoodsServiceServer) ListGoods(context.Context, *ListGoodsRequ
 }
 func (UnimplementedGoodsServiceServer) GetSKUs(context.Context, *GetSKUsRequest) (*GetSKUsReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetSKUs not implemented")
+}
+func (UnimplementedGoodsServiceServer) GetGoodsAndSkuDetail(context.Context, *GetGoodsAndSkuDetailRequest) (*GetGoodsAndSkuDetailReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetGoodsAndSkuDetail not implemented")
 }
 func (UnimplementedGoodsServiceServer) mustEmbedUnimplementedGoodsServiceServer() {}
 
@@ -248,6 +262,24 @@ func _GoodsService_GetSKUs_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _GoodsService_GetGoodsAndSkuDetail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetGoodsAndSkuDetailRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GoodsServiceServer).GetGoodsAndSkuDetail(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.mall.v1.GoodsService/GetGoodsAndSkuDetail",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GoodsServiceServer).GetGoodsAndSkuDetail(ctx, req.(*GetGoodsAndSkuDetailRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // GoodsService_ServiceDesc is the grpc.ServiceDesc for GoodsService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -278,6 +310,10 @@ var GoodsService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetSKUs",
 			Handler:    _GoodsService_GetSKUs_Handler,
+		},
+		{
+			MethodName: "GetGoodsAndSkuDetail",
+			Handler:    _GoodsService_GetGoodsAndSkuDetail_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

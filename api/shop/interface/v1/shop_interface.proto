@@ -43,6 +43,17 @@ service ShopInterface {
 			body: "*"
 		};
 	};
+	rpc GetMyCart (GetMyCartRequest) returns (GetMyCartReply) {
+		option (google.api.http) = {
+			get: "/v1/user/my/cart"
+		};
+	};
+	rpc UpdateCartNum (UpdateCartNumRequest) returns (UpdateCartNumReply) {
+		option (google.api.http) = {
+			put: "/v1/user/my/cart/{id}",
+			body: "*"
+		};
+	}
 }
 
 message Category {
@@ -164,5 +175,37 @@ message Cart {
 }
 
 message AddCartReply {
+	Cart cart = 1;
+}
+
+message GetMyCartRequest {
+}
+
+message GetMyCartReply {
+	message CartItem {
+		// cart info
+		int64 cart_id = 1;
+		int64 goods_sku_id = 2;
+		int64 goods_id = 3;
+		int32 num = 4;
+		string goods_sku_desc = 5;
+		// goods
+		string goods_name = 6;
+		string goods_desc = 7;
+		string goods_image = 8;
+		// goods_sku
+		int64 price = 9;
+		int64 stock = 10;
+		repeated int64 goods_attr_path = 11;
+	}
+	repeated CartItem items = 1;
+}
+
+message UpdateCartNumRequest {
+	google.protobuf.Int64Value id = 1 [(validate.rules).int64 = {gt: 0}, (validate.rules).message.required=true];
+	google.protobuf.Int32Value num = 2 [(validate.rules).int32 = {gt: 0}, (validate.rules).message.required=true];
+}
+
+message UpdateCartNumReply {
 	Cart cart = 1;
 }

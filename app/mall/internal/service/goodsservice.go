@@ -134,3 +134,19 @@ func (s *GoodsServiceService) GetSKUs(ctx context.Context, req *pb.GetSKUsReques
 		Attrs: attrList,
 	}, nil
 }
+
+func (s *GoodsServiceService) GetGoodsAndSkuDetail(ctx context.Context, req *pb.GetGoodsAndSkuDetailRequest) (*pb.GetGoodsAndSkuDetailReply, error) {
+	goodsAndSkuDetail, err := s.uc.GetGoodsAndSkuDetails(ctx, req.GoodsId.Value, req.SkuId.Value)
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.GetGoodsAndSkuDetailReply{
+		GoodsName:     goodsAndSkuDetail.GoodsName,
+		GoodsDesc:     goodsAndSkuDetail.GoodsDesc,
+		GoodsImage:    goodsAndSkuDetail.GoodsImage,
+		Price:         goodsAndSkuDetail.Price,
+		Stock:         goodsAndSkuDetail.Stock,
+		GoodsAttrPath: goodsAndSkuDetail.GoodsAttrPath,
+	}, nil
+}

@@ -11,6 +11,7 @@ import (
 var (
 	// ErrGoodsNotFound is goods not found.
 	ErrGoodsNotFound = errors.NotFound(mall.ErrorReason_GOODS_NOT_FOUND.String(), "goods not found")
+	ErrSkuNotFound   = errors.NotFound(mall.ErrorReason_SKU_NOT_FOUND.String(), "sku not found")
 )
 
 type GoodsInfo struct {
@@ -72,6 +73,15 @@ type GoodsSimplify struct {
 	Info       GoodsInfo
 }
 
+type GoodsAndSkuDetail struct {
+	GoodsAttrPath []int64
+	Price         int64
+	Stock         int64
+	GoodsName     string
+	GoodsDesc     string
+	GoodsImage    string
+}
+
 // GoodsRepo is a Goods repo.
 type GoodsRepo interface {
 	Save(context.Context, *Goods) (*Goods, error)
@@ -80,6 +90,7 @@ type GoodsRepo interface {
 	List(context.Context, int64, filters.Filters) ([]*GoodsSimplify, filters.Metadata, error)
 	GetAttrs(context.Context, int64) ([]*GoodsAttr, error)
 	GetSKUs(context.Context, int64) ([]*GoodsSKU, error)
+	GetBySkuId(context.Context, int64) (*GoodsSKU, error)
 }
 
 // GoodsUsecase is a Goods usecase.
@@ -129,4 +140,32 @@ func (uc *GoodsUsecase) GetGoodsSKUs(ctx context.Context, goodsId int64) ([]*Goo
 	}
 
 	return skus, attrs, nil
+}
+
+func (uc *GoodsUsecase) GetGoodsAndSkuDetails(ctx context.Context, goodsId int64, skuId int64) (*GoodsAndSkuDetail, error) {
+	goodsDetail, err := uc.GetGoodsDetail(ctx, goodsId)
+	if err != nil {
+		return nil, err
+	}
+	sku, err := uc.repo.GetBySkuId(ctx, skuId)
+	if err != nil {
+		return nil, err
+	}
+
+	var imagePath string
+	for _, x := range goodsDetail.Infos {
+		if x.Kind == 0 {
+			imagePath = x.Content
+			break
+		}
+	}
+
+	return &GoodsAndSkuDetail{
+		GoodsAttrPath: sku.GoodsAttrPath,
+		Price:         sku.Price,
+		Stock:         sku.Stock,
+		GoodsName:     goodsDetail.GoodsName,
+		GoodsDesc:     goodsDetail.GoodsDesc,
+		GoodsImage:    imagePath,
+	}, nil
 }

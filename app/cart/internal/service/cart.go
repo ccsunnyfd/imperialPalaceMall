@@ -39,3 +39,41 @@ func (s *CartService) AddCart(ctx context.Context, in *pb.AddCartRequest) (*pb.A
 		},
 	}, nil
 }
+
+func (s *CartService) GetCartByUserId(ctx context.Context, in *pb.GetCartByUserIdRequest) (*pb.GetCartByUserIdReply, error) {
+	cc, err := s.uc.GetCartsByUserId(ctx, in.UserId.Value)
+	if err != nil {
+		return &pb.GetCartByUserIdReply{}, err
+	}
+	rv := make([]*pb.GetCartByUserIdReply_CartItem, 0, len(cc))
+	for _, x := range cc {
+		rv = append(rv, &pb.GetCartByUserIdReply_CartItem{
+			CartId:       x.Id,
+			GoodsSkuId:   x.GoodsSKUId,
+			GoodsId:      x.GoodsId,
+			Num:          x.Num,
+			GoodsSkuDesc: x.GoodsSKUDesc,
+		})
+	}
+
+	return &pb.GetCartByUserIdReply{
+		Items: rv,
+	}, nil
+}
+
+func (s *CartService) UpdateCartNum(ctx context.Context, in *pb.UpdateCartNumRequest) (*pb.UpdateCartNumReply, error) {
+	cart, err := s.uc.UpdateCartNum(ctx, in.CartId.Value, in.Num.Value)
+	if err != nil {
+		return &pb.UpdateCartNumReply{}, err
+	}
+	return &pb.UpdateCartNumReply{
+		Cart: &pb.Cart{
+			Id:           cart.Id,
+			UserId:       cart.UserId,
+			GoodsId:      cart.GoodsId,
+			GoodsSkuId:   cart.GoodsSKUId,
+			GoodsSkuDesc: cart.GoodsSKUDesc,
+			Num:          cart.Num,
+		},
+	}, nil
+}

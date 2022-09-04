@@ -2333,3 +2333,266 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = GoodsAttrValueValidationError{}
+
+// Validate checks the field values on GetGoodsAndSkuDetailRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *GetGoodsAndSkuDetailRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetGoodsAndSkuDetailRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetGoodsAndSkuDetailRequestMultiError, or nil if none found.
+func (m *GetGoodsAndSkuDetailRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetGoodsAndSkuDetailRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if wrapper := m.GetGoodsId(); wrapper != nil {
+
+		if wrapper.GetValue() <= 0 {
+			err := GetGoodsAndSkuDetailRequestValidationError{
+				field:  "GoodsId",
+				reason: "value must be greater than 0",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+	} else {
+		err := GetGoodsAndSkuDetailRequestValidationError{
+			field:  "GoodsId",
+			reason: "value is required and must not be nil.",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if wrapper := m.GetSkuId(); wrapper != nil {
+
+		if wrapper.GetValue() <= 0 {
+			err := GetGoodsAndSkuDetailRequestValidationError{
+				field:  "SkuId",
+				reason: "value must be greater than 0",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+	} else {
+		err := GetGoodsAndSkuDetailRequestValidationError{
+			field:  "SkuId",
+			reason: "value is required and must not be nil.",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return GetGoodsAndSkuDetailRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// GetGoodsAndSkuDetailRequestMultiError is an error wrapping multiple
+// validation errors returned by GetGoodsAndSkuDetailRequest.ValidateAll() if
+// the designated constraints aren't met.
+type GetGoodsAndSkuDetailRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetGoodsAndSkuDetailRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetGoodsAndSkuDetailRequestMultiError) AllErrors() []error { return m }
+
+// GetGoodsAndSkuDetailRequestValidationError is the validation error returned
+// by GetGoodsAndSkuDetailRequest.Validate if the designated constraints
+// aren't met.
+type GetGoodsAndSkuDetailRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetGoodsAndSkuDetailRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetGoodsAndSkuDetailRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetGoodsAndSkuDetailRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetGoodsAndSkuDetailRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetGoodsAndSkuDetailRequestValidationError) ErrorName() string {
+	return "GetGoodsAndSkuDetailRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetGoodsAndSkuDetailRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetGoodsAndSkuDetailRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetGoodsAndSkuDetailRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetGoodsAndSkuDetailRequestValidationError{}
+
+// Validate checks the field values on GetGoodsAndSkuDetailReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *GetGoodsAndSkuDetailReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetGoodsAndSkuDetailReply with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetGoodsAndSkuDetailReplyMultiError, or nil if none found.
+func (m *GetGoodsAndSkuDetailReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetGoodsAndSkuDetailReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for GoodsName
+
+	// no validation rules for GoodsDesc
+
+	// no validation rules for GoodsImage
+
+	// no validation rules for Price
+
+	// no validation rules for Stock
+
+	if len(errors) > 0 {
+		return GetGoodsAndSkuDetailReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// GetGoodsAndSkuDetailReplyMultiError is an error wrapping multiple validation
+// errors returned by GetGoodsAndSkuDetailReply.ValidateAll() if the
+// designated constraints aren't met.
+type GetGoodsAndSkuDetailReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetGoodsAndSkuDetailReplyMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetGoodsAndSkuDetailReplyMultiError) AllErrors() []error { return m }
+
+// GetGoodsAndSkuDetailReplyValidationError is the validation error returned by
+// GetGoodsAndSkuDetailReply.Validate if the designated constraints aren't met.
+type GetGoodsAndSkuDetailReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetGoodsAndSkuDetailReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetGoodsAndSkuDetailReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetGoodsAndSkuDetailReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetGoodsAndSkuDetailReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetGoodsAndSkuDetailReplyValidationError) ErrorName() string {
+	return "GetGoodsAndSkuDetailReplyValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetGoodsAndSkuDetailReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetGoodsAndSkuDetailReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetGoodsAndSkuDetailReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetGoodsAndSkuDetailReplyValidationError{}

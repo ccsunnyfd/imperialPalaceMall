@@ -164,3 +164,30 @@ func (r *goodsRepo) GetGoodsSKUs(ctx context.Context, goodsId int64) ([]*biz.Goo
 	retV := result.(ret)
 	return retV.skus, retV.attrs, nil
 }
+
+func (r *goodsRepo) GetGoodsAndSkuDetail(ctx context.Context, goodsId int64, skuId int64) (*biz.GoodsAndSkuDetailItem, error) {
+	result, err, _ := r.sg.Do(fmt.Sprintf("get_goods_and_sku_detail_goodsId:%d_skuId:%d", goodsId, skuId), func() (interface{}, error) {
+		reply, err := r.data.gc.GetGoodsAndSkuDetail(ctx, &mallV1.GetGoodsAndSkuDetailRequest{
+			GoodsId: wrapperspb.Int64(goodsId),
+			SkuId:   wrapperspb.Int64(skuId),
+		})
+		if err != nil {
+			r.log.Errorf("get goods and sku detail error: %v", err)
+			return nil, biz.ErrGoodsAndSkuDetailNotFound
+		}
+
+		return &biz.GoodsAndSkuDetailItem{
+			GoodsName:     reply.GoodsName,
+			GoodsDesc:     reply.GoodsDesc,
+			GoodsImage:    reply.GoodsImage,
+			Price:         reply.Price,
+			Stock:         reply.Stock,
+			GoodsAttrPath: reply.GoodsAttrPath,
+		}, nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return result.(*biz.GoodsAndSkuDetailItem), nil
+}

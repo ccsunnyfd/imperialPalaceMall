@@ -16,6 +16,7 @@ service GoodsService {
   rpc GetGoods (GetGoodsRequest) returns (GetGoodsReply);
   rpc ListGoods (ListGoodsRequest) returns (ListGoodsReply);
   rpc GetSKUs (GetSKUsRequest) returns (GetSKUsReply);
+  rpc GetGoodsAndSkuDetail (GetGoodsAndSkuDetailRequest) returns (GetGoodsAndSkuDetailReply);
 }
 
 message GoodsInfo {
@@ -107,4 +108,20 @@ message GoodsAttrValue {
   int64 id = 1;
   int64 attr_key_id = 2;
   string attr_value = 3;
+}
+
+message GetGoodsAndSkuDetailRequest {
+  google.protobuf.Int64Value goods_id = 1 [(validate.rules).int64 = {gt: 0}, (validate.rules).message.required=true];
+  google.protobuf.Int64Value sku_id = 2 [(validate.rules).int64 = {gt: 0}, (validate.rules).message.required=true];
+}
+
+message GetGoodsAndSkuDetailReply {
+  // goods
+  string goods_name = 1;
+  string goods_desc = 2;
+  string goods_image = 3;
+  // goods_sku
+  int64 price = 4;
+  int64 stock = 5;
+  repeated int64 goods_attr_path = 6;
 }

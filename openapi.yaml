@@ -113,6 +113,17 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/api.shop.interface.v1.GetSKUsReply'
     /v1/user/my/cart:
+        get:
+            tags:
+                - ShopInterface
+            operationId: ShopInterface_GetMyCart
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.shop.interface.v1.GetMyCartReply'
         put:
             tags:
                 - ShopInterface
@@ -130,6 +141,30 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.shop.interface.v1.AddCartReply'
+    /v1/user/my/cart/{id}:
+        put:
+            tags:
+                - ShopInterface
+            operationId: ShopInterface_UpdateCartNum
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    $ref: '#/components/schemas/google.protobuf.Int64Value'
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.shop.interface.v1.UpdateCartNumRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.shop.interface.v1.UpdateCartNumReply'
     /v1/wx/login:
         post:
             tags:
@@ -197,6 +232,50 @@ components:
             properties:
                 goods:
                     $ref: '#/components/schemas/api.shop.interface.v1.GoodsDetail'
+        api.shop.interface.v1.GetMyCartReply:
+            type: object
+            properties:
+                items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.shop.interface.v1.GetMyCartReply_CartItem'
+        api.shop.interface.v1.GetMyCartReply_CartItem:
+            type: object
+            properties:
+                cartId:
+                    type: integer
+                    description: cart info
+                    format: int64
+                goodsSkuId:
+                    type: integer
+                    format: int64
+                goodsId:
+                    type: integer
+                    format: int64
+                num:
+                    type: integer
+                    format: int32
+                goodsSkuDesc:
+                    type: string
+                goodsName:
+                    type: string
+                    description: goods
+                goodsDesc:
+                    type: string
+                goodsImage:
+                    type: string
+                price:
+                    type: integer
+                    description: goods_sku
+                    format: int64
+                stock:
+                    type: integer
+                    format: int64
+                goodsAttrPath:
+                    type: array
+                    items:
+                        type: integer
+                        format: int64
         api.shop.interface.v1.GetSKUsReply:
             type: object
             properties:
@@ -345,6 +424,18 @@ components:
                 totalRecords:
                     type: integer
                     format: int64
+        api.shop.interface.v1.UpdateCartNumReply:
+            type: object
+            properties:
+                cart:
+                    $ref: '#/components/schemas/api.shop.interface.v1.Cart'
+        api.shop.interface.v1.UpdateCartNumRequest:
+            type: object
+            properties:
+                id:
+                    $ref: '#/components/schemas/google.protobuf.Int64Value'
+                num:
+                    $ref: '#/components/schemas/google.protobuf.Int32Value'
         api.shop.interface.v1.WxLoginReply:
             type: object
             properties:
@@ -373,6 +464,14 @@ components:
                     format: int64
                 errmsg:
                     type: string
+        google.protobuf.Int32Value:
+            type: object
+            properties:
+                value:
+                    type: integer
+                    description: The int32 value.
+                    format: int32
+            description: Wrapper message for `int32`. The JSON representation for `Int32Value` is JSON number.
         google.protobuf.Int64Value:
             type: object
             properties:
