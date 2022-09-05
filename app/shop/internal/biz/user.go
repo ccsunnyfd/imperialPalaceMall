@@ -2,13 +2,13 @@ package biz
 
 import (
 	"context"
-	"errors"
+	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
 )
 
 var (
-	ErrTokenNotCreated = errors.New("token not created")
-	ErrTokenNotFound   = errors.New("token not found")
+	ErrTokenNotCreated = errors.New(500, "user", "token not created")
+	ErrTokenNotFound   = errors.NotFound("user", "token not found")
 )
 
 type UserCache struct {

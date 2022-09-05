@@ -3,6 +3,7 @@ package data
 import (
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/pkg/errors"
 	"imperialPalaceMall/app/mall/internal/biz"
 	"imperialPalaceMall/app/pkg/filters"
 )
@@ -34,12 +35,12 @@ func (r *goodsRepo) GetGoodsDetail(ctx context.Context, id int64) (*biz.GoodsDet
 	g, err := r.data.db.Goods.Get(ctx, id)
 
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrapf(biz.ErrGoodsNotFound, "GetGoodsDetail: id_%d", id)
 	}
 
 	infos, err := r.data.db.Goods.GetGoodsInfo(ctx, id)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrapf(biz.ErrGoodsInfoNotFound, "GetGoodsDetail: id_%d", id)
 	}
 
 	var infoList = make([]*biz.GoodsInfo, 0, len(infos))
@@ -67,7 +68,7 @@ func (r *goodsRepo) GetSKUs(ctx context.Context, goodsId int64) ([]*biz.GoodsSKU
 	skus, err := r.data.db.Goods.GetSKUs(ctx, goodsId)
 
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrapf(biz.ErrSkuNotFound, "GetSKUs: goodsId_%d", goodsId)
 	}
 	rv := make([]*biz.GoodsSKU, 0, len(skus))
 	for _, sku := range skus {
@@ -86,7 +87,7 @@ func (r *goodsRepo) GetBySkuId(ctx context.Context, skuId int64) (*biz.GoodsSKU,
 	sku, err := r.data.db.Goods.GetSku(ctx, skuId)
 
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrapf(biz.ErrSkuNotFound, "GetBySkuId: skuId_%d", skuId)
 	}
 	return &biz.GoodsSKU{
 		Id:            sku.Id,
@@ -100,7 +101,7 @@ func (r *goodsRepo) GetBySkuId(ctx context.Context, skuId int64) (*biz.GoodsSKU,
 func (r *goodsRepo) GetAttrs(ctx context.Context, goodsId int64) ([]*biz.GoodsAttr, error) {
 	kk, err := r.data.db.Goods.GetGoodsAttrKeys(ctx, goodsId)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrapf(biz.ErrAttrsNotFound, "GetAttrs: goodsId_%d", goodsId)
 	}
 
 	attrList := make([]*biz.GoodsAttr, 0, len(kk))
@@ -108,7 +109,7 @@ func (r *goodsRepo) GetAttrs(ctx context.Context, goodsId int64) ([]*biz.GoodsAt
 		attrKeyId := k.Id
 		vv, err := r.data.db.Goods.GetGoodsAttrValuesByKeyId(ctx, attrKeyId)
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrapf(biz.ErrAttrValuesNotFound, "GetAttrs: goodsId_%d", goodsId)
 		}
 
 		attrValueList := make([]*biz.GoodsAttrValue, 0, len(vv))
@@ -135,7 +136,7 @@ func (r *goodsRepo) List(ctx context.Context, categoryId int64, f filters.Filter
 	gg, metadata, err := r.data.db.Goods.Query(ctx, categoryId, f)
 
 	if err != nil {
-		return nil, filters.Metadata{}, err
+		return nil, filters.Metadata{}, errors.Wrapf(biz.ErrGoodsList, "List: categoryId_%d", categoryId)
 	}
 	rv := make([]*biz.GoodsSimplify, 0, len(gg))
 	for _, po := range gg {

@@ -2,14 +2,14 @@ package biz
 
 import (
 	"context"
-	"errors"
+	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
 )
 
 var (
-	ErrAddCart       = errors.New("add cart item error")
-	ErrGetCart       = errors.New("get cart by userId error")
-	ErrUpdateCartNum = errors.New("update cart num error")
+	ErrAddCart       = errors.New(500, "cart", "add cart item error")
+	ErrGetCart       = errors.New(500, "cart", "get cart by userId error")
+	ErrUpdateCartNum = errors.New(500, "cart", "update cart num error")
 )
 
 // Cart is a Cart model.

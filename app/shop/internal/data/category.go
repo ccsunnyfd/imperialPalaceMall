@@ -3,6 +3,7 @@ package data
 import (
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/pkg/errors"
 	"golang.org/x/sync/singleflight"
 	mallV1 "imperialPalaceMall/api/mall/v1"
 	"imperialPalaceMall/app/shop/internal/biz"
@@ -29,7 +30,7 @@ func (r *categoryRepo) ListCategories(ctx context.Context) ([]*biz.Category, err
 	result, err, _ := r.sg.Do("list_categories", func() (interface{}, error) {
 		reply, err := r.data.catc.ListCategory(ctx, &mallV1.ListCategoryRequest{})
 		if err != nil {
-			return nil, biz.ErrListCategories
+			return nil, errors.Wrapf(biz.ErrListCategories, "ListCategories")
 		}
 		rv := make([]*biz.Category, 0)
 		for _, x := range reply.Categories {

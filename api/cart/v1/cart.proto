@@ -11,7 +11,7 @@ option java_package = "api.cart.v1";
 
 service CartService {
   rpc AddCart (AddCartRequest) returns (AddCartReply);
-  rpc GetCartByUserId (GetCartByUserIdRequest) returns (GetCartByUserIdReply);
+  rpc GetCartsByUserId (GetCartsByUserIdRequest) returns (GetCartsByUserIdReply);
   rpc UpdateCartNum (UpdateCartNumRequest) returns (UpdateCartNumReply);
 }
 
@@ -35,11 +35,11 @@ message AddCartReply {
   Cart cart = 1;
 }
 
-message GetCartByUserIdRequest {
+message GetCartsByUserIdRequest {
   google.protobuf.Int64Value user_id = 1 [(validate.rules).int64 = {gt: 0}, (validate.rules).message.required=true];
 }
 
-message GetCartByUserIdReply {
+message GetCartsByUserIdReply {
   message CartItem {
     int64 cart_id = 1;
     int64 goods_sku_id = 2;

@@ -12,6 +12,9 @@ import (
 var (
 	// ErrUserNotFound is user not found.
 	ErrUserNotFound = errors.NotFound(user.ErrorReason_USER_NOT_FOUND.String(), "user not found")
+	ErrUserGet      = errors.NotFound(user.ErrorReason_USER_GET_ERROR.String(), "user get error")
+	ErrUserCreate   = errors.NotFound(user.ErrorReason_USER_CREATE_ERROR.String(), "user create error")
+	ErrUserUpdate   = errors.NotFound(user.ErrorReason_USER_UPDATE_ERROR.String(), "user update error")
 )
 
 // User is a User model.
@@ -77,7 +80,6 @@ func (u *UserUsecase) WXLogin(ctx context.Context, code string, encryptedData st
 		// 从缓存中拿老的session_key用来解密用户敏感数据
 		userCache, err := u.repo.Get(ctx, openid)
 		if err != nil {
-			u.log.Errorf("get from redis cache error: %v", err)
 			return "", err
 		}
 		sessionKeyForDecrypt = userCache.SessionKey
@@ -87,7 +89,6 @@ func (u *UserUsecase) WXLogin(ctx context.Context, code string, encryptedData st
 	userInfo, err := u.repo.DecryptUserInfo(ctx, sessionKeyForDecrypt, encryptedData, iv)
 	if err != nil {
 		// 解密不成功有可能是因为Redis缓存失效，不应该作为致命失败，只保存必要的openId等信息进数据库也可以的，应该让流程继续
-		u.log.Errorf("decrypt userInfo error: %v", err)
 		userInfo = &User{
 			OpenId: openid,
 		}

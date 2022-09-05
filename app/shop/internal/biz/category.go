@@ -2,12 +2,12 @@ package biz
 
 import (
 	"context"
-	"errors"
+	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
 )
 
 var (
-	ErrListCategories = errors.New("categories not listed")
+	ErrListCategories = errors.New(500, "category", "list categories error")
 )
 
 // Category is a Category model.

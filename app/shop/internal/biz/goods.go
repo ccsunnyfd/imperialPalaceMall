@@ -2,16 +2,16 @@ package biz
 
 import (
 	"context"
-	"errors"
+	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
 	"imperialPalaceMall/app/pkg/filters"
 )
 
 var (
-	ErrListGoods                 = errors.New("goods not listed")
-	ErrGoodsNotFound             = errors.New("goods not found")
-	ErrSKUNotFound               = errors.New("goods sku not found")
-	ErrGoodsAndSkuDetailNotFound = errors.New("goods and sku detail not found")
+	ErrListGoods                 = errors.New(500, "goods", "list goods error")
+	ErrGoodsNotFound             = errors.New(500, "goods", "get goods error")
+	ErrSKUNotFound               = errors.New(500, "goods", "get sku error")
+	ErrGoodsAndSkuDetailNotFound = errors.New(500, "goods", "get goods and sku detail error")
 )
 
 type Goods struct {

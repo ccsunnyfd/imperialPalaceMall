@@ -469,22 +469,22 @@ var _ interface {
 	ErrorName() string
 } = AddCartReplyValidationError{}
 
-// Validate checks the field values on GetCartByUserIdRequest with the rules
+// Validate checks the field values on GetCartsByUserIdRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
-func (m *GetCartByUserIdRequest) Validate() error {
+func (m *GetCartsByUserIdRequest) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on GetCartByUserIdRequest with the rules
-// defined in the proto definition for this message. If any rules are
+// ValidateAll checks the field values on GetCartsByUserIdRequest with the
+// rules defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// GetCartByUserIdRequestMultiError, or nil if none found.
-func (m *GetCartByUserIdRequest) ValidateAll() error {
+// GetCartsByUserIdRequestMultiError, or nil if none found.
+func (m *GetCartsByUserIdRequest) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *GetCartByUserIdRequest) validate(all bool) error {
+func (m *GetCartsByUserIdRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -494,7 +494,7 @@ func (m *GetCartByUserIdRequest) validate(all bool) error {
 	if wrapper := m.GetUserId(); wrapper != nil {
 
 		if wrapper.GetValue() <= 0 {
-			err := GetCartByUserIdRequestValidationError{
+			err := GetCartsByUserIdRequestValidationError{
 				field:  "UserId",
 				reason: "value must be greater than 0",
 			}
@@ -505,7 +505,7 @@ func (m *GetCartByUserIdRequest) validate(all bool) error {
 		}
 
 	} else {
-		err := GetCartByUserIdRequestValidationError{
+		err := GetCartsByUserIdRequestValidationError{
 			field:  "UserId",
 			reason: "value is required and must not be nil.",
 		}
@@ -516,19 +516,19 @@ func (m *GetCartByUserIdRequest) validate(all bool) error {
 	}
 
 	if len(errors) > 0 {
-		return GetCartByUserIdRequestMultiError(errors)
+		return GetCartsByUserIdRequestMultiError(errors)
 	}
 
 	return nil
 }
 
-// GetCartByUserIdRequestMultiError is an error wrapping multiple validation
-// errors returned by GetCartByUserIdRequest.ValidateAll() if the designated
+// GetCartsByUserIdRequestMultiError is an error wrapping multiple validation
+// errors returned by GetCartsByUserIdRequest.ValidateAll() if the designated
 // constraints aren't met.
-type GetCartByUserIdRequestMultiError []error
+type GetCartsByUserIdRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m GetCartByUserIdRequestMultiError) Error() string {
+func (m GetCartsByUserIdRequestMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -537,11 +537,11 @@ func (m GetCartByUserIdRequestMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m GetCartByUserIdRequestMultiError) AllErrors() []error { return m }
+func (m GetCartsByUserIdRequestMultiError) AllErrors() []error { return m }
 
-// GetCartByUserIdRequestValidationError is the validation error returned by
-// GetCartByUserIdRequest.Validate if the designated constraints aren't met.
-type GetCartByUserIdRequestValidationError struct {
+// GetCartsByUserIdRequestValidationError is the validation error returned by
+// GetCartsByUserIdRequest.Validate if the designated constraints aren't met.
+type GetCartsByUserIdRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -549,24 +549,24 @@ type GetCartByUserIdRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e GetCartByUserIdRequestValidationError) Field() string { return e.field }
+func (e GetCartsByUserIdRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e GetCartByUserIdRequestValidationError) Reason() string { return e.reason }
+func (e GetCartsByUserIdRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e GetCartByUserIdRequestValidationError) Cause() error { return e.cause }
+func (e GetCartsByUserIdRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e GetCartByUserIdRequestValidationError) Key() bool { return e.key }
+func (e GetCartsByUserIdRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e GetCartByUserIdRequestValidationError) ErrorName() string {
-	return "GetCartByUserIdRequestValidationError"
+func (e GetCartsByUserIdRequestValidationError) ErrorName() string {
+	return "GetCartsByUserIdRequestValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e GetCartByUserIdRequestValidationError) Error() string {
+func (e GetCartsByUserIdRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -578,14 +578,14 @@ func (e GetCartByUserIdRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sGetCartByUserIdRequest.%s: %s%s",
+		"invalid %sGetCartsByUserIdRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = GetCartByUserIdRequestValidationError{}
+var _ error = GetCartsByUserIdRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -593,24 +593,24 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = GetCartByUserIdRequestValidationError{}
+} = GetCartsByUserIdRequestValidationError{}
 
-// Validate checks the field values on GetCartByUserIdReply with the rules
+// Validate checks the field values on GetCartsByUserIdReply with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
-func (m *GetCartByUserIdReply) Validate() error {
+func (m *GetCartsByUserIdReply) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on GetCartByUserIdReply with the rules
+// ValidateAll checks the field values on GetCartsByUserIdReply with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// GetCartByUserIdReplyMultiError, or nil if none found.
-func (m *GetCartByUserIdReply) ValidateAll() error {
+// GetCartsByUserIdReplyMultiError, or nil if none found.
+func (m *GetCartsByUserIdReply) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *GetCartByUserIdReply) validate(all bool) error {
+func (m *GetCartsByUserIdReply) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -624,7 +624,7 @@ func (m *GetCartByUserIdReply) validate(all bool) error {
 			switch v := interface{}(item).(type) {
 			case interface{ ValidateAll() error }:
 				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, GetCartByUserIdReplyValidationError{
+					errors = append(errors, GetCartsByUserIdReplyValidationError{
 						field:  fmt.Sprintf("Items[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -632,7 +632,7 @@ func (m *GetCartByUserIdReply) validate(all bool) error {
 				}
 			case interface{ Validate() error }:
 				if err := v.Validate(); err != nil {
-					errors = append(errors, GetCartByUserIdReplyValidationError{
+					errors = append(errors, GetCartsByUserIdReplyValidationError{
 						field:  fmt.Sprintf("Items[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -641,7 +641,7 @@ func (m *GetCartByUserIdReply) validate(all bool) error {
 			}
 		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return GetCartByUserIdReplyValidationError{
+				return GetCartsByUserIdReplyValidationError{
 					field:  fmt.Sprintf("Items[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -652,19 +652,19 @@ func (m *GetCartByUserIdReply) validate(all bool) error {
 	}
 
 	if len(errors) > 0 {
-		return GetCartByUserIdReplyMultiError(errors)
+		return GetCartsByUserIdReplyMultiError(errors)
 	}
 
 	return nil
 }
 
-// GetCartByUserIdReplyMultiError is an error wrapping multiple validation
-// errors returned by GetCartByUserIdReply.ValidateAll() if the designated
+// GetCartsByUserIdReplyMultiError is an error wrapping multiple validation
+// errors returned by GetCartsByUserIdReply.ValidateAll() if the designated
 // constraints aren't met.
-type GetCartByUserIdReplyMultiError []error
+type GetCartsByUserIdReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m GetCartByUserIdReplyMultiError) Error() string {
+func (m GetCartsByUserIdReplyMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -673,11 +673,11 @@ func (m GetCartByUserIdReplyMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m GetCartByUserIdReplyMultiError) AllErrors() []error { return m }
+func (m GetCartsByUserIdReplyMultiError) AllErrors() []error { return m }
 
-// GetCartByUserIdReplyValidationError is the validation error returned by
-// GetCartByUserIdReply.Validate if the designated constraints aren't met.
-type GetCartByUserIdReplyValidationError struct {
+// GetCartsByUserIdReplyValidationError is the validation error returned by
+// GetCartsByUserIdReply.Validate if the designated constraints aren't met.
+type GetCartsByUserIdReplyValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -685,24 +685,24 @@ type GetCartByUserIdReplyValidationError struct {
 }
 
 // Field function returns field value.
-func (e GetCartByUserIdReplyValidationError) Field() string { return e.field }
+func (e GetCartsByUserIdReplyValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e GetCartByUserIdReplyValidationError) Reason() string { return e.reason }
+func (e GetCartsByUserIdReplyValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e GetCartByUserIdReplyValidationError) Cause() error { return e.cause }
+func (e GetCartsByUserIdReplyValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e GetCartByUserIdReplyValidationError) Key() bool { return e.key }
+func (e GetCartsByUserIdReplyValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e GetCartByUserIdReplyValidationError) ErrorName() string {
-	return "GetCartByUserIdReplyValidationError"
+func (e GetCartsByUserIdReplyValidationError) ErrorName() string {
+	return "GetCartsByUserIdReplyValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e GetCartByUserIdReplyValidationError) Error() string {
+func (e GetCartsByUserIdReplyValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -714,14 +714,14 @@ func (e GetCartByUserIdReplyValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sGetCartByUserIdReply.%s: %s%s",
+		"invalid %sGetCartsByUserIdReply.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = GetCartByUserIdReplyValidationError{}
+var _ error = GetCartsByUserIdReplyValidationError{}
 
 var _ interface {
 	Field() string
@@ -729,7 +729,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = GetCartByUserIdReplyValidationError{}
+} = GetCartsByUserIdReplyValidationError{}
 
 // Validate checks the field values on UpdateCartNumRequest with the rules
 // defined in the proto definition for this message. If any rules are
@@ -1012,22 +1012,22 @@ var _ interface {
 	ErrorName() string
 } = UpdateCartNumReplyValidationError{}
 
-// Validate checks the field values on GetCartByUserIdReply_CartItem with the
+// Validate checks the field values on GetCartsByUserIdReply_CartItem with the
 // rules defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
-func (m *GetCartByUserIdReply_CartItem) Validate() error {
+func (m *GetCartsByUserIdReply_CartItem) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on GetCartByUserIdReply_CartItem with
+// ValidateAll checks the field values on GetCartsByUserIdReply_CartItem with
 // the rules defined in the proto definition for this message. If any rules
 // are violated, the result is a list of violation errors wrapped in
-// GetCartByUserIdReply_CartItemMultiError, or nil if none found.
-func (m *GetCartByUserIdReply_CartItem) ValidateAll() error {
+// GetCartsByUserIdReply_CartItemMultiError, or nil if none found.
+func (m *GetCartsByUserIdReply_CartItem) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *GetCartByUserIdReply_CartItem) validate(all bool) error {
+func (m *GetCartsByUserIdReply_CartItem) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -1045,19 +1045,19 @@ func (m *GetCartByUserIdReply_CartItem) validate(all bool) error {
 	// no validation rules for GoodsSkuDesc
 
 	if len(errors) > 0 {
-		return GetCartByUserIdReply_CartItemMultiError(errors)
+		return GetCartsByUserIdReply_CartItemMultiError(errors)
 	}
 
 	return nil
 }
 
-// GetCartByUserIdReply_CartItemMultiError is an error wrapping multiple
-// validation errors returned by GetCartByUserIdReply_CartItem.ValidateAll()
+// GetCartsByUserIdReply_CartItemMultiError is an error wrapping multiple
+// validation errors returned by GetCartsByUserIdReply_CartItem.ValidateAll()
 // if the designated constraints aren't met.
-type GetCartByUserIdReply_CartItemMultiError []error
+type GetCartsByUserIdReply_CartItemMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m GetCartByUserIdReply_CartItemMultiError) Error() string {
+func (m GetCartsByUserIdReply_CartItemMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -1066,12 +1066,12 @@ func (m GetCartByUserIdReply_CartItemMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m GetCartByUserIdReply_CartItemMultiError) AllErrors() []error { return m }
+func (m GetCartsByUserIdReply_CartItemMultiError) AllErrors() []error { return m }
 
-// GetCartByUserIdReply_CartItemValidationError is the validation error
-// returned by GetCartByUserIdReply_CartItem.Validate if the designated
+// GetCartsByUserIdReply_CartItemValidationError is the validation error
+// returned by GetCartsByUserIdReply_CartItem.Validate if the designated
 // constraints aren't met.
-type GetCartByUserIdReply_CartItemValidationError struct {
+type GetCartsByUserIdReply_CartItemValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -1079,24 +1079,24 @@ type GetCartByUserIdReply_CartItemValidationError struct {
 }
 
 // Field function returns field value.
-func (e GetCartByUserIdReply_CartItemValidationError) Field() string { return e.field }
+func (e GetCartsByUserIdReply_CartItemValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e GetCartByUserIdReply_CartItemValidationError) Reason() string { return e.reason }
+func (e GetCartsByUserIdReply_CartItemValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e GetCartByUserIdReply_CartItemValidationError) Cause() error { return e.cause }
+func (e GetCartsByUserIdReply_CartItemValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e GetCartByUserIdReply_CartItemValidationError) Key() bool { return e.key }
+func (e GetCartsByUserIdReply_CartItemValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e GetCartByUserIdReply_CartItemValidationError) ErrorName() string {
-	return "GetCartByUserIdReply_CartItemValidationError"
+func (e GetCartsByUserIdReply_CartItemValidationError) ErrorName() string {
+	return "GetCartsByUserIdReply_CartItemValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e GetCartByUserIdReply_CartItemValidationError) Error() string {
+func (e GetCartsByUserIdReply_CartItemValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -1108,14 +1108,14 @@ func (e GetCartByUserIdReply_CartItemValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sGetCartByUserIdReply_CartItem.%s: %s%s",
+		"invalid %sGetCartsByUserIdReply_CartItem.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = GetCartByUserIdReply_CartItemValidationError{}
+var _ error = GetCartsByUserIdReply_CartItemValidationError{}
 
 var _ interface {
 	Field() string
@@ -1123,4 +1123,4 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = GetCartByUserIdReply_CartItemValidationError{}
+} = GetCartsByUserIdReply_CartItemValidationError{}

@@ -2,7 +2,9 @@ package data
 
 import (
 	"context"
+	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/pkg/errors"
 	"golang.org/x/sync/singleflight"
 	"google.golang.org/protobuf/types/known/wrapperspb"
 	cartV1 "imperialPalaceMall/api/cart/v1"
@@ -33,7 +35,7 @@ func (r *cartRepo) AddCart(ctx context.Context, item *biz.Cart) (*biz.Cart, erro
 		GoodsSkuDesc: wrapperspb.String(item.GoodsSKUDesc),
 	})
 	if err != nil {
-		return nil, biz.ErrAddCart
+		return nil, errors.Wrapf(biz.ErrAddCart, "AddCart: userId_%d, goodsId_%d, goodsSKUId_%d, goodsSKUDesc_%s", item.UserId, item.GoodsId, item.GoodsSKUId, item.GoodsSKUDesc)
 	}
 	return &biz.Cart{
 		Id:           reply.Cart.Id,
@@ -46,26 +48,33 @@ func (r *cartRepo) AddCart(ctx context.Context, item *biz.Cart) (*biz.Cart, erro
 }
 
 func (r *cartRepo) GetCart(ctx context.Context, userId int64) ([]*biz.Cart, error) {
-	reply, err := r.data.cc.GetCartByUserId(ctx, &cartV1.GetCartByUserIdRequest{
-		UserId: wrapperspb.Int64(userId),
-	})
-	if err != nil {
-		return nil, biz.ErrGetCart
-	}
-
-	rv := make([]*biz.Cart, 0, len(reply.Items))
-	for _, x := range reply.Items {
-		rv = append(rv, &biz.Cart{
-			Id:           x.CartId,
-			UserId:       userId,
-			GoodsId:      x.GoodsId,
-			GoodsSKUId:   x.GoodsSkuId,
-			GoodsSKUDesc: x.GoodsSkuDesc,
-			Num:          x.Num,
+	result, err, _ := r.sg.Do(fmt.Sprintf("get_cart_by_userId_%d", userId), func() (interface{}, error) {
+		reply, err := r.data.cc.GetCartsByUserId(ctx, &cartV1.GetCartsByUserIdRequest{
+			UserId: wrapperspb.Int64(userId),
 		})
-	}
+		if err != nil {
+			return nil, errors.Wrapf(biz.ErrGetCart, "GetCart: userId_%d", userId)
+		}
 
-	return rv, nil
+		rv := make([]*biz.Cart, 0, len(reply.Items))
+		for _, x := range reply.Items {
+			rv = append(rv, &biz.Cart{
+				Id:           x.CartId,
+				UserId:       userId,
+				GoodsId:      x.GoodsId,
+				GoodsSKUId:   x.GoodsSkuId,
+				GoodsSKUDesc: x.GoodsSkuDesc,
+				Num:          x.Num,
+			})
+		}
+
+		return rv, nil
+	})
+
+	if err != nil {
+		return nil, err
+	}
+	return result.([]*biz.Cart), nil
 }
 
 func (r *cartRepo) UpdateCartNum(ctx context.Context, cartId int64, num int32) (*biz.Cart, error) {
@@ -74,7 +83,7 @@ func (r *cartRepo) UpdateCartNum(ctx context.Context, cartId int64, num int32) (
 		Num:    wrapperspb.Int32(num),
 	})
 	if err != nil {
-		return nil, biz.ErrUpdateCartNum
+		return nil, errors.Wrapf(biz.ErrUpdateCartNum, "UpdateCartNum: cartId_%d, num_%d", cartId, num)
 	}
 
 	return &biz.Cart{

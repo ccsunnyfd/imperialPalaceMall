@@ -3,14 +3,15 @@ package biz
 import (
 	"context"
 	"github.com/go-kratos/kratos/v2/errors"
-	cart "imperialPalaceMall/api/cart/v1"
-
 	"github.com/go-kratos/kratos/v2/log"
+	cartPb "imperialPalaceMall/api/cart/v1"
 )
 
 var (
-	// ErrCartItemNotFound is cart item not found.
-	ErrCartItemNotFound = errors.NotFound(cart.ErrorReason_CART_ITEM_NOT_FOUND.String(), "cart item not found")
+	ErrAddCartItem      = errors.New(500, cartPb.ErrorReason_CART_ITEM_ADD_ERROR.String(), "add cart item failed")
+	ErrUpdateCartItem   = errors.New(500, cartPb.ErrorReason_CART_ITEM_UPDATE_ERROR.String(), "update cart item failed")
+	ErrCartItemNotFound = errors.NotFound(cartPb.ErrorReason_CART_ITEM_NOT_FOUND.String(), "cart item not found")
+	ErrGetCartItem      = errors.New(500, cartPb.ErrorReason_CART_ITEM_GET_ERROR.String(), "get cart item failed")
 )
 
 // Cart is a Cart model.
@@ -52,7 +53,6 @@ func (uc *CartUsecase) AddCart(ctx context.Context, item *Cart) (*Cart, error) {
 		if errors.Is(err, ErrCartItemNotFound) {
 			return uc.repo.Create(ctx, item)
 		}
-		uc.log.Errorf("add cart error: %v", err)
 		return nil, err
 	}
 	// 存在则更新
@@ -61,12 +61,10 @@ func (uc *CartUsecase) AddCart(ctx context.Context, item *Cart) (*Cart, error) {
 
 func (uc *CartUsecase) GetCartsByUserId(ctx context.Context, userId int64) ([]*Cart, error) {
 	uc.log.WithContext(ctx).Infof("GetCartsByUserId: %d", userId)
-
 	return uc.repo.GetByUserId(ctx, userId)
 }
 
 func (uc *CartUsecase) UpdateCartNum(ctx context.Context, cartId int64, num int32) (*Cart, error) {
 	uc.log.WithContext(ctx).Infof("UpdateCartNum_cartId_%d_num_%d", cartId, num)
-
 	return uc.repo.UpdateNum(ctx, cartId, num)
 }

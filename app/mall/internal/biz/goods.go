@@ -10,8 +10,12 @@ import (
 
 var (
 	// ErrGoodsNotFound is goods not found.
-	ErrGoodsNotFound = errors.NotFound(mall.ErrorReason_GOODS_NOT_FOUND.String(), "goods not found")
-	ErrSkuNotFound   = errors.NotFound(mall.ErrorReason_SKU_NOT_FOUND.String(), "sku not found")
+	ErrGoodsNotFound      = errors.NotFound(mall.ErrorReason_GOODS_NOT_FOUND.String(), "goods not found")
+	ErrGoodsInfoNotFound  = errors.NotFound(mall.ErrorReason_GOODS_INFO_NOT_FOUND.String(), "goods info not found")
+	ErrSkuNotFound        = errors.NotFound(mall.ErrorReason_SKU_NOT_FOUND.String(), "sku not found")
+	ErrAttrsNotFound      = errors.NotFound(mall.ErrorReason_ATTRS_NOT_FOUND.String(), "attrs not found")
+	ErrAttrValuesNotFound = errors.NotFound(mall.ErrorReason_ATTR_VALUES_NOT_FOUND.String(), "attr values not found")
+	ErrGoodsList          = errors.New(500, mall.ErrorReason_LIST_GOODS_ERROR.String(), "list goods failed")
 )
 
 type GoodsInfo struct {

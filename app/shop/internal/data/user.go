@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/pkg/errors"
 	"golang.org/x/sync/singleflight"
 	"google.golang.org/protobuf/types/known/wrapperspb"
 	userV1 "imperialPalaceMall/api/user/v1"
@@ -36,7 +37,7 @@ func (r *userRepo) WXLogin(ctx context.Context, code string, encryptedData strin
 			SessionIsValid: sessionIsValid,
 		})
 		if err != nil {
-			return nil, biz.ErrTokenNotCreated
+			return nil, errors.Wrapf(biz.ErrTokenNotCreated, "WXLogin: code_%s", code)
 		}
 		return reply.Token, nil
 	})
@@ -52,7 +53,7 @@ func (r *userRepo) CheckToken(ctx context.Context, token string) (*biz.UserCache
 			Token: wrapperspb.String(token),
 		})
 		if err != nil {
-			return nil, biz.ErrTokenNotFound
+			return nil, errors.Wrapf(biz.ErrTokenNotFound, "CheckToken: token_%s", token)
 		}
 		return &biz.UserCache{
 			UserId: reply.User.UserId,

@@ -2,11 +2,8 @@ package postgres
 
 import (
 	"context"
-	"database/sql"
-	"errors"
 	"github.com/lib/pq"
 	_ "github.com/lib/pq"
-	"imperialPalaceMall/app/mall/internal/biz"
 	"imperialPalaceMall/app/pkg/filters"
 )
 
@@ -111,12 +108,11 @@ func (c *GoodsClient) Get(ctx context.Context, id int64) (*Goods, error) {
 	)
 
 	if err != nil {
-		switch {
-		case errors.Is(err, sql.ErrNoRows):
-			return nil, biz.ErrGoodsNotFound
-		default:
-			return nil, err
-		}
+		//switch {
+		//case errors.Is(err, sql.ErrNoRows):
+		//	return nil, biz.ErrGoodsNotFound
+		//default:
+		return nil, err
 	}
 
 	return &goods, nil
@@ -348,12 +344,11 @@ func (c *GoodsClient) GetSku(ctx context.Context, skuId int64) (*GoodsSKU, error
 	)
 
 	if err != nil {
-		switch {
-		case errors.Is(err, sql.ErrNoRows):
-			return nil, biz.ErrSkuNotFound
-		default:
-			return nil, err
-		}
+		//switch {
+		//case errors.Is(err, sql.ErrNoRows):
+		//	return nil, biz.ErrSkuNotFound
+		//default:
+		return nil, err
 	}
 
 	return &sku, nil

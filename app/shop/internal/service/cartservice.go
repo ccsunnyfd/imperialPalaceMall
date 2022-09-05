@@ -2,13 +2,19 @@ package service
 
 import (
 	"context"
+	"github.com/go-kratos/kratos/v2/errors"
+	pkgErrors "github.com/pkg/errors"
 	pb "imperialPalaceMall/api/shop/interface/v1"
 	"imperialPalaceMall/app/pkg/middleware"
 	"imperialPalaceMall/app/shop/internal/biz"
 )
 
 func (s *ShopInterface) AddCart(ctx context.Context, req *pb.AddCartRequest) (*pb.AddCartReply, error) {
-	userId := middleware.ContextGetUser(ctx).UserId
+	ctxUser, err := middleware.ContextGetUser(ctx)
+	if err != nil {
+		return nil, pkgErrors.Wrap(errors.Unauthorized("user", "missing user value in request context"), "cartservice_AddCart_error")
+	}
+	userId := ctxUser.UserId
 
 	cart, err := s.cc.AddCart(ctx, &biz.Cart{
 		UserId:       userId,
@@ -32,7 +38,11 @@ func (s *ShopInterface) AddCart(ctx context.Context, req *pb.AddCartRequest) (*p
 }
 
 func (s *ShopInterface) GetMyCart(ctx context.Context, req *pb.GetMyCartRequest) (*pb.GetMyCartReply, error) {
-	userId := middleware.ContextGetUser(ctx).UserId
+	ctxUser, err := middleware.ContextGetUser(ctx)
+	if err != nil {
+		return nil, pkgErrors.Wrap(errors.Unauthorized("user", "missing user value in request context"), "cartService_GetMyCart_error")
+	}
+	userId := ctxUser.UserId
 
 	cartItems, err := s.cc.GetCart(ctx, userId)
 	if err != nil {

@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/go-kratos/kratos/v2/middleware/logging"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/go-kratos/kratos/v2/middleware/selector"
 	"github.com/go-kratos/kratos/v2/middleware/validate"
@@ -47,6 +48,7 @@ func NewHTTPServer(c *conf.Server, shopInterface *service.ShopInterface, logger 
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
+			logging.Server(logger),
 			validate.Validator(),
 			selector.Server(
 				middleware.JWTAuth(NewTokenChecker(shopInterface)),

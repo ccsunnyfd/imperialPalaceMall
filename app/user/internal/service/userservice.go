@@ -20,7 +20,7 @@ func NewUserServiceService(uc *biz.UserUsecase) *UserServiceService {
 func (s *UserServiceService) WxLogin(ctx context.Context, req *pb.WxLoginRequest) (*pb.WxLoginReply, error) {
 	token, err := s.uc.WXLogin(ctx, req.Code.Value, req.EncryptedData.Value, req.Iv.Value, req.SessionIsValid)
 	if err != nil {
-		return &pb.WxLoginReply{}, err
+		return nil, err
 	}
 	return &pb.WxLoginReply{
 		Token: token,
@@ -30,7 +30,7 @@ func (s *UserServiceService) WxLogin(ctx context.Context, req *pb.WxLoginRequest
 func (s *UserServiceService) CheckToken(ctx context.Context, req *pb.CheckTokenRequest) (*pb.CheckTokenReply, error) {
 	user, err := s.uc.CheckToken(ctx, req.Token.Value)
 	if err != nil {
-		return &pb.CheckTokenReply{}, err
+		return nil, err
 	}
 	return &pb.CheckTokenReply{
 		User: &pb.CheckTokenReply_UserRet{

@@ -2,6 +2,7 @@ package data
 
 import (
 	"context"
+	"github.com/pkg/errors"
 	"imperialPalaceMall/app/mall/internal/biz"
 
 	"github.com/go-kratos/kratos/v2/log"
@@ -38,7 +39,7 @@ func (r *categoryRepo) ListAll(ctx context.Context) ([]*biz.Category, error) {
 	cc, err := r.data.db.Category.Query(ctx)
 
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrapf(biz.ErrCategoryNotFound, "ListAll")
 	}
 	rv := make([]*biz.Category, 0, len(cc))
 	for _, po := range cc {

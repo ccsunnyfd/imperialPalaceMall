@@ -3,6 +3,7 @@ package data
 import (
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/pkg/errors"
 	"imperialPalaceMall/app/cart/internal/biz"
 	"imperialPalaceMall/app/cart/internal/data/ent/cart"
 )
@@ -32,8 +33,7 @@ func (r *cartRepo) Create(ctx context.Context, item *biz.Cart) (*biz.Cart, error
 		SetNum(1).
 		Save(ctx)
 	if err != nil {
-		r.log.Errorf("add cart error: %v", err)
-		return nil, err
+		return nil, errors.Wrapf(biz.ErrAddCartItem, "Create: userId_%d, goodsId_%d, goodsSKUId_%d, goodsSKUDesc_%s", item.UserId, item.GoodsId, item.GoodsSKUId, item.GoodsSKUDesc)
 	}
 	return &biz.Cart{
 		Id:           po.ID,
@@ -51,7 +51,7 @@ func (r *cartRepo) UpdateNum(ctx context.Context, cartId int64, num int32) (*biz
 		SetNum(num).
 		Save(ctx)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrapf(biz.ErrUpdateCartItem, "UpdateNum to %d by cartId_%d", num, cartId)
 	}
 	return &biz.Cart{
 		Id:           po.ID,
@@ -73,7 +73,7 @@ func (r *cartRepo) FindOne(ctx context.Context, item *biz.Cart) (*biz.Cart, erro
 		First(ctx)
 
 	if err != nil {
-		return nil, biz.ErrCartItemNotFound
+		return nil, errors.Wrapf(biz.ErrCartItemNotFound, "FindOneBy userId_%d, goodsId_%d, goodsSKUId_%d", item.UserId, item.GoodsId, item.GoodsSKUId)
 	}
 	return &biz.Cart{
 		Id:           po.ID,
@@ -91,8 +91,9 @@ func (r *cartRepo) GetByUserId(ctx context.Context, userId int64) ([]*biz.Cart, 
 		Where(
 			cart.UserIDEQ(userId)).
 		All(ctx)
+	// 如果查询为空列表，ent不认为是错误，只会返回空列表
 	if err != nil {
-		return nil, biz.ErrCartItemNotFound
+		return nil, errors.Wrapf(biz.ErrGetCartItem, "GetByUserId_%d", userId)
 	}
 
 	rv := make([]*biz.Cart, 0, len(po))

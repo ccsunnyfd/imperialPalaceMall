@@ -67,10 +67,10 @@ func ContextSetUser(ctx context.Context, user *User) context.Context {
 	return context.WithValue(ctx, userContextKey, user)
 }
 
-func ContextGetUser(ctx context.Context) *User {
+func ContextGetUser(ctx context.Context) (*User, error) {
 	user, ok := ctx.Value(userContextKey).(*User)
 	if !ok {
-		panic("missing user value in request context")
+		return nil, errors.New("missing user value in request context")
 	}
-	return user
+	return user, nil
 }

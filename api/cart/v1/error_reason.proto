@@ -12,4 +12,7 @@ enum ErrorReason {
 
   CART_ITEM__UNSPECIFIED = 0 [(errors.code) = 400];
   CART_ITEM_NOT_FOUND = 1 [(errors.code) = 404];
+  CART_ITEM_GET_ERROR = 2 [(errors.code) = 500];
+  CART_ITEM_ADD_ERROR = 3 [(errors.code) = 500];
+  CART_ITEM_UPDATE_ERROR = 4 [(errors.code) = 500];
 }
