@@ -6,6 +6,7 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	pkgErrors "github.com/pkg/errors"
 	"gorm.io/gorm"
+	userPb "imperialPalaceMall/api/user/v1"
 	"imperialPalaceMall/app/user/internal/biz"
 	"time"
 )
@@ -59,13 +60,13 @@ func (r *userRepo) Save(ctx context.Context, user *biz.User) (*biz.User, error) 
 			}
 			result = r.data.db.WithContext(ctx).Create(&u)
 			if result.Error != nil {
-				return nil, pkgErrors.Wrapf(biz.ErrUserCreate, "Save: create_user")
+				return nil, pkgErrors.Wrap(userPb.ErrorUserCreateError("Save: create_user"), "user")
 			}
 			return &biz.User{
 				Id: u.Id,
 			}, nil
 		}
-		return nil, pkgErrors.Wrapf(biz.ErrUserGet, "Save: get_by_open_id_%s", user.OpenId)
+		return nil, pkgErrors.Wrap(userPb.ErrorUserGetError("Save: get_by_open_id_%s", user.OpenId), "user")
 	}
 
 	u.NickName = user.NickName
@@ -78,7 +79,7 @@ func (r *userRepo) Save(ctx context.Context, user *biz.User) (*biz.User, error) 
 
 	result = r.data.db.WithContext(ctx).Save(&u)
 	if result.Error != nil {
-		return nil, pkgErrors.Wrapf(biz.ErrUserUpdate, "Save: update")
+		return nil, pkgErrors.Wrap(userPb.ErrorUserUpdateError("Save: update"), "user")
 	}
 
 	return &biz.User{

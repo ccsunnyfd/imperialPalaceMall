@@ -58,3 +58,63 @@ func IsGoodsNotFound(err error) bool {
 func ErrorGoodsNotFound(format string, args ...interface{}) *errors.Error {
 	return errors.New(404, ErrorReason_GOODS_NOT_FOUND.String(), fmt.Sprintf(format, args...))
 }
+
+func IsGoodsInfoNotFound(err error) bool {
+	if err == nil {
+		return false
+	}
+	e := errors.FromError(err)
+	return e.Reason == ErrorReason_GOODS_INFO_NOT_FOUND.String() && e.Code == 404
+}
+
+func ErrorGoodsInfoNotFound(format string, args ...interface{}) *errors.Error {
+	return errors.New(404, ErrorReason_GOODS_INFO_NOT_FOUND.String(), fmt.Sprintf(format, args...))
+}
+
+func IsSkuNotFound(err error) bool {
+	if err == nil {
+		return false
+	}
+	e := errors.FromError(err)
+	return e.Reason == ErrorReason_SKU_NOT_FOUND.String() && e.Code == 404
+}
+
+func ErrorSkuNotFound(format string, args ...interface{}) *errors.Error {
+	return errors.New(404, ErrorReason_SKU_NOT_FOUND.String(), fmt.Sprintf(format, args...))
+}
+
+func IsAttrsNotFound(err error) bool {
+	if err == nil {
+		return false
+	}
+	e := errors.FromError(err)
+	return e.Reason == ErrorReason_ATTRS_NOT_FOUND.String() && e.Code == 404
+}
+
+func ErrorAttrsNotFound(format string, args ...interface{}) *errors.Error {
+	return errors.New(404, ErrorReason_ATTRS_NOT_FOUND.String(), fmt.Sprintf(format, args...))
+}
+
+func IsAttrValuesNotFound(err error) bool {
+	if err == nil {
+		return false
+	}
+	e := errors.FromError(err)
+	return e.Reason == ErrorReason_ATTR_VALUES_NOT_FOUND.String() && e.Code == 404
+}
+
+func ErrorAttrValuesNotFound(format string, args ...interface{}) *errors.Error {
+	return errors.New(404, ErrorReason_ATTR_VALUES_NOT_FOUND.String(), fmt.Sprintf(format, args...))
+}
+
+func IsListGoodsError(err error) bool {
+	if err == nil {
+		return false
+	}
+	e := errors.FromError(err)
+	return e.Reason == ErrorReason_LIST_GOODS_ERROR.String() && e.Code == 500
+}
+
+func ErrorListGoodsError(format string, args ...interface{}) *errors.Error {
+	return errors.New(500, ErrorReason_LIST_GOODS_ERROR.String(), fmt.Sprintf(format, args...))
+}

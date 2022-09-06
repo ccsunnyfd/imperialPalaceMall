@@ -2,10 +2,10 @@ package data
 
 import (
 	"context"
-	"github.com/pkg/errors"
-	"imperialPalaceMall/app/mall/internal/biz"
-
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/pkg/errors"
+	mallPb "imperialPalaceMall/api/mall/v1"
+	"imperialPalaceMall/app/mall/internal/biz"
 )
 
 var _ biz.CategoryRepo = (*categoryRepo)(nil)
@@ -39,7 +39,7 @@ func (r *categoryRepo) ListAll(ctx context.Context) ([]*biz.Category, error) {
 	cc, err := r.data.db.Category.Query(ctx)
 
 	if err != nil {
-		return nil, errors.Wrapf(biz.ErrCategoryNotFound, "ListAll")
+		return nil, errors.Wrap(mallPb.ErrorCategoryNotFound("ListAll"), "category")
 	}
 	rv := make([]*biz.Category, 0, len(cc))
 	for _, po := range cc {

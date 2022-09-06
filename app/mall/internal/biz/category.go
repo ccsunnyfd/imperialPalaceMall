@@ -3,14 +3,7 @@ package biz
 import (
 	"context"
 
-	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
-	mall "imperialPalaceMall/api/mall/v1"
-)
-
-var (
-	// ErrCategoryNotFound is category not found.
-	ErrCategoryNotFound = errors.NotFound(mall.ErrorReason_CATEGORY_NOT_FOUND.String(), "category not found")
 )
 
 // Category is a Category model.

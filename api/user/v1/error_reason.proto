@@ -15,4 +15,8 @@ enum ErrorReason {
   USER_GET_ERROR = 2 [(errors.code) = 500];
   USER_CREATE_ERROR = 3 [(errors.code) = 500];
   USER_UPDATE_ERROR = 4 [(errors.code) = 500];
+  USER_CACHE_NOT_FOUND = 5 [(errors.code) = 401];
+  USER_CACHE_UNMARSHAL_ERROR = 6 [(errors.code) = 401];
+  USER_CACHE_MARSHAL_ERROR = 7 [(errors.code) = 500];
+  USER_CACHE_SET_ERROR = 8 [(errors.code) = 500];
 }

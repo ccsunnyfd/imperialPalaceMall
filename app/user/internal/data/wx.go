@@ -2,6 +2,7 @@ package data
 
 import (
 	"context"
+	"github.com/pkg/errors"
 	weixinPb "imperialPalaceMall/api/weixin/v1"
 	"imperialPalaceMall/app/user/internal/biz"
 )
@@ -27,7 +28,7 @@ func (r *userRepo) Code2Session(ctx context.Context, code string) (openid, sessi
 	})
 
 	if err != nil {
-		return "", "", err
+		return "", "", errors.Wrap(weixinPb.ErrorWxCode2sessionError("Code2Session_code_%s", code), "user")
 	}
 
 	return resp.Openid, resp.SessionKey, nil
@@ -37,7 +38,7 @@ func (r *userRepo) DecryptUserInfo(ctx context.Context, sessionKey string, encry
 	decrypter := r.data.wxDecrypter.WithSessionKey(sessionKey)
 	userInfo, err := decrypter.DecryptData(encryptedData, iv)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(weixinPb.ErrorWxDecryptDataError("DecryptUserInfo"), "user")
 	}
 
 	return &biz.User{

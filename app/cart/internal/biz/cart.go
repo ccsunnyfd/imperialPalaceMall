@@ -2,17 +2,8 @@ package biz
 
 import (
 	"context"
-	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
 	cartPb "imperialPalaceMall/api/cart/v1"
-)
-
-var (
-	ErrAddCartItem      = errors.New(500, cartPb.ErrorReason_CART_ITEM_ADD_ERROR.String(), "add cart item failed")
-	ErrUpdateCartItem   = errors.New(500, cartPb.ErrorReason_CART_ITEM_UPDATE_ERROR.String(), "update cart item failed")
-	ErrCartItemNotFound = errors.NotFound(cartPb.ErrorReason_CART_ITEM_NOT_FOUND.String(), "cart item not found")
-	ErrGetCartItem      = errors.New(500, cartPb.ErrorReason_CART_ITEM_GET_ERROR.String(), "get cart item failed")
-	ErrDeleteCartItems  = errors.New(500, cartPb.ErrorReason_CART_ITEM_DELETE_ERROR.String(), "delete cart items failed")
 )
 
 // Cart is a Cart model.
@@ -52,8 +43,7 @@ func (uc *CartUsecase) AddCart(ctx context.Context, item *Cart) (*Cart, error) {
 	existItem, err := uc.repo.FindOne(ctx, item)
 	// 不存在则新建
 	if err != nil {
-		e := errors.FromError(err)
-		if e.Reason == "CART_ITEM_NOT_FOUND" {
+		if cartPb.IsCartItemNotFound(err) {
 			return uc.repo.Create(ctx, item)
 		}
 		return nil, err

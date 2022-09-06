@@ -12,4 +12,6 @@ enum ErrorReason {
 
   WEIXIN_CODE_UNSPECIFIED = 0 [(errors.code) = 400];
   WEIXIN_CODE_ERROR = 1 [(errors.code) = 404];
+  WX_CODE2SESSION_ERROR = 2 [(errors.code) = 500];
+  WX_DECRYPT_DATA_ERROR = 3 [(errors.code) = 500];
 }

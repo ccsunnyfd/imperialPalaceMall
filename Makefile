@@ -43,6 +43,15 @@ api:
 	       --openapi_out=fq_schema_naming=true,default_response=false:. \
 	       $(API_PROTO_FILES)
 
+.PHONY: error
+# generate error proto
+error:
+	protoc --proto_path=./api \
+         --proto_path=./third_party \
+         --go_out=paths=source_relative:./api \
+         --go-errors_out=paths=source_relative:./api \
+         $(API_PROTO_FILES)
+
 .PHONY: validate
 # generate validate proto
 validate:

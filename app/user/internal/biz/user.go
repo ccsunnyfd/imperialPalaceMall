@@ -2,19 +2,9 @@ package biz
 
 import (
 	"context"
-	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
-	user "imperialPalaceMall/api/user/v1"
 	"imperialPalaceMall/app/pkg/tokens"
 	"time"
-)
-
-var (
-	// ErrUserNotFound is user not found.
-	ErrUserNotFound = errors.NotFound(user.ErrorReason_USER_NOT_FOUND.String(), "user not found")
-	ErrUserGet      = errors.NotFound(user.ErrorReason_USER_GET_ERROR.String(), "user get error")
-	ErrUserCreate   = errors.NotFound(user.ErrorReason_USER_CREATE_ERROR.String(), "user create error")
-	ErrUserUpdate   = errors.NotFound(user.ErrorReason_USER_UPDATE_ERROR.String(), "user update error")
 )
 
 // User is a User model.
@@ -51,7 +41,7 @@ type UserRepo interface {
 	Code2Session(context.Context, string) (string, string, error)
 	DecryptUserInfo(context.Context, string, string, string) (*User, error)
 	Get(context.Context, string) (*UserCache, error)
-	SetUserCache(context.Context, *UserCache, string, time.Duration)
+	SetUserCache(context.Context, *UserCache, string, time.Duration) error
 	DeleteOldToken(context.Context, string)
 }
 
@@ -113,19 +103,27 @@ func (u *UserUsecase) WXLogin(ctx context.Context, code string, encryptedData st
 		u.repo.DeleteOldToken(ctx, oldToken)
 	}
 
-	u.repo.SetUserCache(ctx, &UserCache{
+	err = u.repo.SetUserCache(ctx, &UserCache{
 		Token:      tokenStr,
 		OpenId:     openid,
 		UserId:     userId,
 		SessionKey: newSessionKey,
 	}, tokenStr, 0)
 
-	u.repo.SetUserCache(ctx, &UserCache{
+	if err != nil {
+		return tokenStr, err
+	}
+
+	err = u.repo.SetUserCache(ctx, &UserCache{
 		Token:      tokenStr,
 		OpenId:     openid,
 		UserId:     userId,
 		SessionKey: newSessionKey,
 	}, openid, 0)
+
+	if err != nil {
+		return tokenStr, err
+	}
 
 	return tokenStr, nil
 }

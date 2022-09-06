@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/pkg/errors"
+	cartPb "imperialPalaceMall/api/cart/v1"
 	"imperialPalaceMall/app/cart/internal/biz"
 	"imperialPalaceMall/app/cart/internal/data/ent/cart"
 )
@@ -33,7 +34,7 @@ func (r *cartRepo) Create(ctx context.Context, item *biz.Cart) (*biz.Cart, error
 		SetNum(1).
 		Save(ctx)
 	if err != nil {
-		return nil, errors.Wrapf(biz.ErrAddCartItem, "Create: userId_%d, goodsId_%d, goodsSKUId_%d, goodsSKUDesc_%s", item.UserId, item.GoodsId, item.GoodsSKUId, item.GoodsSKUDesc)
+		return nil, errors.Wrap(cartPb.ErrorCartItemAddError("Create: userId_%d, goodsId_%d, goodsSKUId_%d, goodsSKUDesc_%s", item.UserId, item.GoodsId, item.GoodsSKUId, item.GoodsSKUDesc), "cart")
 	}
 	return &biz.Cart{
 		Id:           po.ID,
@@ -51,7 +52,7 @@ func (r *cartRepo) UpdateNum(ctx context.Context, cartId int64, num int32) (*biz
 		SetNum(num).
 		Save(ctx)
 	if err != nil {
-		return nil, errors.Wrapf(biz.ErrUpdateCartItem, "UpdateNum to %d by cartId_%d", num, cartId)
+		return nil, errors.Wrap(cartPb.ErrorCartItemUpdateError("UpdateNum to %d by cartId_%d", num, cartId), "cart")
 	}
 	return &biz.Cart{
 		Id:           po.ID,
@@ -73,7 +74,7 @@ func (r *cartRepo) FindOne(ctx context.Context, item *biz.Cart) (*biz.Cart, erro
 		First(ctx)
 
 	if err != nil {
-		return nil, errors.Wrapf(biz.ErrCartItemNotFound, "FindOneBy userId_%d, goodsId_%d, goodsSKUId_%d", item.UserId, item.GoodsId, item.GoodsSKUId)
+		return nil, errors.Wrap(cartPb.ErrorCartItemNotFound("FindOneBy userId_%d, goodsId_%d, goodsSKUId_%d", item.UserId, item.GoodsId, item.GoodsSKUId), "cart")
 	}
 	return &biz.Cart{
 		Id:           po.ID,
@@ -93,7 +94,7 @@ func (r *cartRepo) GetByUserId(ctx context.Context, userId int64) ([]*biz.Cart, 
 		All(ctx)
 	// 如果查询为空列表，ent不认为是错误，只会返回空列表
 	if err != nil {
-		return nil, errors.Wrapf(biz.ErrGetCartItem, "GetByUserId_%d", userId)
+		return nil, errors.Wrap(cartPb.ErrorCartItemGetError("GetByUserId_%d", userId), "cart")
 	}
 
 	rv := make([]*biz.Cart, 0, len(po))
@@ -113,7 +114,7 @@ func (r *cartRepo) GetByUserId(ctx context.Context, userId int64) ([]*biz.Cart, 
 func (r *cartRepo) DeleteByIds(ctx context.Context, userId int64, ids []int64) (int64, error) {
 	affected, err := r.data.db.Cart.Delete().Where(cart.IDIn(ids...), cart.UserIDEQ(userId)).Exec(ctx)
 	if err != nil {
-		return 0, errors.Wrapf(biz.ErrDeleteCartItems, "DeleteByIds_userId_%d_ids_%v", userId, ids)
+		return 0, errors.Wrap(cartPb.ErrorCartItemDeleteError("DeleteByIds_userId_%d_ids_%v", userId, ids), "cart")
 	}
 	return int64(affected), nil
 }
