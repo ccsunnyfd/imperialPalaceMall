@@ -2,19 +2,18 @@ package service
 
 import (
 	"context"
-	"github.com/go-kratos/kratos/v2/errors"
-	pkgErrors "github.com/pkg/errors"
+	"fmt"
 	pb "imperialPalaceMall/api/shop/interface/v1"
-	"imperialPalaceMall/app/pkg/middleware"
 	"imperialPalaceMall/app/shop/internal/biz"
+	"strconv"
+	"strings"
 )
 
 func (s *ShopInterface) AddCart(ctx context.Context, req *pb.AddCartRequest) (*pb.AddCartReply, error) {
-	ctxUser, err := middleware.ContextGetUser(ctx)
+	userId, err := getUserIdFromContext(ctx)
 	if err != nil {
-		return nil, pkgErrors.Wrap(errors.Unauthorized("user", "missing user value in request context"), "cartservice_AddCart_error")
+		return nil, err
 	}
-	userId := ctxUser.UserId
 
 	cart, err := s.cc.AddCart(ctx, &biz.Cart{
 		UserId:       userId,
@@ -38,11 +37,10 @@ func (s *ShopInterface) AddCart(ctx context.Context, req *pb.AddCartRequest) (*p
 }
 
 func (s *ShopInterface) GetMyCart(ctx context.Context, req *pb.GetMyCartRequest) (*pb.GetMyCartReply, error) {
-	ctxUser, err := middleware.ContextGetUser(ctx)
+	userId, err := getUserIdFromContext(ctx)
 	if err != nil {
-		return nil, pkgErrors.Wrap(errors.Unauthorized("user", "missing user value in request context"), "cartService_GetMyCart_error")
+		return nil, err
 	}
-	userId := ctxUser.UserId
 
 	cartItems, err := s.cc.GetCart(ctx, userId)
 	if err != nil {
@@ -93,5 +91,39 @@ func (s *ShopInterface) UpdateCartNum(ctx context.Context, req *pb.UpdateCartNum
 			GoodsSkuDesc: cart.GoodsSKUDesc,
 			Num:          cart.Num,
 		},
+	}, nil
+}
+
+func (s *ShopInterface) RemoveCartItems(ctx context.Context, req *pb.RemoveCartItemsRequest) (*pb.RemoveCartItemsReply, error) {
+	userId, err := getUserIdFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	idsStr := req.Ids.Value
+	fmt.Println(idsStr)
+	idsArr := strings.Split(idsStr, ",")
+	idsIntArr := make([]int64, 0, len(idsArr))
+	for _, x := range idsArr {
+		v, err := strconv.ParseInt(x, 10, 64)
+		if err != nil {
+			continue
+		}
+		idsIntArr = append(idsIntArr, v)
+	}
+
+	if len(idsIntArr) == 0 {
+		return &pb.RemoveCartItemsReply{
+			Affected: 0,
+		}, nil
+	}
+
+	affected, err := s.cc.RemoveCartItems(ctx, userId, idsIntArr)
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.RemoveCartItemsReply{
+		Affected: affected,
 	}, nil
 }

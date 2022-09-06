@@ -7,9 +7,10 @@ import (
 )
 
 var (
-	ErrAddCart       = errors.New(500, "cart", "add cart item error")
-	ErrGetCart       = errors.New(500, "cart", "get cart by userId error")
-	ErrUpdateCartNum = errors.New(500, "cart", "update cart num error")
+	ErrAddCart         = errors.New(500, "cart", "add cart item error")
+	ErrGetCart         = errors.New(500, "cart", "get cart by userId error")
+	ErrUpdateCartNum   = errors.New(500, "cart", "update cart num error")
+	ErrRemoveCartItems = errors.New(500, "cart", "remove cart items error")
 )
 
 // Cart is a Cart model.
@@ -27,6 +28,7 @@ type CartRepo interface {
 	AddCart(ctx context.Context, item *Cart) (*Cart, error)
 	GetCart(ctx context.Context, userId int64) ([]*Cart, error)
 	UpdateCartNum(ctx context.Context, cartId int64, num int32) (*Cart, error)
+	RemoveCartItems(ctx context.Context, userId int64, ids []int64) (int64, error)
 }
 
 // CartUsecase is a Cart usecase.
@@ -51,4 +53,8 @@ func (uc *CartUsecase) GetCart(ctx context.Context, userId int64) ([]*Cart, erro
 
 func (uc *CartUsecase) UpdateCartNum(ctx context.Context, cartId int64, num int32) (*Cart, error) {
 	return uc.repo.UpdateCartNum(ctx, cartId, num)
+}
+
+func (uc *CartUsecase) RemoveCartItems(ctx context.Context, userId int64, ids []int64) (int64, error) {
+	return uc.repo.RemoveCartItems(ctx, userId, ids)
 }

@@ -13,6 +13,7 @@ service CartService {
   rpc AddCart (AddCartRequest) returns (AddCartReply);
   rpc GetCartsByUserId (GetCartsByUserIdRequest) returns (GetCartsByUserIdReply);
   rpc UpdateCartNum (UpdateCartNumRequest) returns (UpdateCartNumReply);
+  rpc RemoveCartItems (RemoveCartItemsRequest) returns (RemoveCartItemsReply);
 }
 
 message AddCartRequest {
@@ -57,4 +58,13 @@ message UpdateCartNumRequest {
 
 message UpdateCartNumReply {
   Cart cart = 1;
+}
+
+message RemoveCartItemsRequest {
+  google.protobuf.Int64Value user_id = 1 [(validate.rules).int64 = {gt: 0}, (validate.rules).message.required=true];
+  repeated int64 ids = 2 [(validate.rules).repeated = {min_items: 1}];
+}
+
+message RemoveCartItemsReply {
+  int64 affected = 1;
 }

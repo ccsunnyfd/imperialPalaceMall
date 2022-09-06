@@ -12,6 +12,7 @@ var (
 	ErrUpdateCartItem   = errors.New(500, cartPb.ErrorReason_CART_ITEM_UPDATE_ERROR.String(), "update cart item failed")
 	ErrCartItemNotFound = errors.NotFound(cartPb.ErrorReason_CART_ITEM_NOT_FOUND.String(), "cart item not found")
 	ErrGetCartItem      = errors.New(500, cartPb.ErrorReason_CART_ITEM_GET_ERROR.String(), "get cart item failed")
+	ErrDeleteCartItems  = errors.New(500, cartPb.ErrorReason_CART_ITEM_DELETE_ERROR.String(), "delete cart items failed")
 )
 
 // Cart is a Cart model.
@@ -30,6 +31,7 @@ type CartRepo interface {
 	Create(ctx context.Context, item *Cart) (*Cart, error)
 	UpdateNum(ctx context.Context, cartId int64, num int32) (*Cart, error)
 	GetByUserId(ctx context.Context, userId int64) ([]*Cart, error)
+	DeleteByIds(ctx context.Context, userId int64, ids []int64) (int64, error)
 }
 
 // CartUsecase is a Cart usecase.
@@ -50,7 +52,8 @@ func (uc *CartUsecase) AddCart(ctx context.Context, item *Cart) (*Cart, error) {
 	existItem, err := uc.repo.FindOne(ctx, item)
 	// 不存在则新建
 	if err != nil {
-		if errors.Is(err, ErrCartItemNotFound) {
+		e := errors.FromError(err)
+		if e.Reason == "CART_ITEM_NOT_FOUND" {
 			return uc.repo.Create(ctx, item)
 		}
 		return nil, err
@@ -67,4 +70,9 @@ func (uc *CartUsecase) GetCartsByUserId(ctx context.Context, userId int64) ([]*C
 func (uc *CartUsecase) UpdateCartNum(ctx context.Context, cartId int64, num int32) (*Cart, error) {
 	uc.log.WithContext(ctx).Infof("UpdateCartNum_cartId_%d_num_%d", cartId, num)
 	return uc.repo.UpdateNum(ctx, cartId, num)
+}
+
+func (uc *CartUsecase) RemoveCartItems(ctx context.Context, userId int64, ids []int64) (int64, error) {
+	uc.log.WithContext(ctx).Infof("RemoveCartItems_userId_%d_ids_%v", userId, ids)
+	return uc.repo.DeleteByIds(ctx, userId, ids)
 }

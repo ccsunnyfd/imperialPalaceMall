@@ -53,7 +53,12 @@ service ShopInterface {
 			put: "/v1/user/my/cart/{id}",
 			body: "*"
 		};
-	}
+	};
+	rpc RemoveCartItems (RemoveCartItemsRequest) returns (RemoveCartItemsReply) {
+		option (google.api.http) = {
+			delete: "/v1/user/my/cart/{ids}",
+		};
+	};
 }
 
 message Category {
@@ -208,4 +213,12 @@ message UpdateCartNumRequest {
 
 message UpdateCartNumReply {
 	Cart cart = 1;
+}
+
+message RemoveCartItemsRequest {
+	google.protobuf.StringValue ids = 1 [(validate.rules).string = {min_len: 1, max_len: 200}, (validate.rules).message.required=true];
+}
+
+message RemoveCartItemsReply {
+	int64 affected = 1;
 }

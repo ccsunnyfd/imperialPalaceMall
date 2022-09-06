@@ -24,6 +24,7 @@ func NewCartRepo(data *Data, logger log.Logger) biz.CartRepo {
 	return &cartRepo{
 		data: data,
 		log:  log.NewHelper(logger),
+		sg:   &singleflight.Group{},
 	}
 }
 
@@ -94,4 +95,16 @@ func (r *cartRepo) UpdateCartNum(ctx context.Context, cartId int64, num int32) (
 		GoodsSKUDesc: reply.Cart.GoodsSkuDesc,
 		Num:          reply.Cart.Num,
 	}, nil
+}
+
+func (r *cartRepo) RemoveCartItems(ctx context.Context, userId int64, ids []int64) (int64, error) {
+	reply, err := r.data.cc.RemoveCartItems(ctx, &cartV1.RemoveCartItemsRequest{
+		UserId: wrapperspb.Int64(userId),
+		Ids:    ids,
+	})
+	if err != nil {
+		return 0, errors.Wrapf(biz.ErrRemoveCartItems, "RemoveCartItems: ids_%v", ids)
+	}
+
+	return reply.Affected, nil
 }

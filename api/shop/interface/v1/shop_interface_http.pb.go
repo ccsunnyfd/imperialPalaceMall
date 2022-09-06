@@ -25,6 +25,7 @@ const OperationShopInterfaceGetMyCart = "/api.shop.interface.v1.ShopInterface/Ge
 const OperationShopInterfaceGetSKUs = "/api.shop.interface.v1.ShopInterface/GetSKUs"
 const OperationShopInterfaceListCategory = "/api.shop.interface.v1.ShopInterface/ListCategory"
 const OperationShopInterfaceListGoods = "/api.shop.interface.v1.ShopInterface/ListGoods"
+const OperationShopInterfaceRemoveCartItems = "/api.shop.interface.v1.ShopInterface/RemoveCartItems"
 const OperationShopInterfaceUpdateCartNum = "/api.shop.interface.v1.ShopInterface/UpdateCartNum"
 const OperationShopInterfaceWxLogin = "/api.shop.interface.v1.ShopInterface/WxLogin"
 
@@ -35,6 +36,7 @@ type ShopInterfaceHTTPServer interface {
 	GetSKUs(context.Context, *GetSKUsRequest) (*GetSKUsReply, error)
 	ListCategory(context.Context, *ListCategoryRequest) (*ListCategoryReply, error)
 	ListGoods(context.Context, *ListGoodsRequest) (*ListGoodsReply, error)
+	RemoveCartItems(context.Context, *RemoveCartItemsRequest) (*RemoveCartItemsReply, error)
 	UpdateCartNum(context.Context, *UpdateCartNumRequest) (*UpdateCartNumReply, error)
 	WxLogin(context.Context, *WxLoginRequest) (*WxLoginReply, error)
 }
@@ -49,6 +51,7 @@ func RegisterShopInterfaceHTTPServer(s *http.Server, srv ShopInterfaceHTTPServer
 	r.PUT("/v1/user/my/cart", _ShopInterface_AddCart0_HTTP_Handler(srv))
 	r.GET("/v1/user/my/cart", _ShopInterface_GetMyCart0_HTTP_Handler(srv))
 	r.PUT("/v1/user/my/cart/{id}", _ShopInterface_UpdateCartNum0_HTTP_Handler(srv))
+	r.DELETE("/v1/user/my/cart/{ids}", _ShopInterface_RemoveCartItems0_HTTP_Handler(srv))
 }
 
 func _ShopInterface_ListCategory0_HTTP_Handler(srv ShopInterfaceHTTPServer) func(ctx http.Context) error {
@@ -212,6 +215,28 @@ func _ShopInterface_UpdateCartNum0_HTTP_Handler(srv ShopInterfaceHTTPServer) fun
 	}
 }
 
+func _ShopInterface_RemoveCartItems0_HTTP_Handler(srv ShopInterfaceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in RemoveCartItemsRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationShopInterfaceRemoveCartItems)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.RemoveCartItems(ctx, req.(*RemoveCartItemsRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*RemoveCartItemsReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type ShopInterfaceHTTPClient interface {
 	AddCart(ctx context.Context, req *AddCartRequest, opts ...http.CallOption) (rsp *AddCartReply, err error)
 	GetGoods(ctx context.Context, req *GetGoodsRequest, opts ...http.CallOption) (rsp *GetGoodsReply, err error)
@@ -219,6 +244,7 @@ type ShopInterfaceHTTPClient interface {
 	GetSKUs(ctx context.Context, req *GetSKUsRequest, opts ...http.CallOption) (rsp *GetSKUsReply, err error)
 	ListCategory(ctx context.Context, req *ListCategoryRequest, opts ...http.CallOption) (rsp *ListCategoryReply, err error)
 	ListGoods(ctx context.Context, req *ListGoodsRequest, opts ...http.CallOption) (rsp *ListGoodsReply, err error)
+	RemoveCartItems(ctx context.Context, req *RemoveCartItemsRequest, opts ...http.CallOption) (rsp *RemoveCartItemsReply, err error)
 	UpdateCartNum(ctx context.Context, req *UpdateCartNumRequest, opts ...http.CallOption) (rsp *UpdateCartNumReply, err error)
 	WxLogin(ctx context.Context, req *WxLoginRequest, opts ...http.CallOption) (rsp *WxLoginReply, err error)
 }
@@ -303,6 +329,19 @@ func (c *ShopInterfaceHTTPClientImpl) ListGoods(ctx context.Context, in *ListGoo
 	opts = append(opts, http.Operation(OperationShopInterfaceListGoods))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *ShopInterfaceHTTPClientImpl) RemoveCartItems(ctx context.Context, in *RemoveCartItemsRequest, opts ...http.CallOption) (*RemoveCartItemsReply, error) {
+	var out RemoveCartItemsReply
+	pattern := "/v1/user/my/cart/{ids}"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationShopInterfaceRemoveCartItems))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "DELETE", path, nil, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

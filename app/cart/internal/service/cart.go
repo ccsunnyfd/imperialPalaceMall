@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-
 	pb "imperialPalaceMall/api/cart/v1"
 	"imperialPalaceMall/app/cart/internal/biz"
 )
@@ -75,5 +74,15 @@ func (s *CartService) UpdateCartNum(ctx context.Context, in *pb.UpdateCartNumReq
 			GoodsSkuDesc: cart.GoodsSKUDesc,
 			Num:          cart.Num,
 		},
+	}, nil
+}
+
+func (s *CartService) RemoveCartItems(ctx context.Context, in *pb.RemoveCartItemsRequest) (*pb.RemoveCartItemsReply, error) {
+	affected, err := s.uc.RemoveCartItems(ctx, in.UserId.Value, in.Ids)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.RemoveCartItemsReply{
+		Affected: affected,
 	}, nil
 }

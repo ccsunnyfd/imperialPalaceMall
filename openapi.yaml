@@ -141,6 +141,24 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.shop.interface.v1.AddCartReply'
+    /v1/user/my/cart/{ids}:
+        delete:
+            tags:
+                - ShopInterface
+            operationId: ShopInterface_RemoveCartItems
+            parameters:
+                - name: ids
+                  in: path
+                  required: true
+                  schema:
+                    $ref: '#/components/schemas/google.protobuf.StringValue'
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.shop.interface.v1.RemoveCartItemsReply'
     /v1/user/my/cart/{id}:
         put:
             tags:
@@ -422,6 +440,12 @@ components:
                     type: integer
                     format: int64
                 totalRecords:
+                    type: integer
+                    format: int64
+        api.shop.interface.v1.RemoveCartItemsReply:
+            type: object
+            properties:
+                affected:
                     type: integer
                     format: int64
         api.shop.interface.v1.UpdateCartNumReply:

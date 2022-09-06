@@ -15,4 +15,5 @@ enum ErrorReason {
   CART_ITEM_GET_ERROR = 2 [(errors.code) = 500];
   CART_ITEM_ADD_ERROR = 3 [(errors.code) = 500];
   CART_ITEM_UPDATE_ERROR = 4 [(errors.code) = 500];
+  CART_ITEM_DELETE_ERROR = 5 [(errors.code) = 500];
 }

@@ -109,3 +109,11 @@ func (r *cartRepo) GetByUserId(ctx context.Context, userId int64) ([]*biz.Cart, 
 	}
 	return rv, nil
 }
+
+func (r *cartRepo) DeleteByIds(ctx context.Context, userId int64, ids []int64) (int64, error) {
+	affected, err := r.data.db.Cart.Delete().Where(cart.IDIn(ids...), cart.UserIDEQ(userId)).Exec(ctx)
+	if err != nil {
+		return 0, errors.Wrapf(biz.ErrDeleteCartItems, "DeleteByIds_userId_%d_ids_%v", userId, ids)
+	}
+	return int64(affected), nil
+}
