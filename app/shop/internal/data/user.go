@@ -37,7 +37,7 @@ func (r *userRepo) WXLogin(ctx context.Context, code string, encryptedData strin
 			SessionIsValid: sessionIsValid,
 		})
 		if err != nil {
-			return nil, errors.Wrapf(biz.ErrTokenNotCreated, "WXLogin: code_%s", code)
+			return nil, errors.Wrapf(biz.ErrTokenNotCreated, "shop_user")
 		}
 		return reply.Token, nil
 	})
@@ -53,7 +53,7 @@ func (r *userRepo) CheckToken(ctx context.Context, token string) (*biz.UserCache
 			Token: wrapperspb.String(token),
 		})
 		if err != nil {
-			return nil, errors.Wrapf(biz.ErrTokenNotFound, "CheckToken: token_%s", token)
+			return nil, errors.Wrapf(biz.ErrTokenNotFound, "shop_user")
 		}
 		return &biz.UserCache{
 			UserId: reply.User.UserId,

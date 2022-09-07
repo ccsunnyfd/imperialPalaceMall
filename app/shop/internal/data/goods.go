@@ -41,7 +41,7 @@ func (r *goodsRepo) List(ctx context.Context, categoryId int64, f filters.Filter
 			PageSize:   f.PageSize,
 		})
 		if err != nil {
-			return nil, errors.Wrapf(biz.ErrListGoods, "List: categoryid_%d_page_%d_pagesize_%d", categoryId, f.Page, f.PageSize)
+			return nil, errors.Wrapf(biz.ErrListGoods, "shop_goods")
 		}
 		rv := make([]*biz.GoodsSimplify, 0)
 		for _, x := range reply.GoodsList {
@@ -85,7 +85,7 @@ func (r *goodsRepo) GetGoodsDetail(ctx context.Context, goodsId int64) (*biz.Goo
 			Id: goodsId,
 		})
 		if err != nil {
-			return nil, errors.Wrapf(biz.ErrGoodsNotFound, "GetGoodsDetail: goodsId_%d", goodsId)
+			return nil, errors.Wrapf(biz.ErrGoodsNotFound, "shop_goods")
 		}
 
 		infos := make([]*biz.GoodsInfo, 0)
@@ -125,7 +125,7 @@ func (r *goodsRepo) GetGoodsSKUs(ctx context.Context, goodsId int64) ([]*biz.Goo
 			Id: wrapperspb.Int64(goodsId),
 		})
 		if err != nil {
-			return nil, errors.Wrapf(biz.ErrSKUNotFound, "GetGoodsSKUs: goodsId_%d", goodsId)
+			return nil, errors.Wrapf(biz.ErrSKUNotFound, "shop_goods")
 		}
 
 		skus, attrs := make([]*biz.GoodsSKU, 0), make([]*biz.GoodsAttr, 0)
@@ -173,7 +173,7 @@ func (r *goodsRepo) GetGoodsAndSkuDetail(ctx context.Context, goodsId int64, sku
 			SkuId:   wrapperspb.Int64(skuId),
 		})
 		if err != nil {
-			return nil, errors.Wrapf(biz.ErrGoodsAndSkuDetailNotFound, "GetGoodsAndSkuDetail: goodsId_%d, skuId_%d", goodsId, skuId)
+			return nil, errors.Wrapf(biz.ErrGoodsAndSkuDetailNotFound, "shop_goods")
 		}
 
 		return &biz.GoodsAndSkuDetailItem{

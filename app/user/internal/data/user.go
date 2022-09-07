@@ -60,13 +60,13 @@ func (r *userRepo) Save(ctx context.Context, user *biz.User) (*biz.User, error) 
 			}
 			result = r.data.db.WithContext(ctx).Create(&u)
 			if result.Error != nil {
-				return nil, pkgErrors.Wrap(userPb.ErrorUserCreateError("Save: create_user"), "user")
+				return nil, pkgErrors.Wrap(userPb.ErrorUserCreateError("save user error"), "user")
 			}
 			return &biz.User{
 				Id: u.Id,
 			}, nil
 		}
-		return nil, pkgErrors.Wrap(userPb.ErrorUserGetError("Save: get_by_open_id_%s", user.OpenId), "user")
+		return nil, pkgErrors.Wrap(userPb.ErrorUserGetError("get user by openid error"), "user")
 	}
 
 	u.NickName = user.NickName
@@ -79,7 +79,7 @@ func (r *userRepo) Save(ctx context.Context, user *biz.User) (*biz.User, error) 
 
 	result = r.data.db.WithContext(ctx).Save(&u)
 	if result.Error != nil {
-		return nil, pkgErrors.Wrap(userPb.ErrorUserUpdateError("Save: update"), "user")
+		return nil, pkgErrors.Wrap(userPb.ErrorUserUpdateError("save user error"), "user")
 	}
 
 	return &biz.User{

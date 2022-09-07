@@ -30,7 +30,7 @@ func (r *categoryRepo) ListCategories(ctx context.Context) ([]*biz.Category, err
 	result, err, _ := r.sg.Do("list_categories", func() (interface{}, error) {
 		reply, err := r.data.catc.ListCategory(ctx, &mallV1.ListCategoryRequest{})
 		if err != nil {
-			return nil, errors.Wrapf(biz.ErrListCategories, "ListCategories")
+			return nil, errors.Wrapf(biz.ErrListCategories, "shop_category")
 		}
 		rv := make([]*biz.Category, 0)
 		for _, x := range reply.Categories {

@@ -28,7 +28,7 @@ func (r *userRepo) Code2Session(ctx context.Context, code string) (openid, sessi
 	})
 
 	if err != nil {
-		return "", "", errors.Wrap(weixinPb.ErrorWxCode2sessionError("Code2Session_code_%s", code), "user")
+		return "", "", errors.Wrap(weixinPb.ErrorWxCode2sessionError("code to session error", code), "user")
 	}
 
 	return resp.Openid, resp.SessionKey, nil
@@ -38,7 +38,7 @@ func (r *userRepo) DecryptUserInfo(ctx context.Context, sessionKey string, encry
 	decrypter := r.data.wxDecrypter.WithSessionKey(sessionKey)
 	userInfo, err := decrypter.DecryptData(encryptedData, iv)
 	if err != nil {
-		return nil, errors.Wrap(weixinPb.ErrorWxDecryptDataError("DecryptUserInfo"), "user")
+		return nil, errors.Wrap(weixinPb.ErrorWxDecryptDataError("decrypt user info error"), "user")
 	}
 
 	return &biz.User{

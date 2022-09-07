@@ -2,11 +2,11 @@ package server
 
 import (
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/go-kratos/kratos/v2/middleware/logging"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/go-kratos/kratos/v2/middleware/validate"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	pb "imperialPalaceMall/api/user/v1"
+	"imperialPalaceMall/app/pkg/middleware"
 	"imperialPalaceMall/app/user/internal/conf"
 	"imperialPalaceMall/app/user/internal/service"
 )
@@ -16,7 +16,7 @@ func NewGRPCServer(c *conf.Server, userService *service.UserServiceService, logg
 	var opts = []grpc.ServerOption{
 		grpc.Middleware(
 			recovery.Recovery(),
-			logging.Server(logger),
+			middleware.LogServer(logger),
 			validate.Validator(),
 		),
 	}

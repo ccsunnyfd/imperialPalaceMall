@@ -2,7 +2,9 @@ package biz
 
 import (
 	"context"
+	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
+	pkgErrors "github.com/pkg/errors"
 	cartPb "imperialPalaceMall/api/cart/v1"
 )
 
@@ -43,7 +45,8 @@ func (uc *CartUsecase) AddCart(ctx context.Context, item *Cart) (*Cart, error) {
 	existItem, err := uc.repo.FindOne(ctx, item)
 	// 不存在则新建
 	if err != nil {
-		if cartPb.IsCartItemNotFound(err) {
+		e := errors.FromError(pkgErrors.Cause(err))
+		if e.Reason == cartPb.ErrorReason_CART_ITEM_NOT_FOUND.String() && e.Code == 404 {
 			return uc.repo.Create(ctx, item)
 		}
 		return nil, err

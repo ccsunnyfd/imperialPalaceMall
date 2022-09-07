@@ -39,7 +39,7 @@ func (r *categoryRepo) ListAll(ctx context.Context) ([]*biz.Category, error) {
 	cc, err := r.data.db.Category.Query(ctx)
 
 	if err != nil {
-		return nil, errors.Wrap(mallPb.ErrorCategoryNotFound("ListAll"), "category")
+		return nil, errors.Wrap(mallPb.ErrorCategoryNotFound("categories not found"), "category")
 	}
 	rv := make([]*biz.Category, 0, len(cc))
 	for _, po := range cc {

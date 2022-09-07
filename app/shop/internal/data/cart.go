@@ -36,7 +36,7 @@ func (r *cartRepo) AddCart(ctx context.Context, item *biz.Cart) (*biz.Cart, erro
 		GoodsSkuDesc: wrapperspb.String(item.GoodsSKUDesc),
 	})
 	if err != nil {
-		return nil, errors.Wrapf(biz.ErrAddCart, "AddCart: userId_%d, goodsId_%d, goodsSKUId_%d, goodsSKUDesc_%s", item.UserId, item.GoodsId, item.GoodsSKUId, item.GoodsSKUDesc)
+		return nil, errors.Wrapf(biz.ErrAddCart, "shop_cart")
 	}
 	return &biz.Cart{
 		Id:           reply.Cart.Id,
@@ -54,7 +54,7 @@ func (r *cartRepo) GetCart(ctx context.Context, userId int64) ([]*biz.Cart, erro
 			UserId: wrapperspb.Int64(userId),
 		})
 		if err != nil {
-			return nil, errors.Wrapf(biz.ErrGetCart, "GetCart: userId_%d", userId)
+			return nil, errors.Wrapf(biz.ErrGetCart, "shop_cart")
 		}
 
 		rv := make([]*biz.Cart, 0, len(reply.Items))
@@ -84,7 +84,7 @@ func (r *cartRepo) UpdateCartNum(ctx context.Context, cartId int64, num int32) (
 		Num:    wrapperspb.Int32(num),
 	})
 	if err != nil {
-		return nil, errors.Wrapf(biz.ErrUpdateCartNum, "UpdateCartNum: cartId_%d, num_%d", cartId, num)
+		return nil, errors.Wrapf(biz.ErrUpdateCartNum, "shop_cart")
 	}
 
 	return &biz.Cart{
@@ -103,7 +103,7 @@ func (r *cartRepo) RemoveCartItems(ctx context.Context, userId int64, ids []int6
 		Ids:    ids,
 	})
 	if err != nil {
-		return 0, errors.Wrapf(biz.ErrRemoveCartItems, "RemoveCartItems: ids_%v", ids)
+		return 0, errors.Wrapf(biz.ErrRemoveCartItems, "shop_cart")
 	}
 
 	return reply.Affected, nil

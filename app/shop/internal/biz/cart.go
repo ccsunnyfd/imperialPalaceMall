@@ -7,10 +7,10 @@ import (
 )
 
 var (
-	ErrAddCart         = errors.New(500, "cart", "add cart item error")
-	ErrGetCart         = errors.New(500, "cart", "get cart by userId error")
-	ErrUpdateCartNum   = errors.New(500, "cart", "update cart num error")
-	ErrRemoveCartItems = errors.New(500, "cart", "remove cart items error")
+	ErrAddCart         = errors.New(500, "CART_ADD_ERROR", "add cart item error")
+	ErrGetCart         = errors.New(500, "CART_NOT_FOUND", "get cart by userId error")
+	ErrUpdateCartNum   = errors.New(500, "CART_UPDATE_NUM_ERROR", "update cart num error")
+	ErrRemoveCartItems = errors.New(500, "CART_REMOVE_ERROR", "remove cart items error")
 )
 
 // Cart is a Cart model.
