@@ -78,23 +78,17 @@ func (r *cartRepo) GetCart(ctx context.Context, userId int64) ([]*biz.Cart, erro
 	return result.([]*biz.Cart), nil
 }
 
-func (r *cartRepo) UpdateCartNum(ctx context.Context, cartId int64, num int32) (*biz.Cart, error) {
+func (r *cartRepo) UpdateCartNum(ctx context.Context, userId int64, cartId int64, num int32) (int64, error) {
 	reply, err := r.data.cc.UpdateCartNum(ctx, &cartV1.UpdateCartNumRequest{
+		UserId: wrapperspb.Int64(userId),
 		CartId: wrapperspb.Int64(cartId),
 		Num:    wrapperspb.Int32(num),
 	})
 	if err != nil {
-		return nil, errors.Wrapf(biz.ErrUpdateCartNum, "shop_cart")
+		return 0, errors.Wrapf(biz.ErrUpdateCartNum, "shop_cart")
 	}
 
-	return &biz.Cart{
-		Id:           reply.Cart.Id,
-		UserId:       reply.Cart.UserId,
-		GoodsId:      reply.Cart.GoodsId,
-		GoodsSKUId:   reply.Cart.GoodsSkuId,
-		GoodsSKUDesc: reply.Cart.GoodsSkuDesc,
-		Num:          reply.Cart.Num,
-	}, nil
+	return reply.Affected, nil
 }
 
 func (r *cartRepo) RemoveCartItems(ctx context.Context, userId int64, ids []int64) (int64, error) {

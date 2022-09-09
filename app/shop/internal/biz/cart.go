@@ -27,7 +27,7 @@ type Cart struct {
 type CartRepo interface {
 	AddCart(ctx context.Context, item *Cart) (*Cart, error)
 	GetCart(ctx context.Context, userId int64) ([]*Cart, error)
-	UpdateCartNum(ctx context.Context, cartId int64, num int32) (*Cart, error)
+	UpdateCartNum(ctx context.Context, userId int64, cartId int64, num int32) (int64, error)
 	RemoveCartItems(ctx context.Context, userId int64, ids []int64) (int64, error)
 }
 
@@ -51,8 +51,8 @@ func (uc *CartUsecase) GetCart(ctx context.Context, userId int64) ([]*Cart, erro
 	return uc.repo.GetCart(ctx, userId)
 }
 
-func (uc *CartUsecase) UpdateCartNum(ctx context.Context, cartId int64, num int32) (*Cart, error) {
-	return uc.repo.UpdateCartNum(ctx, cartId, num)
+func (uc *CartUsecase) UpdateCartNum(ctx context.Context, userId int64, cartId int64, num int32) (int64, error) {
+	return uc.repo.UpdateCartNum(ctx, userId, cartId, num)
 }
 
 func (uc *CartUsecase) RemoveCartItems(ctx context.Context, userId int64, ids []int64) (int64, error) {

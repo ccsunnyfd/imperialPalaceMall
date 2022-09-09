@@ -77,20 +77,18 @@ func (s *ShopInterface) GetMyCart(ctx context.Context, req *pb.GetMyCartRequest)
 }
 
 func (s *ShopInterface) UpdateCartNum(ctx context.Context, req *pb.UpdateCartNumRequest) (*pb.UpdateCartNumReply, error) {
-	cart, err := s.cc.UpdateCartNum(ctx, req.Id.Value, req.Num.Value)
+	userId, err := getUserIdFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	affected, err := s.cc.UpdateCartNum(ctx, userId, req.Id.Value, req.Num.Value)
 	if err != nil {
 		return nil, err
 	}
 
 	return &pb.UpdateCartNumReply{
-		Cart: &pb.Cart{
-			Id:           cart.Id,
-			UserId:       cart.UserId,
-			GoodsId:      cart.GoodsId,
-			GoodsSkuId:   cart.GoodsSKUId,
-			GoodsSkuDesc: cart.GoodsSKUDesc,
-			Num:          cart.Num,
-		},
+		Affected: affected,
 	}, nil
 }
 

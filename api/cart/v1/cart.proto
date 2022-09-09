@@ -52,12 +52,13 @@ message GetCartsByUserIdReply {
 }
 
 message UpdateCartNumRequest {
-  google.protobuf.Int64Value cart_id = 1 [(validate.rules).int64 = {gt: 0}, (validate.rules).message.required=true];
-  google.protobuf.Int32Value num = 2 [(validate.rules).int32 = {gt: 0}, (validate.rules).message.required=true];
+  google.protobuf.Int64Value user_id = 1 [(validate.rules).int64 = {gt: 0}, (validate.rules).message.required=true];
+  google.protobuf.Int64Value cart_id = 2 [(validate.rules).int64 = {gt: 0}, (validate.rules).message.required=true];
+  google.protobuf.Int32Value num = 3 [(validate.rules).int32 = {gt: 0}, (validate.rules).message.required=true];
 }
 
 message UpdateCartNumReply {
-  Cart cart = 1;
+  int64 affected = 1;
 }
 
 message RemoveCartItemsRequest {

@@ -46,31 +46,28 @@ func (r *cartRepo) Create(ctx context.Context, item *biz.Cart) (*biz.Cart, error
 	}, nil
 }
 
-func (r *cartRepo) UpdateNum(ctx context.Context, cartId int64, num int32) (*biz.Cart, error) {
-	po, err := r.data.db.Cart.
-		UpdateOneID(cartId).
+func (r *cartRepo) UpdateNum(ctx context.Context, userId int64, cartId int64, num int32) (int64, error) {
+	affected, err := r.data.db.Cart.
+		Update().
+		Where(
+			cart.UserID(userId),
+			cart.ID(cartId),
+		).
 		SetNum(num).
 		Save(ctx)
 	if err != nil {
-		return nil, errors.Wrap(cartPb.ErrorCartItemUpdateError("update cart num to %d error", num), "cart")
+		return 0, errors.Wrap(cartPb.ErrorCartItemUpdateError("update cart num to %d error", num), "cart")
 	}
-	return &biz.Cart{
-		Id:           po.ID,
-		UserId:       po.UserID,
-		GoodsId:      po.GoodsID,
-		GoodsSKUId:   po.GoodsSkuID,
-		GoodsSKUDesc: po.GoodsSkuDesc,
-		Num:          po.Num,
-	}, nil
+	return int64(affected), nil
 }
 
 func (r *cartRepo) FindOne(ctx context.Context, item *biz.Cart) (*biz.Cart, error) {
 	po, err := r.data.db.Cart.
 		Query().
 		Where(
-			cart.UserIDEQ(item.UserId),
-			cart.GoodsIDEQ(item.GoodsId),
-			cart.GoodsSkuIDEQ(item.GoodsSKUId)).
+			cart.UserID(item.UserId),
+			cart.GoodsID(item.GoodsId),
+			cart.GoodsSkuID(item.GoodsSKUId)).
 		First(ctx)
 
 	if err != nil {
@@ -90,7 +87,7 @@ func (r *cartRepo) GetByUserId(ctx context.Context, userId int64) ([]*biz.Cart, 
 	po, err := r.data.db.Cart.
 		Query().
 		Where(
-			cart.UserIDEQ(userId)).
+			cart.UserID(userId)).
 		All(ctx)
 	// 如果查询为空列表，ent不认为是错误，只会返回空列表
 	if err != nil {
@@ -112,7 +109,7 @@ func (r *cartRepo) GetByUserId(ctx context.Context, userId int64) ([]*biz.Cart, 
 }
 
 func (r *cartRepo) DeleteByIds(ctx context.Context, userId int64, ids []int64) (int64, error) {
-	affected, err := r.data.db.Cart.Delete().Where(cart.IDIn(ids...), cart.UserIDEQ(userId)).Exec(ctx)
+	affected, err := r.data.db.Cart.Delete().Where(cart.IDIn(ids...), cart.UserID(userId)).Exec(ctx)
 	if err != nil {
 		return 0, errors.Wrap(cartPb.ErrorCartItemDeleteError("delete cart item by ids_%v error", ids), "cart")
 	}

@@ -61,19 +61,12 @@ func (s *CartService) GetCartsByUserId(ctx context.Context, in *pb.GetCartsByUse
 }
 
 func (s *CartService) UpdateCartNum(ctx context.Context, in *pb.UpdateCartNumRequest) (*pb.UpdateCartNumReply, error) {
-	cart, err := s.uc.UpdateCartNum(ctx, in.CartId.Value, in.Num.Value)
+	affected, err := s.uc.UpdateCartNum(ctx, in.UserId.Value, in.CartId.Value, in.Num.Value)
 	if err != nil {
 		return nil, err
 	}
 	return &pb.UpdateCartNumReply{
-		Cart: &pb.Cart{
-			Id:           cart.Id,
-			UserId:       cart.UserId,
-			GoodsId:      cart.GoodsId,
-			GoodsSkuId:   cart.GoodsSKUId,
-			GoodsSkuDesc: cart.GoodsSKUDesc,
-			Num:          cart.Num,
-		},
+		Affected: affected,
 	}, nil
 }
 

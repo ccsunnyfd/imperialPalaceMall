@@ -212,7 +212,7 @@ message UpdateCartNumRequest {
 }
 
 message UpdateCartNumReply {
-	Cart cart = 1;
+	int64 affected = 1;
 }
 
 message RemoveCartItemsRequest {

@@ -451,8 +451,9 @@ components:
         api.shop.interface.v1.UpdateCartNumReply:
             type: object
             properties:
-                cart:
-                    $ref: '#/components/schemas/api.shop.interface.v1.Cart'
+                affected:
+                    type: integer
+                    format: int64
         api.shop.interface.v1.UpdateCartNumRequest:
             type: object
             properties:
