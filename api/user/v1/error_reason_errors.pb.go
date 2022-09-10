@@ -118,3 +118,39 @@ func IsUserCacheSetError(err error) bool {
 func ErrorUserCacheSetError(format string, args ...interface{}) *errors.Error {
 	return errors.New(500, ErrorReason_USER_CACHE_SET_ERROR.String(), fmt.Sprintf(format, args...))
 }
+
+func IsAddressNotFound(err error) bool {
+	if err == nil {
+		return false
+	}
+	e := errors.FromError(err)
+	return e.Reason == ErrorReason_ADDRESS_NOT_FOUND.String() && e.Code == 404
+}
+
+func ErrorAddressNotFound(format string, args ...interface{}) *errors.Error {
+	return errors.New(404, ErrorReason_ADDRESS_NOT_FOUND.String(), fmt.Sprintf(format, args...))
+}
+
+func IsAddressGetError(err error) bool {
+	if err == nil {
+		return false
+	}
+	e := errors.FromError(err)
+	return e.Reason == ErrorReason_ADDRESS_GET_ERROR.String() && e.Code == 500
+}
+
+func ErrorAddressGetError(format string, args ...interface{}) *errors.Error {
+	return errors.New(500, ErrorReason_ADDRESS_GET_ERROR.String(), fmt.Sprintf(format, args...))
+}
+
+func IsAddressCreateError(err error) bool {
+	if err == nil {
+		return false
+	}
+	e := errors.FromError(err)
+	return e.Reason == ErrorReason_ADDRESS_CREATE_ERROR.String() && e.Code == 500
+}
+
+func ErrorAddressCreateError(format string, args ...interface{}) *errors.Error {
+	return errors.New(500, ErrorReason_ADDRESS_CREATE_ERROR.String(), fmt.Sprintf(format, args...))
+}

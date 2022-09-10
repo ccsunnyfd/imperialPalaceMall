@@ -112,6 +112,35 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.shop.interface.v1.GetSKUsReply'
+    /v1/user/my/address:
+        get:
+            tags:
+                - ShopInterface
+            operationId: ShopInterface_GetAddress
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.shop.interface.v1.GetAddressReply'
+        post:
+            tags:
+                - ShopInterface
+            operationId: ShopInterface_SaveAddress
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.shop.interface.v1.SaveAddressRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.shop.interface.v1.SaveAddressReply'
     /v1/user/my/cart:
         get:
             tags:
@@ -151,7 +180,7 @@ paths:
                   in: path
                   required: true
                   schema:
-                    $ref: '#/components/schemas/google.protobuf.StringValue'
+                    type: string
             responses:
                 "200":
                     description: OK
@@ -216,7 +245,28 @@ components:
                 goodsSkuId:
                     $ref: '#/components/schemas/google.protobuf.Int64Value'
                 goodsSkuDesc:
-                    $ref: '#/components/schemas/google.protobuf.StringValue'
+                    type: string
+        api.shop.interface.v1.Address:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int64
+                userId:
+                    type: integer
+                    format: int64
+                userName:
+                    type: string
+                tel:
+                    type: string
+                region:
+                    type: array
+                    items:
+                        type: string
+                detailInfo:
+                    type: string
+                postCode:
+                    type: string
         api.shop.interface.v1.Cart:
             type: object
             properties:
@@ -245,6 +295,13 @@ components:
                     format: int64
                 categoryName:
                     type: string
+        api.shop.interface.v1.GetAddressReply:
+            type: object
+            properties:
+                addresses:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.shop.interface.v1.Address'
         api.shop.interface.v1.GetGoodsReply:
             type: object
             properties:
@@ -448,6 +505,27 @@ components:
                 affected:
                     type: integer
                     format: int64
+        api.shop.interface.v1.SaveAddressReply:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int64
+        api.shop.interface.v1.SaveAddressRequest:
+            type: object
+            properties:
+                userName:
+                    type: string
+                tel:
+                    type: string
+                region:
+                    type: array
+                    items:
+                        type: string
+                detailInfo:
+                    type: string
+                postCode:
+                    $ref: '#/components/schemas/google.protobuf.StringValue'
         api.shop.interface.v1.UpdateCartNumReply:
             type: object
             properties:
@@ -470,11 +548,11 @@ components:
             type: object
             properties:
                 code:
-                    $ref: '#/components/schemas/google.protobuf.StringValue'
+                    type: string
                 encryptedData:
-                    $ref: '#/components/schemas/google.protobuf.StringValue'
+                    type: string
                 iv:
-                    $ref: '#/components/schemas/google.protobuf.StringValue'
+                    type: string
                 sessionIsValid:
                     type: boolean
         api.weixin.v1.Code2SessionReply:

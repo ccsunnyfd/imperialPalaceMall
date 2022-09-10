@@ -19,4 +19,7 @@ enum ErrorReason {
   USER_CACHE_UNMARSHAL_ERROR = 6 [(errors.code) = 401];
   USER_CACHE_MARSHAL_ERROR = 7 [(errors.code) = 500];
   USER_CACHE_SET_ERROR = 8 [(errors.code) = 500];
+  ADDRESS_NOT_FOUND = 9 [(errors.code) = 404];
+  ADDRESS_GET_ERROR = 10 [(errors.code) = 500];
+  ADDRESS_CREATE_ERROR = 11 [(errors.code) = 500];
 }

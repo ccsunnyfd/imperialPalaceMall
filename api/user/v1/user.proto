@@ -16,12 +16,14 @@ service User {
 	rpc DeleteUser (DeleteUserRequest) returns (DeleteUserReply);
 	rpc CheckToken (CheckTokenRequest) returns (CheckTokenReply);
 	rpc ListUser (ListUserRequest) returns (ListUserReply);
+	rpc GetAddressByUserId (GetAddressByUserIdRequest) returns (GetAddressByUserIdReply);
+	rpc SaveAddress (SaveAddressRequest) returns (SaveAddressReply);
 }
 
 message WxLoginRequest {
-	google.protobuf.StringValue code = 1 [(validate.rules).string = {min_len: 5}, (validate.rules).message.required = true];
-	google.protobuf.StringValue encrypted_data = 2 [(validate.rules).string = {min_len: 10}, (validate.rules).message.required = true];
-	google.protobuf.StringValue iv = 3 [(validate.rules).string = {min_len: 5}, (validate.rules).message.required = true];
+	string code = 1 [(validate.rules).string = {min_len: 5}];
+	string encrypted_data = 2 [(validate.rules).string = {min_len: 10}];
+	string iv = 3 [(validate.rules).string = {min_len: 5}];
 	bool session_is_valid = 4;
 }
 
@@ -39,7 +41,7 @@ message DeleteUserRequest {}
 message DeleteUserReply {}
 
 message CheckTokenRequest {
-	google.protobuf.StringValue token = 1 [(validate.rules).string = {min_len: 20}, (validate.rules).message.required = true];
+	string token = 1 [(validate.rules).string = {min_len: 20}];
 }
 message CheckTokenReply {
 	message UserRet {
@@ -51,3 +53,34 @@ message CheckTokenReply {
 
 message ListUserRequest {}
 message ListUserReply {}
+
+message Address {
+	int64 id = 1;
+	int64 user_id = 2;
+	string user_name = 3;
+	string tel = 4;
+	repeated string region = 5;
+	string detail_info = 6;
+	string post_code = 7;
+}
+
+message		GetAddressByUserIdRequest {
+	google.protobuf.Int64Value user_id = 1 [(validate.rules).int64 = {gt: 0}, (validate.rules).message.required=true];
+}
+
+message GetAddressByUserIdReply {
+	repeated Address addresses = 1;
+}
+
+message SaveAddressRequest {
+	google.protobuf.Int64Value user_id = 1 [(validate.rules).int64 = {gt: 0}, (validate.rules).message.required=true];
+	string user_name = 2 [(validate.rules).string = {min_len: 1}];
+	string tel = 3 [(validate.rules).string = {min_len: 8}];
+	repeated string region = 4 [(validate.rules).repeated = {min_items: 2}];
+	string detail_info = 5 [(validate.rules).string = {min_len: 4}];
+	google.protobuf.StringValue post_code = 6 [(validate.rules).string = {min_len: 6}, (validate.rules).message.required=false];
+}
+
+message SaveAddressReply {
+	int64 id = 1;
+}

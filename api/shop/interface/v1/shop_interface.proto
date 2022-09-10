@@ -59,6 +59,17 @@ service ShopInterface {
 			delete: "/v1/user/my/cart/{ids}",
 		};
 	};
+	rpc GetAddress (GetAddressRequest) returns (GetAddressReply) {
+		option (google.api.http) = {
+			get: "/v1/user/my/address",
+		};
+	};
+	rpc SaveAddress (SaveAddressRequest) returns (SaveAddressReply) {
+		option (google.api.http) = {
+			post: "/v1/user/my/address",
+			body: "*"
+		};
+	};
 }
 
 message Category {
@@ -154,9 +165,9 @@ message GoodsAttrValue {
 }
 
 message WxLoginRequest {
-	google.protobuf.StringValue code = 1 [(validate.rules).string = {min_len: 5}, (validate.rules).message.required = true];
-	google.protobuf.StringValue encrypted_data = 2 [(validate.rules).string = {min_len: 10}, (validate.rules).message.required = true];
-	google.protobuf.StringValue iv = 3 [(validate.rules).string = {min_len: 5}, (validate.rules).message.required = true];
+	string code = 1 [(validate.rules).string = {min_len: 5}];
+	string encrypted_data = 2 [(validate.rules).string = {min_len: 10}];
+	string iv = 3 [(validate.rules).string = {min_len: 5}];
 	bool session_is_valid = 4;
 }
 
@@ -167,7 +178,7 @@ message WxLoginReply {
 message AddCartRequest {
 	google.protobuf.Int64Value goods_id = 1 [(validate.rules).int64 = {gt: 0}, (validate.rules).message.required=true];
 	google.protobuf.Int64Value goods_sku_id = 2 [(validate.rules).int64 = {gt: 0}, (validate.rules).message.required=true];
-	google.protobuf.StringValue goods_sku_desc = 3 [(validate.rules).string = {min_len: 1, max_len: 50}, (validate.rules).message.required=true];
+	string goods_sku_desc = 3 [(validate.rules).string = {min_len: 1, max_len: 50}];
 }
 
 message Cart {
@@ -216,9 +227,37 @@ message UpdateCartNumReply {
 }
 
 message RemoveCartItemsRequest {
-	google.protobuf.StringValue ids = 1 [(validate.rules).string = {min_len: 1, max_len: 200}, (validate.rules).message.required=true];
+	string ids = 1 [(validate.rules).string = {min_len: 1, max_len: 200}];
 }
 
 message RemoveCartItemsReply {
 	int64 affected = 1;
+}
+
+message Address {
+	int64 id = 1;
+	int64 user_id = 2;
+	string user_name = 3;
+	string tel = 4;
+	repeated string region = 5;
+	string detail_info = 6;
+	string post_code = 7;
+}
+
+message		GetAddressRequest {}
+
+message GetAddressReply {
+	repeated Address addresses = 1;
+}
+
+message SaveAddressRequest {
+	string user_name = 1 [(validate.rules).string = {min_len: 1}];
+	string tel = 2 [(validate.rules).string = {min_len: 8}];
+	repeated string region = 3 [(validate.rules).repeated = {min_items: 2}];
+	string detail_info = 4 [(validate.rules).string = {min_len: 4}];
+	google.protobuf.StringValue post_code = 5 [(validate.rules).string = {min_len: 6}, (validate.rules).message.required=false];
+}
+
+message SaveAddressReply {
+	int64 id = 1;
 }

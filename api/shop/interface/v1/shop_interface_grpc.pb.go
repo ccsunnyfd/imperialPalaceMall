@@ -31,6 +31,8 @@ type ShopInterfaceClient interface {
 	GetMyCart(ctx context.Context, in *GetMyCartRequest, opts ...grpc.CallOption) (*GetMyCartReply, error)
 	UpdateCartNum(ctx context.Context, in *UpdateCartNumRequest, opts ...grpc.CallOption) (*UpdateCartNumReply, error)
 	RemoveCartItems(ctx context.Context, in *RemoveCartItemsRequest, opts ...grpc.CallOption) (*RemoveCartItemsReply, error)
+	GetAddress(ctx context.Context, in *GetAddressRequest, opts ...grpc.CallOption) (*GetAddressReply, error)
+	SaveAddress(ctx context.Context, in *SaveAddressRequest, opts ...grpc.CallOption) (*SaveAddressReply, error)
 }
 
 type shopInterfaceClient struct {
@@ -122,6 +124,24 @@ func (c *shopInterfaceClient) RemoveCartItems(ctx context.Context, in *RemoveCar
 	return out, nil
 }
 
+func (c *shopInterfaceClient) GetAddress(ctx context.Context, in *GetAddressRequest, opts ...grpc.CallOption) (*GetAddressReply, error) {
+	out := new(GetAddressReply)
+	err := c.cc.Invoke(ctx, "/api.shop.interface.v1.ShopInterface/GetAddress", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *shopInterfaceClient) SaveAddress(ctx context.Context, in *SaveAddressRequest, opts ...grpc.CallOption) (*SaveAddressReply, error) {
+	out := new(SaveAddressReply)
+	err := c.cc.Invoke(ctx, "/api.shop.interface.v1.ShopInterface/SaveAddress", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ShopInterfaceServer is the server API for ShopInterface service.
 // All implementations must embed UnimplementedShopInterfaceServer
 // for forward compatibility
@@ -135,6 +155,8 @@ type ShopInterfaceServer interface {
 	GetMyCart(context.Context, *GetMyCartRequest) (*GetMyCartReply, error)
 	UpdateCartNum(context.Context, *UpdateCartNumRequest) (*UpdateCartNumReply, error)
 	RemoveCartItems(context.Context, *RemoveCartItemsRequest) (*RemoveCartItemsReply, error)
+	GetAddress(context.Context, *GetAddressRequest) (*GetAddressReply, error)
+	SaveAddress(context.Context, *SaveAddressRequest) (*SaveAddressReply, error)
 	mustEmbedUnimplementedShopInterfaceServer()
 }
 
@@ -168,6 +190,12 @@ func (UnimplementedShopInterfaceServer) UpdateCartNum(context.Context, *UpdateCa
 }
 func (UnimplementedShopInterfaceServer) RemoveCartItems(context.Context, *RemoveCartItemsRequest) (*RemoveCartItemsReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RemoveCartItems not implemented")
+}
+func (UnimplementedShopInterfaceServer) GetAddress(context.Context, *GetAddressRequest) (*GetAddressReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAddress not implemented")
+}
+func (UnimplementedShopInterfaceServer) SaveAddress(context.Context, *SaveAddressRequest) (*SaveAddressReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SaveAddress not implemented")
 }
 func (UnimplementedShopInterfaceServer) mustEmbedUnimplementedShopInterfaceServer() {}
 
@@ -344,6 +372,42 @@ func _ShopInterface_RemoveCartItems_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ShopInterface_GetAddress_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAddressRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ShopInterfaceServer).GetAddress(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.shop.interface.v1.ShopInterface/GetAddress",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ShopInterfaceServer).GetAddress(ctx, req.(*GetAddressRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ShopInterface_SaveAddress_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SaveAddressRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ShopInterfaceServer).SaveAddress(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.shop.interface.v1.ShopInterface/SaveAddress",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ShopInterfaceServer).SaveAddress(ctx, req.(*SaveAddressRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ShopInterface_ServiceDesc is the grpc.ServiceDesc for ShopInterface service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -386,6 +450,14 @@ var ShopInterface_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RemoveCartItems",
 			Handler:    _ShopInterface_RemoveCartItems_Handler,
+		},
+		{
+			MethodName: "GetAddress",
+			Handler:    _ShopInterface_GetAddress_Handler,
+		},
+		{
+			MethodName: "SaveAddress",
+			Handler:    _ShopInterface_SaveAddress_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -28,6 +28,8 @@ type UserClient interface {
 	DeleteUser(ctx context.Context, in *DeleteUserRequest, opts ...grpc.CallOption) (*DeleteUserReply, error)
 	CheckToken(ctx context.Context, in *CheckTokenRequest, opts ...grpc.CallOption) (*CheckTokenReply, error)
 	ListUser(ctx context.Context, in *ListUserRequest, opts ...grpc.CallOption) (*ListUserReply, error)
+	GetAddressByUserId(ctx context.Context, in *GetAddressByUserIdRequest, opts ...grpc.CallOption) (*GetAddressByUserIdReply, error)
+	SaveAddress(ctx context.Context, in *SaveAddressRequest, opts ...grpc.CallOption) (*SaveAddressReply, error)
 }
 
 type userClient struct {
@@ -92,6 +94,24 @@ func (c *userClient) ListUser(ctx context.Context, in *ListUserRequest, opts ...
 	return out, nil
 }
 
+func (c *userClient) GetAddressByUserId(ctx context.Context, in *GetAddressByUserIdRequest, opts ...grpc.CallOption) (*GetAddressByUserIdReply, error) {
+	out := new(GetAddressByUserIdReply)
+	err := c.cc.Invoke(ctx, "/api.user.v1.User/GetAddressByUserId", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userClient) SaveAddress(ctx context.Context, in *SaveAddressRequest, opts ...grpc.CallOption) (*SaveAddressReply, error) {
+	out := new(SaveAddressReply)
+	err := c.cc.Invoke(ctx, "/api.user.v1.User/SaveAddress", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServer is the server API for User service.
 // All implementations must embed UnimplementedUserServer
 // for forward compatibility
@@ -102,6 +122,8 @@ type UserServer interface {
 	DeleteUser(context.Context, *DeleteUserRequest) (*DeleteUserReply, error)
 	CheckToken(context.Context, *CheckTokenRequest) (*CheckTokenReply, error)
 	ListUser(context.Context, *ListUserRequest) (*ListUserReply, error)
+	GetAddressByUserId(context.Context, *GetAddressByUserIdRequest) (*GetAddressByUserIdReply, error)
+	SaveAddress(context.Context, *SaveAddressRequest) (*SaveAddressReply, error)
 	mustEmbedUnimplementedUserServer()
 }
 
@@ -126,6 +148,12 @@ func (UnimplementedUserServer) CheckToken(context.Context, *CheckTokenRequest) (
 }
 func (UnimplementedUserServer) ListUser(context.Context, *ListUserRequest) (*ListUserReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListUser not implemented")
+}
+func (UnimplementedUserServer) GetAddressByUserId(context.Context, *GetAddressByUserIdRequest) (*GetAddressByUserIdReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAddressByUserId not implemented")
+}
+func (UnimplementedUserServer) SaveAddress(context.Context, *SaveAddressRequest) (*SaveAddressReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SaveAddress not implemented")
 }
 func (UnimplementedUserServer) mustEmbedUnimplementedUserServer() {}
 
@@ -248,6 +276,42 @@ func _User_ListUser_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
+func _User_GetAddressByUserId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAddressByUserIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServer).GetAddressByUserId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.user.v1.User/GetAddressByUserId",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServer).GetAddressByUserId(ctx, req.(*GetAddressByUserIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _User_SaveAddress_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SaveAddressRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServer).SaveAddress(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.user.v1.User/SaveAddress",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServer).SaveAddress(ctx, req.(*SaveAddressRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // User_ServiceDesc is the grpc.ServiceDesc for User service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -278,6 +342,14 @@ var User_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListUser",
 			Handler:    _User_ListUser_Handler,
+		},
+		{
+			MethodName: "GetAddressByUserId",
+			Handler:    _User_GetAddressByUserId_Handler,
+		},
+		{
+			MethodName: "SaveAddress",
+			Handler:    _User_SaveAddress_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
