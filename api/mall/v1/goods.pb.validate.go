@@ -1165,10 +1165,23 @@ func (m *GetGoodsRequest) validate(all bool) error {
 
 	var errors []error
 
-	if m.GetId() <= 0 {
+	if wrapper := m.GetId(); wrapper != nil {
+
+		if wrapper.GetValue() <= 0 {
+			err := GetGoodsRequestValidationError{
+				field:  "Id",
+				reason: "value must be greater than 0",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+	} else {
 		err := GetGoodsRequestValidationError{
 			field:  "Id",
-			reason: "value must be greater than 0",
+			reason: "value is required and must not be nil.",
 		}
 		if !all {
 			return err

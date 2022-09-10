@@ -85,8 +85,7 @@ paths:
                   in: path
                   required: true
                   schema:
-                    type: integer
-                    format: int64
+                    $ref: '#/components/schemas/google.protobuf.Int64Value'
             responses:
                 "200":
                     description: OK
@@ -525,7 +524,7 @@ components:
                 detailInfo:
                     type: string
                 postCode:
-                    $ref: '#/components/schemas/google.protobuf.StringValue'
+                    type: string
         api.shop.interface.v1.UpdateCartNumReply:
             type: object
             properties:
@@ -583,13 +582,6 @@ components:
                     description: The int64 value.
                     format: int64
             description: Wrapper message for `int64`. The JSON representation for `Int64Value` is JSON string.
-        google.protobuf.StringValue:
-            type: object
-            properties:
-                value:
-                    type: string
-                    description: The string value.
-            description: Wrapper message for `string`. The JSON representation for `StringValue` is JSON string.
 tags:
     - name: ShopInterface
     - name: Weixin

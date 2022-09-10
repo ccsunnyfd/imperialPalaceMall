@@ -33,7 +33,7 @@ func (r *cartRepo) AddCart(ctx context.Context, item *biz.Cart) (*biz.Cart, erro
 		UserId:       wrapperspb.Int64(item.UserId),
 		GoodsId:      wrapperspb.Int64(item.GoodsId),
 		GoodsSkuId:   wrapperspb.Int64(item.GoodsSKUId),
-		GoodsSkuDesc: wrapperspb.String(item.GoodsSKUDesc),
+		GoodsSkuDesc: item.GoodsSKUDesc,
 	})
 	if err != nil {
 		return nil, errors.Wrapf(biz.ErrAddCart, "shop_cart")

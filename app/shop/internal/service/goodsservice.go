@@ -7,7 +7,7 @@ import (
 )
 
 func (s *ShopInterface) GetGoods(ctx context.Context, req *pb.GetGoodsRequest) (*pb.GetGoodsReply, error) {
-	g, err := s.gc.GetGoodsDetail(ctx, req.Id)
+	g, err := s.gc.GetGoodsDetail(ctx, req.Id.Value)
 	if err != nil {
 		//if errors.Is(err, biz.ErrGoodsNotFound) {
 		//	return nil, pb.ErrorGoodsNotFound("goods %d not found", req.Id)

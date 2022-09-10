@@ -1781,9 +1781,9 @@ func (m *SaveAddressRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if wrapper := m.GetPostCode(); wrapper != nil {
+	if m.GetPostCode() != "" {
 
-		if utf8.RuneCountInString(wrapper.GetValue()) < 6 {
+		if utf8.RuneCountInString(m.GetPostCode()) < 6 {
 			err := SaveAddressRequestValidationError{
 				field:  "PostCode",
 				reason: "value length must be at least 6 runes",

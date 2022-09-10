@@ -129,23 +129,10 @@ func (m *AddCartRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if wrapper := m.GetGoodsSkuDesc(); wrapper != nil {
-
-		if l := utf8.RuneCountInString(wrapper.GetValue()); l < 1 || l > 50 {
-			err := AddCartRequestValidationError{
-				field:  "GoodsSkuDesc",
-				reason: "value length must be between 1 and 50 runes, inclusive",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
-		}
-
-	} else {
+	if l := utf8.RuneCountInString(m.GetGoodsSkuDesc()); l < 1 || l > 50 {
 		err := AddCartRequestValidationError{
 			field:  "GoodsSkuDesc",
-			reason: "value is required and must not be nil.",
+			reason: "value length must be between 1 and 50 runes, inclusive",
 		}
 		if !all {
 			return err

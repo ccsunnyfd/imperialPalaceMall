@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS addresses (
                                      user_id bigint NOT NULL,
                                      user_name text NOT NULL,
                                      tel text NOT NULL,
-                                     region bigint[] NOT NULL,
+                                     region text[] NOT NULL,
                                      detail_info text NOT NULL,
                                      post_code text NOT NULL,
                                      deleted_at timestamp(0) with time zone,

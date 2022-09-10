@@ -42,16 +42,24 @@ func NewAddressRepo(data *Data, logger log.Logger) biz.AddressRepo {
 }
 
 func (r *addressRepo) Save(ctx context.Context, addr *biz.Address) (int64, error) {
-	result := r.data.db.WithContext(ctx).Create(&addr)
+	a := Address{
+		UserId:     addr.UserId,
+		UserName:   addr.UserName,
+		Tel:        addr.Tel,
+		Region:     addr.Region,
+		DetailInfo: addr.DetailInfo,
+		PostCode:   addr.PostCode,
+	}
+	result := r.data.db.WithContext(ctx).Create(&a)
 	if result.Error != nil || result.RowsAffected < 1 {
 		return -1, pkgErrors.Wrap(userPb.ErrorAddressCreateError("create address error"), "user/address")
 	}
 
-	return addr.Id, nil
+	return a.Id, nil
 }
 
 func (r *addressRepo) GetByUserId(ctx context.Context, userId int64) ([]*biz.Address, error) {
-	var addrs []*Address
+	var addrs []Address
 	result := r.data.db.WithContext(ctx).Where("user_id = ?", userId).Find(&addrs).Order("id")
 	if result.Error != nil {
 		return nil, pkgErrors.Wrap(userPb.ErrorAddressGetError("get address by userid error"), "user/address")

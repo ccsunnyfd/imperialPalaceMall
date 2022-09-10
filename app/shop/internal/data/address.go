@@ -35,7 +35,7 @@ func (r *addressRepo) Create(ctx context.Context, userId int64, address *biz.Add
 		Tel:        address.Tel,
 		Region:     address.Region,
 		DetailInfo: address.DetailInfo,
-		PostCode:   wrapperspb.String(address.PostCode),
+		PostCode:   address.PostCode,
 	})
 	if err != nil {
 		return -1, errors.Wrapf(biz.ErrAddressNotCreated, "shop_user_address")

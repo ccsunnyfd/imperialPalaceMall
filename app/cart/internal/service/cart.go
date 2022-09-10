@@ -22,7 +22,7 @@ func (s *CartService) AddCart(ctx context.Context, in *pb.AddCartRequest) (*pb.A
 		UserId:       in.UserId.Value,
 		GoodsId:      in.GoodsId.Value,
 		GoodsSKUId:   in.GoodsSkuId.Value,
-		GoodsSKUDesc: in.GoodsSkuDesc.Value,
+		GoodsSKUDesc: in.GoodsSkuDesc,
 	})
 	if err != nil {
 		return nil, err

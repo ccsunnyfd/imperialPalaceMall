@@ -19,7 +19,7 @@ func (s *ShopInterface) AddCart(ctx context.Context, req *pb.AddCartRequest) (*p
 		UserId:       userId,
 		GoodsId:      req.GoodsId.Value,
 		GoodsSKUId:   req.GoodsSkuId.Value,
-		GoodsSKUDesc: req.GoodsSkuDesc.Value,
+		GoodsSKUDesc: req.GoodsSkuDesc,
 	})
 	if err != nil {
 		return nil, err
@@ -98,7 +98,7 @@ func (s *ShopInterface) RemoveCartItems(ctx context.Context, req *pb.RemoveCartI
 		return nil, err
 	}
 
-	idsStr := req.Ids.Value
+	idsStr := req.Ids
 	fmt.Println(idsStr)
 	idsArr := strings.Split(idsStr, ",")
 	idsIntArr := make([]int64, 0, len(idsArr))

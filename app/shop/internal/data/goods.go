@@ -82,7 +82,7 @@ func (r *goodsRepo) List(ctx context.Context, categoryId int64, f filters.Filter
 func (r *goodsRepo) GetGoodsDetail(ctx context.Context, goodsId int64) (*biz.GoodsDetail, error) {
 	result, err, _ := r.sg.Do(fmt.Sprintf("get_goods_detail_%d", goodsId), func() (interface{}, error) {
 		reply, err := r.data.gc.GetGoods(ctx, &mallV1.GetGoodsRequest{
-			Id: goodsId,
+			Id: wrapperspb.Int64(goodsId),
 		})
 		if err != nil {
 			return nil, errors.Wrapf(biz.ErrGoodsNotFound, "shop_goods")

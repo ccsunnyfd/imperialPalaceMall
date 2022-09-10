@@ -10,7 +10,7 @@ import (
 )
 
 func (s *ShopInterface) WxLogin(ctx context.Context, req *pb.WxLoginRequest) (*pb.WxLoginReply, error) {
-	token, err := s.uc.WXLogin(ctx, req.Code.Value, req.EncryptedData.Value, req.Iv.Value, req.SessionIsValid)
+	token, err := s.uc.WXLogin(ctx, req.Code, req.EncryptedData, req.Iv, req.SessionIsValid)
 	if err != nil {
 		return nil, err
 	}
@@ -30,7 +30,7 @@ func (s *ShopInterface) SaveAddress(ctx context.Context, req *pb.SaveAddressRequ
 		Tel:        req.Tel,
 		Region:     req.Region,
 		DetailInfo: req.DetailInfo,
-		PostCode:   req.PostCode.Value,
+		PostCode:   req.PostCode,
 	})
 
 	if err != nil {

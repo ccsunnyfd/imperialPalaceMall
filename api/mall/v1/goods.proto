@@ -64,7 +64,7 @@ message DeleteGoodsRequest {}
 message DeleteGoodsReply {}
 
 message GetGoodsRequest {
-  int64 id = 1  [(validate.rules).int64 = {gt: 0}];
+  google.protobuf.Int64Value id = 1  [(validate.rules).int64 = {gt: 0}, (validate.rules).message.required = true];
 }
 message GetGoodsReply {
   GoodsDetail goods = 1;

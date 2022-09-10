@@ -6,7 +6,6 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/pkg/errors"
 	"golang.org/x/sync/singleflight"
-	"google.golang.org/protobuf/types/known/wrapperspb"
 	userV1 "imperialPalaceMall/api/user/v1"
 	"imperialPalaceMall/app/shop/internal/biz"
 )
@@ -31,9 +30,9 @@ func NewUserRepo(data *Data, logger log.Logger) biz.UserRepo {
 func (r *userRepo) WXLogin(ctx context.Context, code string, encryptedData string, iv string, sessionIsValid bool) (string, error) {
 	result, err, _ := r.sg.Do(fmt.Sprintf("wxlogin_with_code_%s", code), func() (interface{}, error) {
 		reply, err := r.data.uc.WxLogin(ctx, &userV1.WxLoginRequest{
-			Code:           wrapperspb.String(code),
-			EncryptedData:  wrapperspb.String(encryptedData),
-			Iv:             wrapperspb.String(iv),
+			Code:           code,
+			EncryptedData:  encryptedData,
+			Iv:             iv,
 			SessionIsValid: sessionIsValid,
 		})
 		if err != nil {
@@ -50,7 +49,7 @@ func (r *userRepo) WXLogin(ctx context.Context, code string, encryptedData strin
 func (r *userRepo) CheckToken(ctx context.Context, token string) (*biz.UserCache, error) {
 	result, err, _ := r.sg.Do(fmt.Sprintf("check_token_%s", token), func() (interface{}, error) {
 		reply, err := r.data.uc.CheckToken(ctx, &userV1.CheckTokenRequest{
-			Token: wrapperspb.String(token),
+			Token: token,
 		})
 		if err != nil {
 			return nil, errors.Wrapf(biz.ErrTokenNotFound, "shop_user")

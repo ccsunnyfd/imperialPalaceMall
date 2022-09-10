@@ -28,7 +28,7 @@ func (s *GoodsServiceService) DeleteGoods(ctx context.Context, req *pb.DeleteGoo
 	return &pb.DeleteGoodsReply{}, nil
 }
 func (s *GoodsServiceService) GetGoods(ctx context.Context, req *pb.GetGoodsRequest) (*pb.GetGoodsReply, error) {
-	g, err := s.uc.GetGoodsDetail(ctx, req.Id)
+	g, err := s.uc.GetGoodsDetail(ctx, req.Id.Value)
 	if err != nil {
 		//if errors.Is(err, biz.ErrGoodsNotFound) {
 		//	return nil, pb.ErrorGoodsNotFound("goods %d not found", req.Id)
