@@ -24,7 +24,7 @@ type Address struct {
 	UserId     int64
 	UserName   string
 	Tel        string
-	Region     pq.StringArray `gorm:"type:varchar(255)[]"`
+	Region     pq.StringArray `gorm:"type:text[]"`
 	DetailInfo string
 	PostCode   string
 
