@@ -70,6 +70,12 @@ service ShopInterface {
 			body: "*"
 		};
 	};
+	rpc UpdateAddress(UpdateAddressRequest) returns (UpdateAddressReply) {
+		option (google.api.http) = {
+			put: "/v1/user/my/address",
+			body: "*"
+		};
+	};
 }
 
 message Category {
@@ -260,4 +266,17 @@ message SaveAddressRequest {
 
 message SaveAddressReply {
 	int64 id = 1;
+}
+
+message UpdateAddressRequest {
+	google.protobuf.Int64Value id = 1 [(validate.rules).int64 = {gt: 0}, (validate.rules).message.required=true];
+	string user_name = 2 [(validate.rules).string = {min_len: 1}];
+	string tel = 3 [(validate.rules).string = {min_len: 8}];
+	repeated string region = 4 [(validate.rules).repeated = {min_items: 2}];
+	string detail_info = 5 [(validate.rules).string = {min_len: 4}];
+	string post_code = 6 [(validate.rules).string = {ignore_empty: true, min_len: 6}];
+}
+
+message UpdateAddressReply {
+	int64 affected = 1;
 }

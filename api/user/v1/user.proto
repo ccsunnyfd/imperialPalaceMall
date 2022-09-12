@@ -18,6 +18,7 @@ service User {
 	rpc ListUser (ListUserRequest) returns (ListUserReply);
 	rpc GetAddressByUserId (GetAddressByUserIdRequest) returns (GetAddressByUserIdReply);
 	rpc SaveAddress (SaveAddressRequest) returns (SaveAddressReply);
+	rpc UpdateAddress(UpdateAddressRequest) returns (UpdateAddressReply);
 }
 
 message WxLoginRequest {
@@ -83,4 +84,18 @@ message SaveAddressRequest {
 
 message SaveAddressReply {
 	int64 id = 1;
+}
+
+message UpdateAddressRequest {
+	google.protobuf.Int64Value user_id = 1 [(validate.rules).int64 = {gt: 0}, (validate.rules).message.required=true];
+	google.protobuf.Int64Value id = 2 [(validate.rules).int64 = {gt: 0}, (validate.rules).message.required=true];
+	string user_name = 3 [(validate.rules).string = {min_len: 1}];
+	string tel = 4 [(validate.rules).string = {min_len: 8}];
+	repeated string region = 5 [(validate.rules).repeated = {min_items: 2}];
+	string detail_info = 6 [(validate.rules).string = {min_len: 4}];
+	string post_code = 7 [(validate.rules).string = {ignore_empty: true, min_len: 6}];
+}
+
+message UpdateAddressReply {
+	int64 affected = 1;
 }

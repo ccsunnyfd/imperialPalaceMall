@@ -108,3 +108,26 @@ func (r *addressRepo) GetByUserId(ctx context.Context, userId int64) ([]*biz.Add
 	}
 	return rv, nil
 }
+
+func (r *addressRepo) Update(ctx context.Context, userId int64, address *biz.Address) (int64, error) {
+	result := r.data.db.WithContext(ctx).
+		Where("user_id = ?", userId).
+		Updates(Address{
+			Id:         address.Id,
+			UserName:   address.UserName,
+			Tel:        address.Tel,
+			Region:     address.Region,
+			DetailInfo: address.DetailInfo,
+			PostCode:   address.PostCode,
+		})
+
+	if result.Error != nil {
+		return -1, pkgErrors.Wrap(userPb.ErrorAddressEditError("edit address error"), "user/address")
+	}
+
+	if result.RowsAffected < 1 {
+		return 0, userPb.ErrorAddressNotFound("edit address not found") // 不是服务器端错误，可能是恶意客户端或丢数据，不需要打堆栈
+	}
+
+	return 1, nil
+}

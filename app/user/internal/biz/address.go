@@ -22,6 +22,7 @@ type AddressRepo interface {
 	Save(context.Context, *Address) (int64, error)
 	GetByUserId(ctx context.Context, userId int64) ([]*Address, error)
 	GetByDetails(ctx context.Context, addr *Address) (*Address, error)
+	Update(ctx context.Context, userId int64, address *Address) (int64, error)
 }
 
 // AddressUsecase is a Address usecase.
@@ -49,4 +50,17 @@ func (u *AddressUsecase) SaveAddress(ctx context.Context, addr *Address) (int64,
 	}
 
 	return -1, userPb.ErrorAddressConflict("create address conflict") // 地址冲突不属于服务器错误
+}
+
+func (u *AddressUsecase) UpdateAddress(ctx context.Context, userId int64, addr *Address) (int64, error) {
+	addr.UserId = userId
+	_, err := u.repo.GetByDetails(ctx, addr)
+	if err != nil {
+		if userPb.IsAddressNotFound(err) {
+			return u.repo.Update(ctx, userId, addr)
+		}
+		return -1, err
+	}
+
+	return -1, userPb.ErrorAddressConflict("update address conflict")
 }

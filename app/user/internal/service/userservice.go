@@ -82,3 +82,22 @@ func (s *UserServiceService) SaveAddress(ctx context.Context, req *pb.SaveAddres
 		Id: id,
 	}, nil
 }
+
+func (s *UserServiceService) UpdateAddress(ctx context.Context, req *pb.UpdateAddressRequest) (*pb.UpdateAddressReply, error) {
+	affected, err := s.ac.UpdateAddress(ctx, req.UserId.Value,
+		&biz.Address{
+			Id:         req.Id.Value,
+			UserName:   req.UserName,
+			Tel:        req.Tel,
+			Region:     req.Region,
+			DetailInfo: req.DetailInfo,
+			PostCode:   req.PostCode,
+		})
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.UpdateAddressReply{
+		Affected: affected,
+	}, nil
+}

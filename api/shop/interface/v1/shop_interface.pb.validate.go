@@ -4029,6 +4029,295 @@ var _ interface {
 	ErrorName() string
 } = SaveAddressReplyValidationError{}
 
+// Validate checks the field values on UpdateAddressRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *UpdateAddressRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on UpdateAddressRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// UpdateAddressRequestMultiError, or nil if none found.
+func (m *UpdateAddressRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *UpdateAddressRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if wrapper := m.GetId(); wrapper != nil {
+
+		if wrapper.GetValue() <= 0 {
+			err := UpdateAddressRequestValidationError{
+				field:  "Id",
+				reason: "value must be greater than 0",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+	} else {
+		err := UpdateAddressRequestValidationError{
+			field:  "Id",
+			reason: "value is required and must not be nil.",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if utf8.RuneCountInString(m.GetUserName()) < 1 {
+		err := UpdateAddressRequestValidationError{
+			field:  "UserName",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if utf8.RuneCountInString(m.GetTel()) < 8 {
+		err := UpdateAddressRequestValidationError{
+			field:  "Tel",
+			reason: "value length must be at least 8 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(m.GetRegion()) < 2 {
+		err := UpdateAddressRequestValidationError{
+			field:  "Region",
+			reason: "value must contain at least 2 item(s)",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if utf8.RuneCountInString(m.GetDetailInfo()) < 4 {
+		err := UpdateAddressRequestValidationError{
+			field:  "DetailInfo",
+			reason: "value length must be at least 4 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if m.GetPostCode() != "" {
+
+		if utf8.RuneCountInString(m.GetPostCode()) < 6 {
+			err := UpdateAddressRequestValidationError{
+				field:  "PostCode",
+				reason: "value length must be at least 6 runes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return UpdateAddressRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// UpdateAddressRequestMultiError is an error wrapping multiple validation
+// errors returned by UpdateAddressRequest.ValidateAll() if the designated
+// constraints aren't met.
+type UpdateAddressRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m UpdateAddressRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m UpdateAddressRequestMultiError) AllErrors() []error { return m }
+
+// UpdateAddressRequestValidationError is the validation error returned by
+// UpdateAddressRequest.Validate if the designated constraints aren't met.
+type UpdateAddressRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UpdateAddressRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UpdateAddressRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UpdateAddressRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UpdateAddressRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UpdateAddressRequestValidationError) ErrorName() string {
+	return "UpdateAddressRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e UpdateAddressRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUpdateAddressRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UpdateAddressRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UpdateAddressRequestValidationError{}
+
+// Validate checks the field values on UpdateAddressReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *UpdateAddressReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on UpdateAddressReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// UpdateAddressReplyMultiError, or nil if none found.
+func (m *UpdateAddressReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *UpdateAddressReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Affected
+
+	if len(errors) > 0 {
+		return UpdateAddressReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// UpdateAddressReplyMultiError is an error wrapping multiple validation errors
+// returned by UpdateAddressReply.ValidateAll() if the designated constraints
+// aren't met.
+type UpdateAddressReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m UpdateAddressReplyMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m UpdateAddressReplyMultiError) AllErrors() []error { return m }
+
+// UpdateAddressReplyValidationError is the validation error returned by
+// UpdateAddressReply.Validate if the designated constraints aren't met.
+type UpdateAddressReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UpdateAddressReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UpdateAddressReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UpdateAddressReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UpdateAddressReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UpdateAddressReplyValidationError) ErrorName() string {
+	return "UpdateAddressReplyValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e UpdateAddressReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUpdateAddressReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UpdateAddressReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UpdateAddressReplyValidationError{}
+
 // Validate checks the field values on GetMyCartReply_CartItem with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.

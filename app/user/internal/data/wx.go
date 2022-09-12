@@ -28,6 +28,7 @@ func (r *userRepo) Code2Session(ctx context.Context, code string) (openid, sessi
 	})
 
 	if err != nil {
+		r.log.Error(err)
 		return "", "", errors.Wrap(weixinPb.ErrorWxCode2sessionError("code to session error", code), "user")
 	}
 

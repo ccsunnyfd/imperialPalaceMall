@@ -123,6 +123,23 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.shop.interface.v1.GetAddressReply'
+        put:
+            tags:
+                - ShopInterface
+            operationId: ShopInterface_UpdateAddress
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.shop.interface.v1.UpdateAddressRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.shop.interface.v1.UpdateAddressReply'
         post:
             tags:
                 - ShopInterface
@@ -513,6 +530,29 @@ components:
         api.shop.interface.v1.SaveAddressRequest:
             type: object
             properties:
+                userName:
+                    type: string
+                tel:
+                    type: string
+                region:
+                    type: array
+                    items:
+                        type: string
+                detailInfo:
+                    type: string
+                postCode:
+                    type: string
+        api.shop.interface.v1.UpdateAddressReply:
+            type: object
+            properties:
+                affected:
+                    type: integer
+                    format: int64
+        api.shop.interface.v1.UpdateAddressRequest:
+            type: object
+            properties:
+                id:
+                    $ref: '#/components/schemas/google.protobuf.Int64Value'
                 userName:
                     type: string
                 tel:

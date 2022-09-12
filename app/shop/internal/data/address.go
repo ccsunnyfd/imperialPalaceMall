@@ -73,3 +73,26 @@ func (r *addressRepo) GetByUserId(ctx context.Context, userId int64) ([]*biz.Add
 	}
 	return result.([]*biz.Address), nil
 }
+
+func (r *addressRepo) Update(ctx context.Context, userId int64, address *biz.Address) (int64, error) {
+	reply, err := r.data.uc.UpdateAddress(ctx, &userV1.UpdateAddressRequest{
+		UserId:     wrapperspb.Int64(userId),
+		Id:         wrapperspb.Int64(address.Id),
+		UserName:   address.UserName,
+		Tel:        address.Tel,
+		Region:     address.Region,
+		DetailInfo: address.DetailInfo,
+		PostCode:   address.PostCode,
+	})
+
+	if err != nil {
+		if userV1.IsAddressEditNotFound(err) {
+			return -1, biz.ErrAddressNotFound // 修改地址找不到，可能是恶意客户端，也可能是丢数据，不需要打堆栈
+		}
+		if userV1.IsAddressConflict(err) {
+			return -1, biz.ErrAddressConflict
+		}
+		return -1, errors.Wrapf(biz.ErrAddressEdit, "shop_user_address")
+	}
+	return reply.Affected, nil
+}

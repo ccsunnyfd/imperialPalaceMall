@@ -10,6 +10,7 @@ var (
 	ErrAddressNotCreated = errors.New(500, "user/address", "address not created")
 	ErrAddressNotFound   = errors.NotFound("user/address", "address not found")
 	ErrAddressConflict   = errors.Conflict("user/address", "address conflict")
+	ErrAddressEdit       = errors.Conflict("user/address", "address edit error")
 )
 
 type Address struct {
@@ -26,6 +27,7 @@ type Address struct {
 type AddressRepo interface {
 	Create(ctx context.Context, userId int64, address *Address) (int64, error)
 	GetByUserId(ctx context.Context, userId int64) ([]*Address, error)
+	Update(ctx context.Context, userId int64, address *Address) (int64, error)
 }
 
 // AddressUsecase is an Address usecase.
@@ -45,4 +47,8 @@ func (u *AddressUsecase) CreateAddress(ctx context.Context, userId int64, addres
 
 func (u *AddressUsecase) GetAddressByUserId(ctx context.Context, userId int64) ([]*Address, error) {
 	return u.repo.GetByUserId(ctx, userId)
+}
+
+func (u *AddressUsecase) UpdateAddress(ctx context.Context, userId int64, address *Address) (int64, error) {
+	return u.repo.Update(ctx, userId, address)
 }

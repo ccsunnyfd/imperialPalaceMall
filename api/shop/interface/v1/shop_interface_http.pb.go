@@ -28,6 +28,7 @@ const OperationShopInterfaceListCategory = "/api.shop.interface.v1.ShopInterface
 const OperationShopInterfaceListGoods = "/api.shop.interface.v1.ShopInterface/ListGoods"
 const OperationShopInterfaceRemoveCartItems = "/api.shop.interface.v1.ShopInterface/RemoveCartItems"
 const OperationShopInterfaceSaveAddress = "/api.shop.interface.v1.ShopInterface/SaveAddress"
+const OperationShopInterfaceUpdateAddress = "/api.shop.interface.v1.ShopInterface/UpdateAddress"
 const OperationShopInterfaceUpdateCartNum = "/api.shop.interface.v1.ShopInterface/UpdateCartNum"
 const OperationShopInterfaceWxLogin = "/api.shop.interface.v1.ShopInterface/WxLogin"
 
@@ -41,6 +42,7 @@ type ShopInterfaceHTTPServer interface {
 	ListGoods(context.Context, *ListGoodsRequest) (*ListGoodsReply, error)
 	RemoveCartItems(context.Context, *RemoveCartItemsRequest) (*RemoveCartItemsReply, error)
 	SaveAddress(context.Context, *SaveAddressRequest) (*SaveAddressReply, error)
+	UpdateAddress(context.Context, *UpdateAddressRequest) (*UpdateAddressReply, error)
 	UpdateCartNum(context.Context, *UpdateCartNumRequest) (*UpdateCartNumReply, error)
 	WxLogin(context.Context, *WxLoginRequest) (*WxLoginReply, error)
 }
@@ -58,6 +60,7 @@ func RegisterShopInterfaceHTTPServer(s *http.Server, srv ShopInterfaceHTTPServer
 	r.DELETE("/v1/user/my/cart/{ids}", _ShopInterface_RemoveCartItems0_HTTP_Handler(srv))
 	r.GET("/v1/user/my/address", _ShopInterface_GetAddress0_HTTP_Handler(srv))
 	r.POST("/v1/user/my/address", _ShopInterface_SaveAddress0_HTTP_Handler(srv))
+	r.PUT("/v1/user/my/address", _ShopInterface_UpdateAddress0_HTTP_Handler(srv))
 }
 
 func _ShopInterface_ListCategory0_HTTP_Handler(srv ShopInterfaceHTTPServer) func(ctx http.Context) error {
@@ -281,6 +284,25 @@ func _ShopInterface_SaveAddress0_HTTP_Handler(srv ShopInterfaceHTTPServer) func(
 	}
 }
 
+func _ShopInterface_UpdateAddress0_HTTP_Handler(srv ShopInterfaceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in UpdateAddressRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationShopInterfaceUpdateAddress)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.UpdateAddress(ctx, req.(*UpdateAddressRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*UpdateAddressReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type ShopInterfaceHTTPClient interface {
 	AddCart(ctx context.Context, req *AddCartRequest, opts ...http.CallOption) (rsp *AddCartReply, err error)
 	GetAddress(ctx context.Context, req *GetAddressRequest, opts ...http.CallOption) (rsp *GetAddressReply, err error)
@@ -291,6 +313,7 @@ type ShopInterfaceHTTPClient interface {
 	ListGoods(ctx context.Context, req *ListGoodsRequest, opts ...http.CallOption) (rsp *ListGoodsReply, err error)
 	RemoveCartItems(ctx context.Context, req *RemoveCartItemsRequest, opts ...http.CallOption) (rsp *RemoveCartItemsReply, err error)
 	SaveAddress(ctx context.Context, req *SaveAddressRequest, opts ...http.CallOption) (rsp *SaveAddressReply, err error)
+	UpdateAddress(ctx context.Context, req *UpdateAddressRequest, opts ...http.CallOption) (rsp *UpdateAddressReply, err error)
 	UpdateCartNum(ctx context.Context, req *UpdateCartNumRequest, opts ...http.CallOption) (rsp *UpdateCartNumReply, err error)
 	WxLogin(ctx context.Context, req *WxLoginRequest, opts ...http.CallOption) (rsp *WxLoginReply, err error)
 }
@@ -414,6 +437,19 @@ func (c *ShopInterfaceHTTPClientImpl) SaveAddress(ctx context.Context, in *SaveA
 	opts = append(opts, http.Operation(OperationShopInterfaceSaveAddress))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *ShopInterfaceHTTPClientImpl) UpdateAddress(ctx context.Context, in *UpdateAddressRequest, opts ...http.CallOption) (*UpdateAddressReply, error) {
+	var out UpdateAddressReply
+	pattern := "/v1/user/my/address"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationShopInterfaceUpdateAddress))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

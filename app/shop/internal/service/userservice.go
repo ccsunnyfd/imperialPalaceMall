@@ -72,6 +72,30 @@ func (s *ShopInterface) GetAddress(ctx context.Context, req *pb.GetAddressReques
 	}, nil
 }
 
+func (s *ShopInterface) UpdateAddress(ctx context.Context, req *pb.UpdateAddressRequest) (*pb.UpdateAddressReply, error) {
+	userId, err := getUserIdFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	affected, err := s.ac.UpdateAddress(ctx, userId, &biz.Address{
+		Id:         req.Id.Value,
+		UserName:   req.UserName,
+		Tel:        req.Tel,
+		Region:     req.Region,
+		DetailInfo: req.DetailInfo,
+		PostCode:   req.PostCode,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.UpdateAddressReply{
+		Affected: affected,
+	}, nil
+}
+
 func (s *ShopInterface) CheckToken(ctx context.Context, token string) (*biz.UserCache, error) {
 	return s.uc.CheckToken(ctx, token)
 }
