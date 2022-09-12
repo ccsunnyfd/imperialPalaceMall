@@ -545,7 +545,7 @@ components:
         api.shop.interface.v1.UpdateAddressReply:
             type: object
             properties:
-                affected:
+                id:
                     type: integer
                     format: int64
         api.shop.interface.v1.UpdateAddressRequest:

@@ -97,5 +97,5 @@ message UpdateAddressRequest {
 }
 
 message UpdateAddressReply {
-	int64 affected = 1;
+	int64 id = 1;
 }

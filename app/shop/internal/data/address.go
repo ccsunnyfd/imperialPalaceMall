@@ -94,5 +94,5 @@ func (r *addressRepo) Update(ctx context.Context, userId int64, address *biz.Add
 		}
 		return -1, errors.Wrapf(biz.ErrAddressEdit, "shop_user_address")
 	}
-	return reply.Affected, nil
+	return reply.Id, nil
 }

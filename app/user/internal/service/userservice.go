@@ -84,7 +84,7 @@ func (s *UserServiceService) SaveAddress(ctx context.Context, req *pb.SaveAddres
 }
 
 func (s *UserServiceService) UpdateAddress(ctx context.Context, req *pb.UpdateAddressRequest) (*pb.UpdateAddressReply, error) {
-	affected, err := s.ac.UpdateAddress(ctx, req.UserId.Value,
+	id, err := s.ac.UpdateAddress(ctx, req.UserId.Value,
 		&biz.Address{
 			Id:         req.Id.Value,
 			UserName:   req.UserName,
@@ -98,6 +98,6 @@ func (s *UserServiceService) UpdateAddress(ctx context.Context, req *pb.UpdateAd
 	}
 
 	return &pb.UpdateAddressReply{
-		Affected: affected,
+		Id: id,
 	}, nil
 }

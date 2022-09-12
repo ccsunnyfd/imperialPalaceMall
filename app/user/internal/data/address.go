@@ -126,8 +126,8 @@ func (r *addressRepo) Update(ctx context.Context, userId int64, address *biz.Add
 	}
 
 	if result.RowsAffected < 1 {
-		return 0, userPb.ErrorAddressNotFound("edit address not found") // 不是服务器端错误，可能是恶意客户端或丢数据，不需要打堆栈
+		return -1, userPb.ErrorAddressNotFound("edit address not found") // 不是服务器端错误，可能是恶意客户端或丢数据，不需要打堆栈
 	}
 
-	return 1, nil
+	return address.Id, nil
 }

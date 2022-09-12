@@ -78,7 +78,7 @@ func (s *ShopInterface) UpdateAddress(ctx context.Context, req *pb.UpdateAddress
 		return nil, err
 	}
 
-	affected, err := s.ac.UpdateAddress(ctx, userId, &biz.Address{
+	id, err := s.ac.UpdateAddress(ctx, userId, &biz.Address{
 		Id:         req.Id.Value,
 		UserName:   req.UserName,
 		Tel:        req.Tel,
@@ -92,7 +92,7 @@ func (s *ShopInterface) UpdateAddress(ctx context.Context, req *pb.UpdateAddress
 	}
 
 	return &pb.UpdateAddressReply{
-		Affected: affected,
+		Id: id,
 	}, nil
 }
 
