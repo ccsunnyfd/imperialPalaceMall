@@ -22,4 +22,5 @@ enum ErrorReason {
   ADDRESS_NOT_FOUND = 9 [(errors.code) = 404];
   ADDRESS_GET_ERROR = 10 [(errors.code) = 500];
   ADDRESS_CREATE_ERROR = 11 [(errors.code) = 500];
+  ADDRESS_CONFLICT = 12 [(errors.code) = 409];
 }

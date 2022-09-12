@@ -2,6 +2,7 @@ package data
 
 import (
 	"context"
+	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/lib/pq"
 	pkgErrors "github.com/pkg/errors"
@@ -39,6 +40,34 @@ func NewAddressRepo(data *Data, logger log.Logger) biz.AddressRepo {
 		data: data,
 		log:  log.NewHelper(logger),
 	}
+}
+
+func (r *addressRepo) GetByDetails(ctx context.Context, addr *biz.Address) (*biz.Address, error) {
+	var a Address
+	result := r.data.db.WithContext(ctx).
+		Where(map[string]interface{}{
+			"user_id":     addr.UserId,
+			"user_name":   addr.UserName,
+			"tel":         addr.Tel,
+			"detail_info": addr.DetailInfo,
+			"region":      pq.Array(addr.Region),
+		}).
+		First(&a)
+	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			return nil, userPb.ErrorAddressNotFound("address by details not found")
+		}
+		return nil, pkgErrors.Wrap(userPb.ErrorAddressGetError("get address by details error"), "user/address")
+	}
+	return &biz.Address{
+		Id:         a.Id,
+		UserId:     a.UserId,
+		UserName:   a.UserName,
+		Tel:        a.Tel,
+		Region:     a.Region,
+		DetailInfo: a.DetailInfo,
+		PostCode:   a.PostCode,
+	}, nil
 }
 
 func (r *addressRepo) Save(ctx context.Context, addr *biz.Address) (int64, error) {

@@ -3,6 +3,7 @@ package biz
 import (
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
+	userPb "imperialPalaceMall/api/user/v1"
 )
 
 // Address is a Address model.
@@ -20,6 +21,7 @@ type Address struct {
 type AddressRepo interface {
 	Save(context.Context, *Address) (int64, error)
 	GetByUserId(ctx context.Context, userId int64) ([]*Address, error)
+	GetByDetails(ctx context.Context, addr *Address) (*Address, error)
 }
 
 // AddressUsecase is a Address usecase.
@@ -38,5 +40,13 @@ func (u *AddressUsecase) GetAddressByUserId(ctx context.Context, userId int64) (
 }
 
 func (u *AddressUsecase) SaveAddress(ctx context.Context, addr *Address) (int64, error) {
-	return u.repo.Save(ctx, addr)
+	_, err := u.repo.GetByDetails(ctx, addr)
+	if err != nil {
+		if userPb.IsAddressNotFound(err) {
+			return u.repo.Save(ctx, addr)
+		}
+		return -1, err
+	}
+
+	return -1, userPb.ErrorAddressConflict("create address conflict") // 地址冲突不属于服务器错误
 }

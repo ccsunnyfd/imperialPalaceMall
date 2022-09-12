@@ -38,6 +38,9 @@ func (r *addressRepo) Create(ctx context.Context, userId int64, address *biz.Add
 		PostCode:   address.PostCode,
 	})
 	if err != nil {
+		if userV1.IsAddressConflict(err) {
+			return -1, biz.ErrAddressConflict // 地址冲突不是业务错误，是客户端问题，不需要打堆栈
+		}
 		return -1, errors.Wrapf(biz.ErrAddressNotCreated, "shop_user_address")
 	}
 	return reply.Id, nil

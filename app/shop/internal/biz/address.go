@@ -9,6 +9,7 @@ import (
 var (
 	ErrAddressNotCreated = errors.New(500, "user/address", "address not created")
 	ErrAddressNotFound   = errors.NotFound("user/address", "address not found")
+	ErrAddressConflict   = errors.Conflict("user/address", "address conflict")
 )
 
 type Address struct {

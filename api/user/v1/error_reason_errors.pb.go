@@ -154,3 +154,15 @@ func IsAddressCreateError(err error) bool {
 func ErrorAddressCreateError(format string, args ...interface{}) *errors.Error {
 	return errors.New(500, ErrorReason_ADDRESS_CREATE_ERROR.String(), fmt.Sprintf(format, args...))
 }
+
+func IsAddressConflict(err error) bool {
+	if err == nil {
+		return false
+	}
+	e := errors.FromError(err)
+	return e.Reason == ErrorReason_ADDRESS_CONFLICT.String() && e.Code == 409
+}
+
+func ErrorAddressConflict(format string, args ...interface{}) *errors.Error {
+	return errors.New(409, ErrorReason_ADDRESS_CONFLICT.String(), fmt.Sprintf(format, args...))
+}
