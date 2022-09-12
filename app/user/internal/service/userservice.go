@@ -101,3 +101,14 @@ func (s *UserServiceService) UpdateAddress(ctx context.Context, req *pb.UpdateAd
 		Id: id,
 	}, nil
 }
+
+func (s *UserServiceService) DeleteAddress(ctx context.Context, req *pb.DeleteAddressRequest) (*pb.DeleteAddressReply, error) {
+	affected, err := s.ac.DeleteAddress(ctx, req.UserId.Value, req.Id.Value)
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.DeleteAddressReply{
+		Affected: affected,
+	}, nil
+}

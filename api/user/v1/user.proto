@@ -19,6 +19,7 @@ service User {
 	rpc GetAddressByUserId (GetAddressByUserIdRequest) returns (GetAddressByUserIdReply);
 	rpc SaveAddress (SaveAddressRequest) returns (SaveAddressReply);
 	rpc UpdateAddress(UpdateAddressRequest) returns (UpdateAddressReply);
+	rpc DeleteAddress(DeleteAddressRequest) returns (DeleteAddressReply);
 }
 
 message WxLoginRequest {
@@ -98,4 +99,13 @@ message UpdateAddressRequest {
 
 message UpdateAddressReply {
 	int64 id = 1;
+}
+
+message DeleteAddressRequest {
+	google.protobuf.Int64Value user_id = 1 [(validate.rules).int64 = {gt: 0}, (validate.rules).message.required=true];
+	google.protobuf.Int64Value id = 2 [(validate.rules).int64 = {gt: 0}, (validate.rules).message.required=true];
+}
+
+message DeleteAddressReply {
+	int64 affected = 1;
 }

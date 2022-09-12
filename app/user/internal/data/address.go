@@ -131,3 +131,18 @@ func (r *addressRepo) Update(ctx context.Context, userId int64, address *biz.Add
 
 	return address.Id, nil
 }
+
+func (r *addressRepo) Delete(ctx context.Context, userId int64, id int64) (int64, error) {
+	a := Address{Id: id}
+	result := r.data.db.WithContext(ctx).Where("user_id = ?", userId).Delete(&a)
+
+	if result.Error != nil {
+		return -1, pkgErrors.Wrap(userPb.ErrorAddressDeleteError("delete address error"), "user/address")
+	}
+	
+	if result.RowsAffected < 1 {
+		return -1, userPb.ErrorAddressDeleteNotFound("delete address not found")
+	}
+
+	return result.RowsAffected, nil
+}

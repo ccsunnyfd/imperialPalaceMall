@@ -20,6 +20,7 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 const OperationShopInterfaceAddCart = "/api.shop.interface.v1.ShopInterface/AddCart"
+const OperationShopInterfaceDeleteAddress = "/api.shop.interface.v1.ShopInterface/DeleteAddress"
 const OperationShopInterfaceGetAddress = "/api.shop.interface.v1.ShopInterface/GetAddress"
 const OperationShopInterfaceGetGoods = "/api.shop.interface.v1.ShopInterface/GetGoods"
 const OperationShopInterfaceGetMyCart = "/api.shop.interface.v1.ShopInterface/GetMyCart"
@@ -34,6 +35,7 @@ const OperationShopInterfaceWxLogin = "/api.shop.interface.v1.ShopInterface/WxLo
 
 type ShopInterfaceHTTPServer interface {
 	AddCart(context.Context, *AddCartRequest) (*AddCartReply, error)
+	DeleteAddress(context.Context, *DeleteAddressRequest) (*DeleteAddressReply, error)
 	GetAddress(context.Context, *GetAddressRequest) (*GetAddressReply, error)
 	GetGoods(context.Context, *GetGoodsRequest) (*GetGoodsReply, error)
 	GetMyCart(context.Context, *GetMyCartRequest) (*GetMyCartReply, error)
@@ -61,6 +63,7 @@ func RegisterShopInterfaceHTTPServer(s *http.Server, srv ShopInterfaceHTTPServer
 	r.GET("/v1/user/my/address", _ShopInterface_GetAddress0_HTTP_Handler(srv))
 	r.POST("/v1/user/my/address", _ShopInterface_SaveAddress0_HTTP_Handler(srv))
 	r.PUT("/v1/user/my/address", _ShopInterface_UpdateAddress0_HTTP_Handler(srv))
+	r.DELETE("/v1/user/my/address/{id}", _ShopInterface_DeleteAddress0_HTTP_Handler(srv))
 }
 
 func _ShopInterface_ListCategory0_HTTP_Handler(srv ShopInterfaceHTTPServer) func(ctx http.Context) error {
@@ -303,8 +306,31 @@ func _ShopInterface_UpdateAddress0_HTTP_Handler(srv ShopInterfaceHTTPServer) fun
 	}
 }
 
+func _ShopInterface_DeleteAddress0_HTTP_Handler(srv ShopInterfaceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in DeleteAddressRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationShopInterfaceDeleteAddress)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.DeleteAddress(ctx, req.(*DeleteAddressRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*DeleteAddressReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type ShopInterfaceHTTPClient interface {
 	AddCart(ctx context.Context, req *AddCartRequest, opts ...http.CallOption) (rsp *AddCartReply, err error)
+	DeleteAddress(ctx context.Context, req *DeleteAddressRequest, opts ...http.CallOption) (rsp *DeleteAddressReply, err error)
 	GetAddress(ctx context.Context, req *GetAddressRequest, opts ...http.CallOption) (rsp *GetAddressReply, err error)
 	GetGoods(ctx context.Context, req *GetGoodsRequest, opts ...http.CallOption) (rsp *GetGoodsReply, err error)
 	GetMyCart(ctx context.Context, req *GetMyCartRequest, opts ...http.CallOption) (rsp *GetMyCartReply, err error)
@@ -333,6 +359,19 @@ func (c *ShopInterfaceHTTPClientImpl) AddCart(ctx context.Context, in *AddCartRe
 	opts = append(opts, http.Operation(OperationShopInterfaceAddCart))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *ShopInterfaceHTTPClientImpl) DeleteAddress(ctx context.Context, in *DeleteAddressRequest, opts ...http.CallOption) (*DeleteAddressReply, error) {
+	var out DeleteAddressReply
+	pattern := "/v1/user/my/address/{id}"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationShopInterfaceDeleteAddress))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "DELETE", path, nil, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

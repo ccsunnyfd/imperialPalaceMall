@@ -23,6 +23,7 @@ type AddressRepo interface {
 	GetByUserId(ctx context.Context, userId int64) ([]*Address, error)
 	GetByDetails(ctx context.Context, addr *Address) (*Address, error)
 	Update(ctx context.Context, userId int64, address *Address) (int64, error)
+	Delete(ctx context.Context, userId int64, id int64) (int64, error)
 }
 
 // AddressUsecase is a Address usecase.
@@ -63,4 +64,8 @@ func (u *AddressUsecase) UpdateAddress(ctx context.Context, userId int64, addr *
 	}
 
 	return -1, userPb.ErrorAddressConflict("update address conflict")
+}
+
+func (u *AddressUsecase) DeleteAddress(ctx context.Context, userId int64, id int64) (int64, error) {
+	return u.repo.Delete(ctx, userId, id)
 }

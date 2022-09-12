@@ -1003,6 +1003,108 @@ func (x *UpdateAddressReply) GetId() int64 {
 	return 0
 }
 
+type DeleteAddressRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	UserId *wrapperspb.Int64Value `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Id     *wrapperspb.Int64Value `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
+}
+
+func (x *DeleteAddressRequest) Reset() {
+	*x = DeleteAddressRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_user_v1_user_proto_msgTypes[19]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *DeleteAddressRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteAddressRequest) ProtoMessage() {}
+
+func (x *DeleteAddressRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_user_v1_user_proto_msgTypes[19]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteAddressRequest.ProtoReflect.Descriptor instead.
+func (*DeleteAddressRequest) Descriptor() ([]byte, []int) {
+	return file_user_v1_user_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *DeleteAddressRequest) GetUserId() *wrapperspb.Int64Value {
+	if x != nil {
+		return x.UserId
+	}
+	return nil
+}
+
+func (x *DeleteAddressRequest) GetId() *wrapperspb.Int64Value {
+	if x != nil {
+		return x.Id
+	}
+	return nil
+}
+
+type DeleteAddressReply struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Affected int64 `protobuf:"varint,1,opt,name=affected,proto3" json:"affected,omitempty"`
+}
+
+func (x *DeleteAddressReply) Reset() {
+	*x = DeleteAddressReply{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_user_v1_user_proto_msgTypes[20]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *DeleteAddressReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteAddressReply) ProtoMessage() {}
+
+func (x *DeleteAddressReply) ProtoReflect() protoreflect.Message {
+	mi := &file_user_v1_user_proto_msgTypes[20]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteAddressReply.ProtoReflect.Descriptor instead.
+func (*DeleteAddressReply) Descriptor() ([]byte, []int) {
+	return file_user_v1_user_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *DeleteAddressReply) GetAffected() int64 {
+	if x != nil {
+		return x.Affected
+	}
+	return 0
+}
+
 type CheckTokenReply_UserRet struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -1015,7 +1117,7 @@ type CheckTokenReply_UserRet struct {
 func (x *CheckTokenReply_UserRet) Reset() {
 	*x = CheckTokenReply_UserRet{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_user_v1_user_proto_msgTypes[19]
+		mi := &file_user_v1_user_proto_msgTypes[21]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1028,7 +1130,7 @@ func (x *CheckTokenReply_UserRet) String() string {
 func (*CheckTokenReply_UserRet) ProtoMessage() {}
 
 func (x *CheckTokenReply_UserRet) ProtoReflect() protoreflect.Message {
-	mi := &file_user_v1_user_proto_msgTypes[19]
+	mi := &file_user_v1_user_proto_msgTypes[21]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1166,7 +1268,20 @@ var file_user_v1_user_proto_rawDesc = []byte{
 	0x09, 0x42, 0x0a, 0xfa, 0x42, 0x07, 0x72, 0x05, 0x10, 0x06, 0xd0, 0x01, 0x01, 0x52, 0x08, 0x70,
 	0x6f, 0x73, 0x74, 0x43, 0x6f, 0x64, 0x65, 0x22, 0x24, 0x0a, 0x12, 0x55, 0x70, 0x64, 0x61, 0x74,
 	0x65, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x12, 0x0e, 0x0a,
-	0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x02, 0x69, 0x64, 0x32, 0xc7, 0x05,
+	0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x02, 0x69, 0x64, 0x22, 0x9b, 0x01,
+	0x0a, 0x14, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x45, 0x0a, 0x07, 0x75, 0x73, 0x65, 0x72, 0x5f, 0x69,
+	0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1b, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65,
+	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x49, 0x6e, 0x74, 0x36, 0x34, 0x56,
+	0x61, 0x6c, 0x75, 0x65, 0x42, 0x0f, 0xfa, 0x42, 0x04, 0x22, 0x02, 0x20, 0x00, 0xfa, 0x42, 0x05,
+	0x8a, 0x01, 0x02, 0x10, 0x01, 0x52, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x64, 0x12, 0x3c, 0x0a,
+	0x02, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1b, 0x2e, 0x67, 0x6f, 0x6f, 0x67,
+	0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x49, 0x6e, 0x74, 0x36,
+	0x34, 0x56, 0x61, 0x6c, 0x75, 0x65, 0x42, 0x0f, 0xfa, 0x42, 0x04, 0x22, 0x02, 0x20, 0x00, 0xfa,
+	0x42, 0x05, 0x8a, 0x01, 0x02, 0x10, 0x01, 0x52, 0x02, 0x69, 0x64, 0x22, 0x30, 0x0a, 0x12, 0x44,
+	0x65, 0x6c, 0x65, 0x74, 0x65, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x52, 0x65, 0x70, 0x6c,
+	0x79, 0x12, 0x1a, 0x0a, 0x08, 0x61, 0x66, 0x66, 0x65, 0x63, 0x74, 0x65, 0x64, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x03, 0x52, 0x08, 0x61, 0x66, 0x66, 0x65, 0x63, 0x74, 0x65, 0x64, 0x32, 0x9c, 0x06,
 	0x0a, 0x04, 0x55, 0x73, 0x65, 0x72, 0x12, 0x41, 0x0a, 0x07, 0x57, 0x78, 0x4c, 0x6f, 0x67, 0x69,
 	0x6e, 0x12, 0x1b, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x75, 0x73, 0x65, 0x72, 0x2e, 0x76, 0x31, 0x2e,
 	0x57, 0x78, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x19,
@@ -1211,11 +1326,16 @@ var file_user_v1_user_proto_rawDesc = []byte{
 	0x31, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x52,
 	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1f, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x75, 0x73, 0x65,
 	0x72, 0x2e, 0x76, 0x31, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x41, 0x64, 0x64, 0x72, 0x65,
-	0x73, 0x73, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x42, 0x32, 0x0a, 0x0b, 0x61, 0x70, 0x69, 0x2e, 0x75,
-	0x73, 0x65, 0x72, 0x2e, 0x76, 0x31, 0x50, 0x01, 0x5a, 0x21, 0x69, 0x6d, 0x70, 0x65, 0x72, 0x69,
-	0x61, 0x6c, 0x50, 0x61, 0x6c, 0x61, 0x63, 0x65, 0x4d, 0x61, 0x6c, 0x6c, 0x2f, 0x61, 0x70, 0x69,
-	0x2f, 0x75, 0x73, 0x65, 0x72, 0x2f, 0x76, 0x31, 0x3b, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x33,
+	0x73, 0x73, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x12, 0x53, 0x0a, 0x0d, 0x44, 0x65, 0x6c, 0x65, 0x74,
+	0x65, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x21, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x75,
+	0x73, 0x65, 0x72, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x41, 0x64, 0x64,
+	0x72, 0x65, 0x73, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1f, 0x2e, 0x61, 0x70,
+	0x69, 0x2e, 0x75, 0x73, 0x65, 0x72, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65,
+	0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x42, 0x32, 0x0a, 0x0b,
+	0x61, 0x70, 0x69, 0x2e, 0x75, 0x73, 0x65, 0x72, 0x2e, 0x76, 0x31, 0x50, 0x01, 0x5a, 0x21, 0x69,
+	0x6d, 0x70, 0x65, 0x72, 0x69, 0x61, 0x6c, 0x50, 0x61, 0x6c, 0x61, 0x63, 0x65, 0x4d, 0x61, 0x6c,
+	0x6c, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x75, 0x73, 0x65, 0x72, 0x2f, 0x76, 0x31, 0x3b, 0x76, 0x31,
+	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -1230,7 +1350,7 @@ func file_user_v1_user_proto_rawDescGZIP() []byte {
 	return file_user_v1_user_proto_rawDescData
 }
 
-var file_user_v1_user_proto_msgTypes = make([]protoimpl.MessageInfo, 20)
+var file_user_v1_user_proto_msgTypes = make([]protoimpl.MessageInfo, 22)
 var file_user_v1_user_proto_goTypes = []interface{}{
 	(*WxLoginRequest)(nil),            // 0: api.user.v1.WxLoginRequest
 	(*WxLoginReply)(nil),              // 1: api.user.v1.WxLoginReply
@@ -1251,39 +1371,45 @@ var file_user_v1_user_proto_goTypes = []interface{}{
 	(*SaveAddressReply)(nil),          // 16: api.user.v1.SaveAddressReply
 	(*UpdateAddressRequest)(nil),      // 17: api.user.v1.UpdateAddressRequest
 	(*UpdateAddressReply)(nil),        // 18: api.user.v1.UpdateAddressReply
-	(*CheckTokenReply_UserRet)(nil),   // 19: api.user.v1.CheckTokenReply.UserRet
-	(*wrapperspb.Int64Value)(nil),     // 20: google.protobuf.Int64Value
+	(*DeleteAddressRequest)(nil),      // 19: api.user.v1.DeleteAddressRequest
+	(*DeleteAddressReply)(nil),        // 20: api.user.v1.DeleteAddressReply
+	(*CheckTokenReply_UserRet)(nil),   // 21: api.user.v1.CheckTokenReply.UserRet
+	(*wrapperspb.Int64Value)(nil),     // 22: google.protobuf.Int64Value
 }
 var file_user_v1_user_proto_depIdxs = []int32{
-	19, // 0: api.user.v1.CheckTokenReply.user:type_name -> api.user.v1.CheckTokenReply.UserRet
-	20, // 1: api.user.v1.GetAddressByUserIdRequest.user_id:type_name -> google.protobuf.Int64Value
+	21, // 0: api.user.v1.CheckTokenReply.user:type_name -> api.user.v1.CheckTokenReply.UserRet
+	22, // 1: api.user.v1.GetAddressByUserIdRequest.user_id:type_name -> google.protobuf.Int64Value
 	12, // 2: api.user.v1.GetAddressByUserIdReply.addresses:type_name -> api.user.v1.Address
-	20, // 3: api.user.v1.SaveAddressRequest.user_id:type_name -> google.protobuf.Int64Value
-	20, // 4: api.user.v1.UpdateAddressRequest.user_id:type_name -> google.protobuf.Int64Value
-	20, // 5: api.user.v1.UpdateAddressRequest.id:type_name -> google.protobuf.Int64Value
-	0,  // 6: api.user.v1.User.WxLogin:input_type -> api.user.v1.WxLoginRequest
-	2,  // 7: api.user.v1.User.CreateUser:input_type -> api.user.v1.CreateUserRequest
-	4,  // 8: api.user.v1.User.UpdateUser:input_type -> api.user.v1.UpdateUserRequest
-	6,  // 9: api.user.v1.User.DeleteUser:input_type -> api.user.v1.DeleteUserRequest
-	8,  // 10: api.user.v1.User.CheckToken:input_type -> api.user.v1.CheckTokenRequest
-	10, // 11: api.user.v1.User.ListUser:input_type -> api.user.v1.ListUserRequest
-	13, // 12: api.user.v1.User.GetAddressByUserId:input_type -> api.user.v1.GetAddressByUserIdRequest
-	15, // 13: api.user.v1.User.SaveAddress:input_type -> api.user.v1.SaveAddressRequest
-	17, // 14: api.user.v1.User.UpdateAddress:input_type -> api.user.v1.UpdateAddressRequest
-	1,  // 15: api.user.v1.User.WxLogin:output_type -> api.user.v1.WxLoginReply
-	3,  // 16: api.user.v1.User.CreateUser:output_type -> api.user.v1.CreateUserReply
-	5,  // 17: api.user.v1.User.UpdateUser:output_type -> api.user.v1.UpdateUserReply
-	7,  // 18: api.user.v1.User.DeleteUser:output_type -> api.user.v1.DeleteUserReply
-	9,  // 19: api.user.v1.User.CheckToken:output_type -> api.user.v1.CheckTokenReply
-	11, // 20: api.user.v1.User.ListUser:output_type -> api.user.v1.ListUserReply
-	14, // 21: api.user.v1.User.GetAddressByUserId:output_type -> api.user.v1.GetAddressByUserIdReply
-	16, // 22: api.user.v1.User.SaveAddress:output_type -> api.user.v1.SaveAddressReply
-	18, // 23: api.user.v1.User.UpdateAddress:output_type -> api.user.v1.UpdateAddressReply
-	15, // [15:24] is the sub-list for method output_type
-	6,  // [6:15] is the sub-list for method input_type
-	6,  // [6:6] is the sub-list for extension type_name
-	6,  // [6:6] is the sub-list for extension extendee
-	0,  // [0:6] is the sub-list for field type_name
+	22, // 3: api.user.v1.SaveAddressRequest.user_id:type_name -> google.protobuf.Int64Value
+	22, // 4: api.user.v1.UpdateAddressRequest.user_id:type_name -> google.protobuf.Int64Value
+	22, // 5: api.user.v1.UpdateAddressRequest.id:type_name -> google.protobuf.Int64Value
+	22, // 6: api.user.v1.DeleteAddressRequest.user_id:type_name -> google.protobuf.Int64Value
+	22, // 7: api.user.v1.DeleteAddressRequest.id:type_name -> google.protobuf.Int64Value
+	0,  // 8: api.user.v1.User.WxLogin:input_type -> api.user.v1.WxLoginRequest
+	2,  // 9: api.user.v1.User.CreateUser:input_type -> api.user.v1.CreateUserRequest
+	4,  // 10: api.user.v1.User.UpdateUser:input_type -> api.user.v1.UpdateUserRequest
+	6,  // 11: api.user.v1.User.DeleteUser:input_type -> api.user.v1.DeleteUserRequest
+	8,  // 12: api.user.v1.User.CheckToken:input_type -> api.user.v1.CheckTokenRequest
+	10, // 13: api.user.v1.User.ListUser:input_type -> api.user.v1.ListUserRequest
+	13, // 14: api.user.v1.User.GetAddressByUserId:input_type -> api.user.v1.GetAddressByUserIdRequest
+	15, // 15: api.user.v1.User.SaveAddress:input_type -> api.user.v1.SaveAddressRequest
+	17, // 16: api.user.v1.User.UpdateAddress:input_type -> api.user.v1.UpdateAddressRequest
+	19, // 17: api.user.v1.User.DeleteAddress:input_type -> api.user.v1.DeleteAddressRequest
+	1,  // 18: api.user.v1.User.WxLogin:output_type -> api.user.v1.WxLoginReply
+	3,  // 19: api.user.v1.User.CreateUser:output_type -> api.user.v1.CreateUserReply
+	5,  // 20: api.user.v1.User.UpdateUser:output_type -> api.user.v1.UpdateUserReply
+	7,  // 21: api.user.v1.User.DeleteUser:output_type -> api.user.v1.DeleteUserReply
+	9,  // 22: api.user.v1.User.CheckToken:output_type -> api.user.v1.CheckTokenReply
+	11, // 23: api.user.v1.User.ListUser:output_type -> api.user.v1.ListUserReply
+	14, // 24: api.user.v1.User.GetAddressByUserId:output_type -> api.user.v1.GetAddressByUserIdReply
+	16, // 25: api.user.v1.User.SaveAddress:output_type -> api.user.v1.SaveAddressReply
+	18, // 26: api.user.v1.User.UpdateAddress:output_type -> api.user.v1.UpdateAddressReply
+	20, // 27: api.user.v1.User.DeleteAddress:output_type -> api.user.v1.DeleteAddressReply
+	18, // [18:28] is the sub-list for method output_type
+	8,  // [8:18] is the sub-list for method input_type
+	8,  // [8:8] is the sub-list for extension type_name
+	8,  // [8:8] is the sub-list for extension extendee
+	0,  // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_user_v1_user_proto_init() }
@@ -1521,6 +1647,30 @@ func file_user_v1_user_proto_init() {
 			}
 		}
 		file_user_v1_user_proto_msgTypes[19].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*DeleteAddressRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_user_v1_user_proto_msgTypes[20].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*DeleteAddressReply); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_user_v1_user_proto_msgTypes[21].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*CheckTokenReply_UserRet); i {
 			case 0:
 				return &v.state
@@ -1539,7 +1689,7 @@ func file_user_v1_user_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_user_v1_user_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   20,
+			NumMessages:   22,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

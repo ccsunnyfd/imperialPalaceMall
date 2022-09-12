@@ -157,6 +157,24 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.shop.interface.v1.SaveAddressReply'
+    /v1/user/my/address/{id}:
+        delete:
+            tags:
+                - ShopInterface
+            operationId: ShopInterface_DeleteAddress
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    $ref: '#/components/schemas/google.protobuf.Int64Value'
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.shop.interface.v1.DeleteAddressReply'
     /v1/user/my/cart:
         get:
             tags:
@@ -311,6 +329,12 @@ components:
                     format: int64
                 categoryName:
                     type: string
+        api.shop.interface.v1.DeleteAddressReply:
+            type: object
+            properties:
+                affected:
+                    type: integer
+                    format: int64
         api.shop.interface.v1.GetAddressReply:
             type: object
             properties:

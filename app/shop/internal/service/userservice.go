@@ -96,6 +96,22 @@ func (s *ShopInterface) UpdateAddress(ctx context.Context, req *pb.UpdateAddress
 	}, nil
 }
 
+func (s *ShopInterface) DeleteAddress(ctx context.Context, req *pb.DeleteAddressRequest) (*pb.DeleteAddressReply, error) {
+	userId, err := getUserIdFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	affected, err := s.ac.DeleteAddress(ctx, userId, req.Id.Value)
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.DeleteAddressReply{
+		Affected: affected,
+	}, nil
+}
+
 func (s *ShopInterface) CheckToken(ctx context.Context, token string) (*biz.UserCache, error) {
 	return s.uc.CheckToken(ctx, token)
 }

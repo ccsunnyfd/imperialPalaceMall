@@ -76,6 +76,11 @@ service ShopInterface {
 			body: "*"
 		};
 	};
+	rpc DeleteAddress(DeleteAddressRequest) returns (DeleteAddressReply) {
+		option (google.api.http) = {
+			delete: "/v1/user/my/address/{id}",
+		};
+	};
 }
 
 message Category {
@@ -279,4 +284,12 @@ message UpdateAddressRequest {
 
 message UpdateAddressReply {
 	int64 id = 1;
+}
+
+message DeleteAddressRequest {
+	google.protobuf.Int64Value id = 1 [(validate.rules).int64 = {gt: 0}, (validate.rules).message.required=true];
+}
+
+message DeleteAddressReply {
+	int64 affected = 1;
 }

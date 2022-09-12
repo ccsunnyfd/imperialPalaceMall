@@ -34,6 +34,7 @@ type ShopInterfaceClient interface {
 	GetAddress(ctx context.Context, in *GetAddressRequest, opts ...grpc.CallOption) (*GetAddressReply, error)
 	SaveAddress(ctx context.Context, in *SaveAddressRequest, opts ...grpc.CallOption) (*SaveAddressReply, error)
 	UpdateAddress(ctx context.Context, in *UpdateAddressRequest, opts ...grpc.CallOption) (*UpdateAddressReply, error)
+	DeleteAddress(ctx context.Context, in *DeleteAddressRequest, opts ...grpc.CallOption) (*DeleteAddressReply, error)
 }
 
 type shopInterfaceClient struct {
@@ -152,6 +153,15 @@ func (c *shopInterfaceClient) UpdateAddress(ctx context.Context, in *UpdateAddre
 	return out, nil
 }
 
+func (c *shopInterfaceClient) DeleteAddress(ctx context.Context, in *DeleteAddressRequest, opts ...grpc.CallOption) (*DeleteAddressReply, error) {
+	out := new(DeleteAddressReply)
+	err := c.cc.Invoke(ctx, "/api.shop.interface.v1.ShopInterface/DeleteAddress", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ShopInterfaceServer is the server API for ShopInterface service.
 // All implementations must embed UnimplementedShopInterfaceServer
 // for forward compatibility
@@ -168,6 +178,7 @@ type ShopInterfaceServer interface {
 	GetAddress(context.Context, *GetAddressRequest) (*GetAddressReply, error)
 	SaveAddress(context.Context, *SaveAddressRequest) (*SaveAddressReply, error)
 	UpdateAddress(context.Context, *UpdateAddressRequest) (*UpdateAddressReply, error)
+	DeleteAddress(context.Context, *DeleteAddressRequest) (*DeleteAddressReply, error)
 	mustEmbedUnimplementedShopInterfaceServer()
 }
 
@@ -210,6 +221,9 @@ func (UnimplementedShopInterfaceServer) SaveAddress(context.Context, *SaveAddres
 }
 func (UnimplementedShopInterfaceServer) UpdateAddress(context.Context, *UpdateAddressRequest) (*UpdateAddressReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateAddress not implemented")
+}
+func (UnimplementedShopInterfaceServer) DeleteAddress(context.Context, *DeleteAddressRequest) (*DeleteAddressReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteAddress not implemented")
 }
 func (UnimplementedShopInterfaceServer) mustEmbedUnimplementedShopInterfaceServer() {}
 
@@ -440,6 +454,24 @@ func _ShopInterface_UpdateAddress_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ShopInterface_DeleteAddress_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteAddressRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ShopInterfaceServer).DeleteAddress(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.shop.interface.v1.ShopInterface/DeleteAddress",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ShopInterfaceServer).DeleteAddress(ctx, req.(*DeleteAddressRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ShopInterface_ServiceDesc is the grpc.ServiceDesc for ShopInterface service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -494,6 +526,10 @@ var ShopInterface_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateAddress",
 			Handler:    _ShopInterface_UpdateAddress_Handler,
+		},
+		{
+			MethodName: "DeleteAddress",
+			Handler:    _ShopInterface_DeleteAddress_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

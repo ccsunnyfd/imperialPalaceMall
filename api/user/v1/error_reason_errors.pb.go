@@ -190,3 +190,27 @@ func IsAddressEditNotFound(err error) bool {
 func ErrorAddressEditNotFound(format string, args ...interface{}) *errors.Error {
 	return errors.New(401, ErrorReason_ADDRESS_EDIT_NOT_FOUND.String(), fmt.Sprintf(format, args...))
 }
+
+func IsAddressDeleteError(err error) bool {
+	if err == nil {
+		return false
+	}
+	e := errors.FromError(err)
+	return e.Reason == ErrorReason_ADDRESS_DELETE_ERROR.String() && e.Code == 500
+}
+
+func ErrorAddressDeleteError(format string, args ...interface{}) *errors.Error {
+	return errors.New(500, ErrorReason_ADDRESS_DELETE_ERROR.String(), fmt.Sprintf(format, args...))
+}
+
+func IsAddressDeleteNotFound(err error) bool {
+	if err == nil {
+		return false
+	}
+	e := errors.FromError(err)
+	return e.Reason == ErrorReason_ADDRESS_DELETE_NOT_FOUND.String() && e.Code == 401
+}
+
+func ErrorAddressDeleteNotFound(format string, args ...interface{}) *errors.Error {
+	return errors.New(401, ErrorReason_ADDRESS_DELETE_NOT_FOUND.String(), fmt.Sprintf(format, args...))
+}

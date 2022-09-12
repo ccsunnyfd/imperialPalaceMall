@@ -96,3 +96,19 @@ func (r *addressRepo) Update(ctx context.Context, userId int64, address *biz.Add
 	}
 	return reply.Id, nil
 }
+
+func (r *addressRepo) Delete(ctx context.Context, userId int64, id int64) (int64, error) {
+	reply, err := r.data.uc.DeleteAddress(ctx, &userV1.DeleteAddressRequest{
+		UserId: wrapperspb.Int64(userId),
+		Id:     wrapperspb.Int64(id),
+	})
+
+	if err != nil {
+		if userV1.IsAddressDeleteNotFound(err) {
+			return -1, biz.ErrAddressNotFound
+		}
+		return -1, errors.Wrapf(biz.ErrAddressDelete, "shop_user_address")
+	}
+
+	return reply.Affected, nil
+}
